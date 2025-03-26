@@ -5,8 +5,8 @@ on:
     branches:
       - '*.x'
   pull_request:
-    branches:
-      - '*.x'
+    branches-ignore:
+      - '*.x' # ignore refs/heads/N.x
 
 permissions:
   contents: write
@@ -22,18 +22,18 @@ jobs:
   lint:
     uses: ./.github/workflows/lint.yml
     with:
-      ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      ref: ${{ github.sha }}
 
   test:
     needs: lint
     uses: ./.github/workflows/test.yml
     with:
-      ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      ref: ${{ github.sha }}
 
   release:
     if: |
       github.event_name == 'push' &&
       success() &&
-      needs.verify.outputs.is_valid_merge == 'true'
+      needs.verify.outputs.is_valid == 'true'
     needs: [verify, test]
     uses: ./.github/workflows/release.yml
