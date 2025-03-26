@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.1](https://github.com/daisorg/dais-app-starter-kit/compare/v1.0.0...v1.0.1) (2025-03-26)
+
+
+### Bug Fixes
+
+* add proper verification via commitlint ([ced3f12](https://github.com/daisorg/dais-app-starter-kit/commit/ced3f1285645ac7e21c5c677628b4aaf1547a457))
+* remove xbranch ci release from main ([23fbf7d](https://github.com/daisorg/dais-app-starter-kit/commit/23fbf7dfd986c8fa888dbd4c3997cabeb5e94430))
+* restored proper workflows ([cc02158](https://github.com/daisorg/dais-app-starter-kit/commit/cc02158506b7a64661ccec25db41ed1755fb62da))
+* this removes forced merge from release ([e822bcb](https://github.com/daisorg/dais-app-starter-kit/commit/e822bcb7c3cdbcd320d31dace5d76f8d899c4e0e))
+
+
+### Maintenance
+
+* add package permissions ([ffc375a](https://github.com/daisorg/dais-app-starter-kit/commit/ffc375aa97b745dd6da2882f11f285b550f3391f))
+
 # 1.0.0 (2025-03-26)
 
 
