@@ -18,7 +18,21 @@ const commitAnalyzerOptions = {
 
 const releaseNotesGeneratorOptions = {
   writerOpts: {
-    transform: (commit, context) => {
+    transform: (
+      commit: {
+        type: string;
+        hash?: string;
+        shortHash?: string;
+        subject?: string;
+        references: Array<{ issue: string }>;
+      },
+      context: {
+        host?: string;
+        owner?: string;
+        repository?: string;
+        repoUrl?: string;
+      },
+    ) => {
       const issues: string[] = [];
 
       // Create a mutable copy of the commit object
