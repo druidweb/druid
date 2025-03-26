@@ -4,7 +4,7 @@ on:
   workflow_call:
     outputs:
       is_valid_merge:
-        description: 'Whether this is a valid merge from develop'
+        description: 'Whether this is a valid merge from main'
         value: ${{ jobs.verify.outputs.is_valid_merge }}
 
 jobs:
@@ -17,16 +17,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Verify merge from develop
+      - name: Verify merge from main
         id: check_merge
         run: |
-          # Check if the latest commit on main is a merge from develop
-          MERGE_FROM_DEVELOP=$(git log -1 --pretty=%B | grep -c "Merge.*develop" || true)
-          if [ "$MERGE_FROM_DEVELOP" -eq 0 ]; then
+          # Check if the latest commit on *.x is a merge from main
+          MERGE_FROM_MAIN=$(git log -1 --pretty=%B | grep -c "Merge.*main" || true)
+          if [ "$MERGE_FROM_MAIN" -eq 0 ]; then
             echo "is_valid_merge=false" >> "$GITHUB_OUTPUT"
-            echo "This push to main does not appear to be a merge from develop"
-            echo "All changes must go through the develop branch first"
+            echo "This push to *.x does not appear to be a merge from main"
+            echo "All changes must be merged from the main branch"
           else
             echo "is_valid_merge=true" >> "$GITHUB_OUTPUT"
-            echo "Verified that this is a merge from develop to main"
+            echo "Verified that this is a merge from main to *.x"
           fi
