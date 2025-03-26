@@ -11,9 +11,14 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  packages: write
   issues: write
 
 jobs:
+  verify:
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/verify.yml
+
   lint:
     uses: ./.github/workflows/lint.yml
     with:
@@ -24,3 +29,31 @@ jobs:
     uses: ./.github/workflows/test.yml
     with:
       ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+  release:
+    if: |
+      github.event_name == 'push' &&
+      needs.verify.outputs.is_valid == 'true'
+    needs: [verify, test]
+    uses: ./.github/workflows/release.yml
+
+  update-maintenance:
+    needs: release
+    if: needs.release.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge main into 1.x
+        run: |
+          git checkout 1.x
+          git merge --no-ff main -m "chore: merge main into 1.x [skip ci]"
+          git push origin 1.x
