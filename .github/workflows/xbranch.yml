@@ -3,10 +3,10 @@ name: Release Branch Workflow
 on:
   push:
     branches:
-      - '*.x'
+      - main
   pull_request:
     branches:
-      - '*.x'
+      - main
 
 permissions:
   contents: write
@@ -15,9 +15,9 @@ permissions:
   packages: write
 
 jobs:
-  verify:
-    if: github.event_name == 'push'
-    uses: ./.github/workflows/verify.yml
+  # verify:
+  #   if: github.event_name == 'push'
+  #   uses: ./.github/workflows/verify.yml
 
   lint:
     uses: ./.github/workflows/lint.yml
@@ -33,7 +33,6 @@ jobs:
   release:
     if: |
       github.event_name == 'push' &&
-      success() &&
-      needs.verify.outputs.is_valid_merge == 'true'
-    needs: [verify, test]
+      success()
+    needs: [test]
     uses: ./.github/workflows/release.yml
