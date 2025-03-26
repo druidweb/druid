@@ -8,6 +8,11 @@ on:
     branches:
       - develop
 
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
 jobs:
   lint:
     uses: ./.github/workflows/lint.yml
