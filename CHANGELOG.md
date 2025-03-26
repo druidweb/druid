@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/daisorg/dais-app-starter-kit/compare/v1.0.1...v1.0.2) (2025-03-26)
+
+
+### Bug Fixes
+
+* add proper naming and keys for composer ([04530eb](https://github.com/daisorg/dais-app-starter-kit/commit/04530eb83246b8da1e4ac2894c264a1abfc9f939))
+
 ## [1.0.1](https://github.com/daisorg/dais-app-starter-kit/compare/v1.0.0...v1.0.1) (2025-03-26)
 
 
