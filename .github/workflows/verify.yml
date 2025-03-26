@@ -4,7 +4,7 @@ on:
   workflow_call:
     outputs:
       is_valid_merge:
-        description: 'Whether this is a valid merge from main'
+        description: 'Whether this commit has main as a parent'
         value: ${{ jobs.verify.outputs.is_valid_merge }}
 
 jobs:
@@ -17,31 +17,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Verify merge from main
+      - name: Verify main as parent
         id: check_merge
         run: |
-          # Get the latest commit message
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-          echo "Latest commit message: $COMMIT_MSG"
+          # Get all parent commits
+          PARENTS=$(git rev-parse HEAD^@)
+          echo "Parent commits: $PARENTS"
 
-          # Check if it's a merge commit from main using a more flexible pattern
-          if git log -1 --pretty=%P | grep -q " "; then
-            # It's a merge commit, now check if main was involved
-            MERGE_PARENTS=$(git log -1 --pretty=%P)
-            echo "Merge parents: $MERGE_PARENTS"
+          # Check if any parent is from main branch
+          for PARENT in $PARENTS; do
+            BRANCH_NAME=$(git name-rev --name-only $PARENT)
+            echo "Checking parent: $PARENT ($BRANCH_NAME)"
+            if echo "$BRANCH_NAME" | grep -q "main"; then
+              echo "Found main as parent"
+              echo "is_valid_merge=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done
 
-            for PARENT in $MERGE_PARENTS; do
-              BRANCH_NAME=$(git name-rev --name-only $PARENT)
-              echo "Checking parent: $PARENT ($BRANCH_NAME)"
-              if echo "$BRANCH_NAME" | grep -q "main"; then
-                echo "Found merge from main branch"
-                echo "is_valid_merge=true" >> "$GITHUB_OUTPUT"
-                exit 0
-              fi
-            done
-            echo "No merge from main found"
-            echo "is_valid_merge=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "Not a merge commit"
-            echo "is_valid_merge=false" >> "$GITHUB_OUTPUT"
-          fi
+          echo "Main not found in parents"
+          echo "is_valid_merge=false" >> "$GITHUB_OUTPUT"
