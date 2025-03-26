@@ -2,22 +2,31 @@ name: Verify Merge
 
 on:
   workflow_call:
+    outputs:
+      is_valid_merge:
+        description: 'Whether this is a valid merge from develop'
+        value: ${{ jobs.verify.outputs.is_valid_merge }}
 
 jobs:
   verify:
     runs-on: ubuntu-latest
+    outputs:
+      is_valid_merge: ${{ steps.check_merge.outputs.is_valid_merge }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Verify merge from develop
+        id: check_merge
         run: |
           # Check if the latest commit on main is a merge from develop
           MERGE_FROM_DEVELOP=$(git log -1 --pretty=%B | grep -c "Merge.*develop" || true)
           if [ "$MERGE_FROM_DEVELOP" -eq 0 ]; then
-            echo "Error: This push to main does not appear to be a merge from develop"
+            echo "is_valid_merge=false" >> "$GITHUB_OUTPUT"
+            echo "This push to main does not appear to be a merge from develop"
             echo "All changes must go through the develop branch first"
-            exit 1
+          else
+            echo "is_valid_merge=true" >> "$GITHUB_OUTPUT"
+            echo "Verified that this is a merge from develop to main"
           fi
-          echo "Verified that this is a merge from develop to main"

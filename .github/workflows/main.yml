@@ -31,6 +31,9 @@ jobs:
       ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
   release:
-    if: github.event_name == 'push' && success()
+    if: |
+      github.event_name == 'push' &&
+      success() &&
+      needs.verify.outputs.is_valid_merge == 'true'
     needs: [verify, test]
     uses: ./.github/workflows/release.yml
