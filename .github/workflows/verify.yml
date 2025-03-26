@@ -1,0 +1,23 @@
+name: Verify Merge
+
+on:
+  workflow_call:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify merge from develop
+        run: |
+          # Check if the latest commit on main is a merge from develop
+          MERGE_FROM_DEVELOP=$(git log -1 --pretty=%B | grep -c "Merge.*develop" || true)
+          if [ "$MERGE_FROM_DEVELOP" -eq 0 ]; then
+            echo "Error: This push to main does not appear to be a merge from develop"
+            echo "All changes must go through the develop branch first"
+            exit 1
+          fi
+          echo "Verified that this is a merge from develop to main"

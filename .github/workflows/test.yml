@@ -1,22 +1,21 @@
-name: tests
+name: Test
 
 on:
-  push:
-    branches:
-      - develop
-      - main
-  pull_request:
-    branches:
-      - develop
-      - main
+  workflow_call:
+    inputs:
+      ref:
+        required: false
+        type: string
+        default: ''
 
 jobs:
-  ci:
+  test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -30,14 +29,13 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install Node Dependencies
-        run: bun i
-
       - name: Create SQLite Database
         run: touch database/database.sqlite
 
       - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          bun i
 
       - name: Copy Environment File
         run: cp .env.example .env
@@ -51,5 +49,5 @@ jobs:
       - name: Build Assets
         run: bun run build
 
-      - name: Tests
+      - name: Run Tests
         run: ./vendor/bin/pest

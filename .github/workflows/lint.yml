@@ -1,28 +1,28 @@
-name: lint & test
+name: Lint
 
 on:
-  push:
-    branches:
-      - develop
-      - main
-  pull_request:
-    branches:
-      - develop
-      - main
+  workflow_call:
+    inputs:
+      ref:
+        required: false
+        type: string
+        default: ''
 
 permissions:
   contents: write
 
 jobs:
-  quality:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: 8.4
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
