@@ -20,13 +20,28 @@ jobs:
       - name: Verify merge from main
         id: check_merge
         run: |
-          # Check if the latest commit on *.x is a merge from main
-          MERGE_FROM_MAIN=$(git log -1 --pretty=%B | grep -c "Merge.*main" || true)
-          if [ "$MERGE_FROM_MAIN" -eq 0 ]; then
+          # Get the latest commit message
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Latest commit message: $COMMIT_MSG"
+
+          # Check if it's a merge commit from main using a more flexible pattern
+          if git log -1 --pretty=%P | grep -q " "; then
+            # It's a merge commit, now check if main was involved
+            MERGE_PARENTS=$(git log -1 --pretty=%P)
+            echo "Merge parents: $MERGE_PARENTS"
+
+            for PARENT in $MERGE_PARENTS; do
+              BRANCH_NAME=$(git name-rev --name-only $PARENT)
+              echo "Checking parent: $PARENT ($BRANCH_NAME)"
+              if echo "$BRANCH_NAME" | grep -q "main"; then
+                echo "Found merge from main branch"
+                echo "is_valid_merge=true" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+            done
+            echo "No merge from main found"
             echo "is_valid_merge=false" >> "$GITHUB_OUTPUT"
-            echo "This push to *.x does not appear to be a merge from main"
-            echo "All changes must be merged from the main branch"
           else
-            echo "is_valid_merge=true" >> "$GITHUB_OUTPUT"
-            echo "Verified that this is a merge from main to *.x"
+            echo "Not a merge commit"
+            echo "is_valid_merge=false" >> "$GITHUB_OUTPUT"
           fi
