@@ -3,10 +3,10 @@ name: Main Branch Workflow
 on:
   push:
     branches:
-      - develop
+      - main
   pull_request:
     branches:
-      - develop
+      - main
 
 permissions:
   contents: write
