@@ -1,4 +1,5 @@
 import type { LucideIcon } from 'lucide-vue-next';
+import { Config, RouteParams } from 'ziggy-js';
 
 export interface Auth {
   user: User;
@@ -40,3 +41,16 @@ export interface User {
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
+
+// Global declarations
+declare global {
+  function route(): Config;
+  function route(name: string, params?: RouteParams<typeof name> | undefined, absolute?: boolean): string;
+}
+
+// Vue component custom properties
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    route: typeof route;
+  }
+}
