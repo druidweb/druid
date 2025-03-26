@@ -20,20 +20,6 @@
       "autoprefixer": {}
     }
   },
-  "devDependencies": {
-    "@eslint/js": "^9.23.0",
-    "@vue/eslint-config-typescript": "^14.5.0",
-    "@vue/runtime-core": "^3.5.13",
-    "eslint": "^9.23.0",
-    "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-vue": "^10.0.0",
-    "laravel-echo": "^2.0.2",
-    "prettier": "^3.5.3",
-    "prettier-plugin-organize-imports": "^4.1.0",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "pusher-js": "^8.4.0",
-    "typescript-eslint": "^8.28.0"
-  },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
     "@inertiajs/vue3": "^2.0.5",
@@ -46,10 +32,12 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "concurrently": "^9.1.2",
+    "laravel-echo": "^2.0.2",
     "laravel-vite-plugin": "^1.2.0",
     "lucide": "^0.482.0",
     "lucide-vue-next": "^0.482.0",
     "postcss-import": "^16.1.0",
+    "pusher-js": "^8.4.0",
     "radix-vue": "^1.9.17",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^3.4.17",
@@ -60,9 +48,54 @@
     "vue-tsc": "^3.0.0-alpha.2",
     "ziggy-js": "^2.5.2"
   },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/js": "^9.23.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@vue/eslint-config-typescript": "^14.5.0",
+    "@vue/runtime-core": "^3.5.13",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-vue": "^10.0.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "semantic-release": "^24.2.3",
+    "typescript-eslint": "^8.28.0"
+  },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.36.0",
     "@tailwindcss/oxide-linux-x64-gnu": "^4.0.16",
     "lightningcss-linux-x64-gnu": "^1.29.3"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "header-max-length": [
+        2,
+        "always",
+        120
+      ],
+      "type-enum": [
+        2,
+        "always",
+        [
+          "breaking",
+          "feat",
+          "fix",
+          "refactor",
+          "docs",
+          "wip",
+          "chore",
+          "style",
+          "test"
+        ]
+      ]
+    }
   }
 }
