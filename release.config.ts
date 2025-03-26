@@ -1,5 +1,5 @@
 const commitAnalyzerOptions = {
-  preset: 'angular',
+  preset: 'conventionalcommits',
   releaseRules: [
     { type: 'breaking', release: 'major' },
     { type: 'feat', release: 'minor' },
@@ -19,7 +19,10 @@ const commitAnalyzerOptions = {
 const releaseNotesGeneratorOptions = {
   writerOpts: {
     transform: (commit, context) => {
-      const issues: string[] = []; // Explicitly type the array
+      const issues: string[] = [];
+
+      // Create a mutable copy of the commit object
+      const modifiedCommit = { ...commit };
 
       const types = {
         breaking: 'Breaking',
@@ -33,25 +36,25 @@ const releaseNotesGeneratorOptions = {
         test: 'Code Testing',
       };
 
-      commit.type = types[commit.type];
+      modifiedCommit.type = types[modifiedCommit.type];
 
-      if (typeof commit.hash === 'string') {
-        commit.shortHash = commit.hash.substring(0, 7);
+      if (typeof modifiedCommit.hash === 'string') {
+        modifiedCommit.shortHash = modifiedCommit.hash.substring(0, 7);
       }
 
-      if (typeof commit.subject === 'string') {
+      if (typeof modifiedCommit.subject === 'string') {
         let url = context.repository ? `${context.host}/${context.owner}/${context.repository}` : context.repoUrl;
         if (url) {
           url = `${url}/issues/`;
           // Issue URLs.
-          commit.subject = commit.subject.replace(/#([0-9]+)/g, (_, issue) => {
+          modifiedCommit.subject = modifiedCommit.subject.replace(/#([0-9]+)/g, (_, issue) => {
             issues.push(issue);
             return `[#${issue}](${url}${issue})`;
           });
         }
         if (context.host) {
           // User URLs.
-          commit.subject = commit.subject.replace(/\B@([a-z0-9](?:-?[a-z0-9/]){0,38})/g, (_, username) => {
+          modifiedCommit.subject = modifiedCommit.subject.replace(/\B@([a-z0-9](?:-?[a-z0-9/]){0,38})/g, (_, username) => {
             if (username.includes('/')) {
               return `@${username}`;
             }
@@ -61,16 +64,12 @@ const releaseNotesGeneratorOptions = {
         }
       }
 
-      // remove references that already appear in the subject
-      commit.references = commit.references.filter((reference) => {
-        if (issues.indexOf(reference.issue) === -1) {
-          return true;
-        }
-
-        return false;
+      // Create a new references array instead of modifying the original
+      modifiedCommit.references = modifiedCommit.references.filter((reference) => {
+        return !issues.includes(reference.issue);
       });
 
-      return commit;
+      return modifiedCommit;
     },
   },
 };
