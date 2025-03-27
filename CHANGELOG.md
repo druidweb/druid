@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/daisorg/dais-app-starter-kit/compare/v1.0.2...v1.0.3) (2025-03-27)
+
+
+### Bug Fixes
+
+* update readme ([017d1d9](https://github.com/daisorg/dais-app-starter-kit/commit/017d1d966d40f7f10ba384386f825dc131aa1edc))
+
 ## [1.0.2](https://github.com/daisorg/dais-app-starter-kit/compare/v1.0.1...v1.0.2) (2025-03-26)
 
 
