@@ -36,7 +36,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.patch(route('profile.update'));
+  form.patch(useRoutes('profile.update'));
 };
 </script>
 

@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 
 const form = useForm({
@@ -16,7 +15,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.post(route('register'), {
+  form.post(useRoutes('register'), {
     onFinish: () => form.reset('password', 'password_confirmation'),
   });
 };

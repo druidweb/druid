@@ -12,7 +12,7 @@ defineProps<{
 const form = useForm({});
 
 const submit = () => {
-  form.post(route('verification.send'));
+  form.post(useRoutes('verification.send'));
 };
 </script>
 

@@ -31,7 +31,7 @@ const releaseNotesGeneratorOptions = {
         owner?: string;
         repository?: string;
         repoUrl?: string;
-      },
+      }
     ) => {
       const issues: string[] = [];
 
@@ -68,13 +68,16 @@ const releaseNotesGeneratorOptions = {
         }
         if (context.host) {
           // User URLs.
-          modifiedCommit.subject = modifiedCommit.subject.replace(/\B@([a-z0-9](?:-?[a-z0-9/]){0,38})/g, (_, username) => {
-            if (username.includes('/')) {
-              return `@${username}`;
-            }
+          modifiedCommit.subject = modifiedCommit.subject.replace(
+            /\B@([a-z0-9](?:-?[a-z0-9/]){0,38})/g,
+            (_, username) => {
+              if (username.includes('/')) {
+                return `@${username}`;
+              }
 
-            return `[@${username}](${context.host}/${username})`;
-          });
+              return `[@${username}](${context.host}/${username})`;
+            }
+          );
         }
       }
 
@@ -91,7 +94,7 @@ const releaseNotesGeneratorOptions = {
 export default {
   debug: true,
   branches: ['+([0-9])?(.{+([0-9]),x}).x', 'main'],
-  repositoryUrl: 'https://github.com/daisorg/dais-app-starter-kit',
+  repositoryUrl: 'https://github.com/druidweb/druid',
 
   plugins: [
     // analyze commits with conventional-changelog

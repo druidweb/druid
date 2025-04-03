@@ -42,15 +42,17 @@ export interface User {
 
 export type BreadcrumbItemType = BreadcrumbItem;
 
-// Global declarations
 declare global {
   function route(): Config;
-  function route(name: string, params?: RouteParams<typeof name> | undefined, absolute?: boolean): string;
+  function route<T extends keyof typeof Ziggy.routes>(name: T, params?: RouteParams<T>, absolute?: boolean): string;
 }
 
 // Vue component custom properties
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     route: typeof route;
+    $page: {
+      props: SharedData;
+    };
   }
 }

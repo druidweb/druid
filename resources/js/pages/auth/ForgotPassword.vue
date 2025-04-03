@@ -17,7 +17,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.post(route('password.email'));
+  form.post(useRoutes('password.email'));
 };
 </script>
 
@@ -47,7 +47,7 @@ const submit = () => {
 
       <div class="space-x-1 text-center text-sm text-muted-foreground">
         <span>Or, return to</span>
-        <TextLink :href="route('login')">log in</TextLink>
+        <TextLink :href="useRoutes('login')">log in</TextLink>
       </div>
     </div>
   </AuthLayout>

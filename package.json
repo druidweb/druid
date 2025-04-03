@@ -3,12 +3,16 @@
   "type": "module",
   "scripts": {
     "cn": "composer update && bun update",
-    "build": "vite build",
-    "build:ssr": "vite build && vite build --ssr",
-    "dev": "vite",
+    "build": "bun reverb:stop && bun zz && vite build",
+    "build:ssr": "bun reverb:stop && bun zz && vite build && vite build --ssr",
+    "dev": "bun zz && bun reverb:start && vite",
     "format": "prettier --write resources/",
     "format:check": "prettier --check resources/",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "prod": "bun zz && vite build && vite build --ssr",
+    "reverb:start": "php artisan reverb:start > storage/logs/reverb.log 2>&1 &",
+    "reverb:stop": "pkill -f \"artisan reverb:start\" || echo \"No Reverb processes found\"",
+    "zz": "php artisan ziggy:generate --types"
   },
   "postcss": {
     "plugins": {
@@ -22,9 +26,9 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
-    "@inertiajs/vue3": "^2.0.5",
+    "@inertiajs/vue3": "^2.0.6",
     "@tailwindcss/forms": "^0.5.10",
-    "@types/node": "^22.13.13",
+    "@types/node": "^22.14.0",
     "@types/ziggy-js": "^1.8.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vueuse/core": "^13.0.0",
@@ -39,13 +43,13 @@
     "postcss-import": "^16.1.0",
     "pusher-js": "^8.4.0",
     "radix-vue": "^1.9.17",
-    "tailwind-merge": "^3.0.2",
+    "tailwind-merge": "^3.1.0",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.8.2",
-    "vite": "^6.2.3",
+    "vite": "^6.2.4",
     "vue": "^3.5.13",
-    "vue-tsc": "^3.0.0-alpha.2",
+    "vue-tsc": "^2.2.8",
     "ziggy-js": "^2.5.2"
   },
   "devDependencies": {
@@ -65,11 +69,13 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "semantic-release": "^24.2.3",
-    "typescript-eslint": "^8.28.0"
+    "typescript-eslint": "^8.29.0",
+    "unplugin-auto-import": "^19.1.2",
+    "unplugin-vue-components": "^28.4.1"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.36.0",
-    "@tailwindcss/oxide-linux-x64-gnu": "^4.0.16",
+    "@tailwindcss/oxide-linux-x64-gnu": "^4.1.1",
     "lightningcss-linux-x64-gnu": "^1.29.3"
   },
   "commitlint": {

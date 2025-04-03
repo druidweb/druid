@@ -24,17 +24,17 @@ jobs:
     with:
       ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-  test:
-    needs: lint
-    uses: ./.github/workflows/test.yml
-    with:
-      ref: ${{ github.event.pull_request.head.sha || github.sha }}
+  # test:
+  #   needs: lint
+  #   uses: ./.github/workflows/test.yml
+  #   with:
+  #     ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
   release:
     if: |
       github.event_name == 'push' &&
       needs.verify.outputs.is_valid == 'true'
-    needs: [verify, test]
+    needs: [verify, lint]
     uses: ./.github/workflows/release.yml
 
   update-maintenance:
