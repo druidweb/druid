@@ -12,7 +12,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.post(route('password.confirm'), {
+  form.post(useRoutes('password.confirm'), {
     onFinish: () => {
       form.reset();
     },
@@ -21,14 +21,23 @@ const submit = () => {
 </script>
 
 <template>
-  <AuthLayout title="Confirm your password" description="This is a secure area of the application. Please confirm your password before continuing.">
+  <AuthLayout
+    title="Confirm your password"
+    description="This is a secure area of the application. Please confirm your password before continuing.">
     <Head title="Confirm password" />
 
     <form @submit.prevent="submit">
       <div class="space-y-6">
         <div class="grid gap-2">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="current-password" autofocus />
+          <Input
+            id="password"
+            type="password"
+            class="mt-1 block w-full"
+            v-model="form.password"
+            required
+            autocomplete="current-password"
+            autofocus />
 
           <InputError :message="form.errors.password" />
         </div>

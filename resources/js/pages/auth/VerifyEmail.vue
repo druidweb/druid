@@ -12,12 +12,14 @@ defineProps<{
 const form = useForm({});
 
 const submit = () => {
-  form.post(route('verification.send'));
+  form.post(useRoutes('verification.send'));
 };
 </script>
 
 <template>
-  <AuthLayout title="Verify email" description="Please verify your email address by clicking on the link we just emailed to you.">
+  <AuthLayout
+    title="Verify email"
+    description="Please verify your email address by clicking on the link we just emailed to you.">
     <Head title="Email verification" />
 
     <div v-if="status === 'verification-link-sent'" class="mb-4 text-center text-sm font-medium text-green-600">

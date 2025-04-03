@@ -36,7 +36,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.patch(route('profile.update'));
+  form.patch(useRoutes('profile.update'));
 };
 </script>
 
@@ -51,7 +51,13 @@ const submit = () => {
         <form @submit.prevent="submit" class="space-y-6">
           <div class="grid gap-2">
             <Label for="name">Name</Label>
-            <Input id="name" class="mt-1 block w-full" v-model="form.name" required autocomplete="name" placeholder="Full name" />
+            <Input
+              id="name"
+              class="mt-1 block w-full"
+              v-model="form.name"
+              required
+              autocomplete="name"
+              placeholder="Full name" />
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
 
@@ -64,8 +70,7 @@ const submit = () => {
               v-model="form.email"
               required
               autocomplete="username"
-              placeholder="Email address"
-            />
+              placeholder="Email address" />
             <InputError class="mt-2" :message="form.errors.email" />
           </div>
 
@@ -76,8 +81,7 @@ const submit = () => {
                 :href="route('verification.send')"
                 method="post"
                 as="button"
-                class="focus:outline-hidden rounded-md text-sm text-neutral-600 underline hover:text-neutral-900 focus:ring-2 focus:ring-offset-2"
-              >
+                class="focus:outline-hidden rounded-md text-sm text-neutral-600 underline hover:text-neutral-900 focus:ring-2 focus:ring-offset-2">
                 Click here to re-send the verification email.
               </Link>
             </p>
@@ -95,8 +99,7 @@ const submit = () => {
               enter="transition ease-in-out"
               enter-from="opacity-0"
               leave="transition ease-in-out"
-              leave-to="opacity-0"
-            >
+              leave-to="opacity-0">
               <p class="text-sm text-neutral-600">Saved.</p>
             </TransitionRoot>
           </div>
