@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.0.4](https://github.com/druidweb/druid/compare/v1.0.3...v1.0.4) (2025-04-03)
+
+
+* Merge branch 'main' of github.com:druidweb/druid ([aabd328](https://github.com/druidweb/druid/commit/aabd328c994b1608ed6795f915d8902c325909c7))
+
+
+### Bug Fixes
+
+* fixed ton of typescript issues added packages ([fc5e5f4](https://github.com/druidweb/druid/commit/fc5e5f4a3adb21caee2f1d7cb2cba4e7a98dbc44))
+
+
+### Maintenance
+
+* **style:** fix code style ([ac9344a](https://github.com/druidweb/druid/commit/ac9344a9bcae3830b1c3284a0075754500740592))
+* **style:** fix code style ([fc165f1](https://github.com/druidweb/druid/commit/fc165f14b829c10257ae878bc6b47f3d4d92a09c))
+* update release and main.yml ([c15125d](https://github.com/druidweb/druid/commit/c15125ddf960bb18cb63fb8171a38ea0dbd0c68c))
+* update workflows for broken tests ([c2e52ea](https://github.com/druidweb/druid/commit/c2e52ea143739d245bfcafa31ebe5d266825a9ee))
+* workflow issue ([d47f7b0](https://github.com/druidweb/druid/commit/d47f7b0cc022da0cda446b5e98931fa6bfccffad))
+
 ## [1.0.3](https://github.com/druidweb/druid/compare/v1.0.2...v1.0.3) (2025-03-27)
 
 ### Bug Fixes
