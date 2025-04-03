@@ -1,14 +1,13 @@
-import './types/ziggy.js.d.ts';
 import '../css/app.css';
 import './echo';
+import './types/ziggy.js.d.ts';
 
-import { createInertiaApp } from '@inertiajs/vue3';
-import { Head, Link } from '@inertiajs/vue3';
+import { createInertiaApp, Head, Link } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
-import { ZiggyVue } from 'ziggy-js';
 import type { Config } from 'ziggy-js';
+import { ZiggyVue } from 'ziggy-js';
 import { Ziggy } from './ziggy.js';
 
 /// <reference types="vite/client" />

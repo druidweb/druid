@@ -1,4 +1,4 @@
-import { route, Config } from 'ziggy-js';
+import { Config, route } from 'ziggy-js';
 import { Ziggy } from '../ziggy.js';
 
 type RouteNames = string;

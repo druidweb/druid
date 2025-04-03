@@ -63,9 +63,7 @@ const updatePassword = () => {
 
     <SettingsLayout>
       <div class="space-y-6">
-        <HeadingSmall
-          title="Update password"
-          description="Ensure your account is using a long, random password to stay secure" />
+        <HeadingSmall title="Update password" description="Ensure your account is using a long, random password to stay secure" />
 
         <form @submit.prevent="updatePassword" class="space-y-6">
           <div class="grid gap-2">
@@ -77,7 +75,8 @@ const updatePassword = () => {
               type="password"
               class="mt-1 block w-full"
               autocomplete="current-password"
-              placeholder="Current password" />
+              placeholder="Current password"
+            />
             <InputError :message="form.errors.current_password" />
           </div>
 
@@ -90,7 +89,8 @@ const updatePassword = () => {
               type="password"
               class="mt-1 block w-full"
               autocomplete="new-password"
-              placeholder="New password" />
+              placeholder="New password"
+            />
             <InputError :message="form.errors.password" />
           </div>
 
@@ -102,7 +102,8 @@ const updatePassword = () => {
               type="password"
               class="mt-1 block w-full"
               autocomplete="new-password"
-              placeholder="Confirm password" />
+              placeholder="Confirm password"
+            />
             <InputError :message="form.errors.password_confirmation" />
           </div>
 
@@ -114,7 +115,8 @@ const updatePassword = () => {
               enter="transition ease-in-out"
               enter-from="opacity-0"
               leave="transition ease-in-out"
-              leave-to="opacity-0">
+              leave-to="opacity-0"
+            >
               <p class="text-sm text-neutral-600">Saved</p>
             </TransitionRoot>
           </div>
