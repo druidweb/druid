@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/druidweb/druid/compare/v1.0.4...v1.0.5) (2025-04-03)
+
+
+### Bug Fixes
+
+* adjusted ssr for new formatting ([c2372eb](https://github.com/druidweb/druid/commit/c2372eb087119ecad814901d8b904d33b2bb9915))
+
 ## [1.0.4](https://github.com/druidweb/druid/compare/v1.0.3...v1.0.4) (2025-04-03)
 
 
