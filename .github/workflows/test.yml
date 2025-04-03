@@ -51,10 +51,10 @@ jobs:
         run: php artisan key:generate
 
       - name: Publish Ziggy Configuration
-        run: php artisan ziggy:generate
+        run: php artisan ziggy:generate --types
 
       - name: Build Assets
-        run: bun run build
+        run: bun run prod
 
       - name: Run Tests
         run: ./vendor/bin/pest

@@ -9,6 +9,7 @@
     "format": "prettier --write resources/",
     "format:check": "prettier --check resources/",
     "lint": "eslint . --fix",
+    "prod": "bun zz && vite build && vite build --ssr",
     "reverb:start": "php artisan reverb:start > storage/logs/reverb.log 2>&1 &",
     "reverb:stop": "pkill -f \"artisan reverb:start\" || echo \"No Reverb processes found\"",
     "zz": "php artisan ziggy:generate --types"
