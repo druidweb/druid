@@ -34,7 +34,7 @@ jobs:
     if: |
       github.event_name == 'push' &&
       needs.verify.outputs.is_valid == 'true'
-    needs: [verify]
+    needs: [verify, lint]
     uses: ./.github/workflows/release.yml
 
   update-maintenance:
