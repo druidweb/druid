@@ -3,9 +3,10 @@
   "type": "module",
   "scripts": {
     "cn": "composer update && bun update",
-    "build": "bun reverb:stop && bun zz && vite build",
-    "build:ssr": "bun reverb:stop && bun zz && vite build && vite build --ssr",
-    "dev": "bun zz && bun reverb:start && vite",
+    "build": "bun zz && vite build",
+    "build:ssr": "bun zz && vite build && vite build --ssr",
+    "dev": "bun reverb:stop && bun zz && bun reverb:start && vite",
+    "dev:ssr": "bun reverb:stop && bun zz && vite build && vite build --ssr",
     "format": "prettier --write resources/",
     "format:check": "prettier --check resources/",
     "lint": "eslint . --fix",
