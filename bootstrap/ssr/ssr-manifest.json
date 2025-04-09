@@ -1,7 +1,5 @@
 {
   "node_modules/laravel-vite-plugin/inertia-helpers/index.js": [],
-  "resources/css/app.css": [],
-  "resources/js/app.ts": [],
   "resources/js/components/AppContent.vue": [
     "/build/assets/AppLayout-Pm2NQ-CK.js"
   ],
@@ -39,16 +37,16 @@
     "/build/assets/AppLayout-Pm2NQ-CK.js"
   ],
   "resources/js/components/AppearanceTabs.vue": [
-    "/build/assets/Appearance-DfDVK5H7.js"
+    "/build/assets/Appearance-ocYlduyK.js"
   ],
   "resources/js/components/AppearanceTabs.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Appearance-DfDVK5H7.js"
+    "/build/assets/Appearance-ocYlduyK.js"
   ],
   "resources/js/components/DeleteUser.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/DeleteUser.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/Heading.vue": [
     "/build/assets/Layout-EewEkA2c.js"
@@ -183,64 +181,64 @@
     "/build/assets/AppLogoIcon-xe2zDqH9.js"
   ],
   "resources/js/components/ui/checkbox/Checkbox.vue": [
-    "/build/assets/Login-h4gXG9NZ.js"
+    "/build/assets/Login-DzRvj1lq.js"
   ],
   "resources/js/components/ui/checkbox/Checkbox.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Login-h4gXG9NZ.js"
+    "/build/assets/Login-DzRvj1lq.js"
   ],
   "resources/js/components/ui/dialog/Dialog.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/Dialog.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogClose.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogClose.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogContent.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogContent.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogDescription.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogDescription.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogFooter.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogFooter.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogHeader.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogHeader.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogScrollContent.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogScrollContent.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogTitle.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogTitle.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogTrigger.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dialog/DialogTrigger.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/components/ui/dropdown-menu/DropdownMenu.vue": [
     "/build/assets/AppLayout-Pm2NQ-CK.js"
@@ -563,14 +561,15 @@
   "resources/js/components/ui/tooltip/TooltipTrigger.vue?vue&type=script&setup=true&lang.ts": [
     "/build/assets/AppLayout-Pm2NQ-CK.js"
   ],
-  "resources/js/composables/useAppearance.ts": [],
+  "resources/js/composables/useAppearance.ts": [
+    "/build/assets/Appearance-ocYlduyK.js"
+  ],
   "resources/js/composables/useInitials.ts": [
     "/build/assets/AppLayout-Pm2NQ-CK.js"
   ],
   "resources/js/composables/useRoutes.ts": [
-    "/build/assets/useRoutes-DcRJSvd8.js"
+    "/build/assets/useRoutes-JSS26hLF.js"
   ],
-  "resources/js/echo.ts": [],
   "resources/js/layouts/AppLayout.vue": [
     "/build/assets/AppLayout-Pm2NQ-CK.js"
   ],
@@ -617,59 +616,62 @@
     "/build/assets/Welcome-C9xMziyQ.js"
   ],
   "resources/js/pages/auth/ConfirmPassword.vue": [
-    "/build/assets/ConfirmPassword-DnqKtAUQ.js"
+    "/build/assets/ConfirmPassword-bJ4Wsebq.js"
   ],
   "resources/js/pages/auth/ConfirmPassword.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/ConfirmPassword-DnqKtAUQ.js"
+    "/build/assets/ConfirmPassword-bJ4Wsebq.js"
   ],
   "resources/js/pages/auth/ForgotPassword.vue": [
-    "/build/assets/ForgotPassword-BFP-IX4n.js"
+    "/build/assets/ForgotPassword-rd3E4MHO.js"
   ],
   "resources/js/pages/auth/ForgotPassword.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/ForgotPassword-BFP-IX4n.js"
+    "/build/assets/ForgotPassword-rd3E4MHO.js"
   ],
   "resources/js/pages/auth/Login.vue": [
-    "/build/assets/Login-h4gXG9NZ.js"
+    "/build/assets/Login-DzRvj1lq.js"
   ],
   "resources/js/pages/auth/Login.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Login-h4gXG9NZ.js"
+    "/build/assets/Login-DzRvj1lq.js"
   ],
   "resources/js/pages/auth/Register.vue": [
-    "/build/assets/Register-WX2ETWz2.js"
+    "/build/assets/Register-D2P42823.js"
   ],
   "resources/js/pages/auth/Register.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Register-WX2ETWz2.js"
+    "/build/assets/Register-D2P42823.js"
   ],
   "resources/js/pages/auth/ResetPassword.vue": [
-    "/build/assets/ResetPassword-hEwh1az_.js"
+    "/build/assets/ResetPassword-CrgHoFno.js"
   ],
   "resources/js/pages/auth/ResetPassword.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/ResetPassword-hEwh1az_.js"
+    "/build/assets/ResetPassword-CrgHoFno.js"
   ],
   "resources/js/pages/auth/VerifyEmail.vue": [
-    "/build/assets/VerifyEmail-DStxjuDX.js"
+    "/build/assets/VerifyEmail-BIndGB76.js"
   ],
   "resources/js/pages/auth/VerifyEmail.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/VerifyEmail-DStxjuDX.js"
+    "/build/assets/VerifyEmail-BIndGB76.js"
   ],
   "resources/js/pages/settings/Appearance.vue": [
-    "/build/assets/Appearance-DfDVK5H7.js"
+    "/build/assets/Appearance-ocYlduyK.js"
   ],
   "resources/js/pages/settings/Appearance.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Appearance-DfDVK5H7.js"
+    "/build/assets/Appearance-ocYlduyK.js"
   ],
   "resources/js/pages/settings/Password.vue": [
-    "/build/assets/Password-4V1dvGGZ.js"
+    "/build/assets/Password-BLqPp3RX.js"
   ],
   "resources/js/pages/settings/Password.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Password-4V1dvGGZ.js"
+    "/build/assets/Password-BLqPp3RX.js"
   ],
   "resources/js/pages/settings/Profile.vue": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
   "resources/js/pages/settings/Profile.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Profile-RAPyFgxT.js"
+    "/build/assets/Profile-Cf3V3B28.js"
   ],
-  "resources/js/ziggy.js": [],
+  "resources/js/ssr.ts": [],
+  "resources/js/ziggy.js": [
+    "/build/assets/useRoutes-JSS26hLF.js"
+  ],
   "vendor/tightenco/ziggy/dist/index.js": []
 }
