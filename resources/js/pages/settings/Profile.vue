@@ -51,13 +51,7 @@ const submit = () => {
         <form @submit.prevent="submit" class="space-y-6">
           <div class="grid gap-2">
             <Label for="name">Name</Label>
-            <Input
-              id="name"
-              class="mt-1 block w-full"
-              v-model="form.name"
-              required
-              autocomplete="name"
-              placeholder="Full name" />
+            <Input id="name" class="mt-1 block w-full" v-model="form.name" required autocomplete="name" placeholder="Full name" />
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
 
@@ -70,18 +64,20 @@ const submit = () => {
               v-model="form.email"
               required
               autocomplete="username"
-              placeholder="Email address" />
+              placeholder="Email address"
+            />
             <InputError class="mt-2" :message="form.errors.email" />
           </div>
 
           <div v-if="mustVerifyEmail && !user.email_verified_at">
-            <p class="-mt-4 text-sm text-muted-foreground">
+            <p class="text-muted-foreground -mt-4 text-sm">
               Your email address is unverified.
               <Link
                 :href="route('verification.send')"
                 method="post"
                 as="button"
-                class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500">
+                class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+              >
                 Click here to resend the verification email.
               </Link>
             </p>
@@ -98,7 +94,8 @@ const submit = () => {
               enter-active-class="transition ease-in-out"
               enter-from-class="opacity-0"
               leave-active-class="transition ease-in-out"
-              leave-to-class="opacity-0">
+              leave-to-class="opacity-0"
+            >
               <p v-show="form.recentlySuccessful" class="text-sm text-neutral-600">Saved.</p>
             </Transition>
           </div>
