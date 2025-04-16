@@ -2,7 +2,6 @@
 import InputError from '@/components/InputError.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
-import { TransitionRoot } from '@headlessui/vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -12,12 +11,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { type BreadcrumbItem } from '@/types';
 
-interface Props {
-  className?: string;
-}
-
-defineProps<Props>();
-
 const breadcrumbItems: BreadcrumbItem[] = [
   {
     title: 'Password settings',
@@ -25,8 +18,8 @@ const breadcrumbItems: BreadcrumbItem[] = [
   },
 ];
 
-const passwordInput = ref<HTMLInputElement>();
-const currentPasswordInput = ref<HTMLInputElement>();
+const passwordInput = ref<HTMLInputElement | null>(null);
+const currentPasswordInput = ref<HTMLInputElement | null>(null);
 
 const form = useForm({
   current_password: '',
@@ -59,15 +52,17 @@ const updatePassword = () => {
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbItems">
-    <Head title="Profile settings" />
+    <Head title="Password settings" />
 
     <SettingsLayout>
       <div class="space-y-6">
-        <HeadingSmall title="Update password" description="Ensure your account is using a long, random password to stay secure" />
+        <HeadingSmall
+          title="Update password"
+          description="Ensure your account is using a long, random password to stay secure" />
 
         <form @submit.prevent="updatePassword" class="space-y-6">
           <div class="grid gap-2">
-            <Label for="current_password">Current Password</Label>
+            <Label for="current_password">Current password</Label>
             <Input
               id="current_password"
               ref="currentPasswordInput"
@@ -75,8 +70,7 @@ const updatePassword = () => {
               type="password"
               class="mt-1 block w-full"
               autocomplete="current-password"
-              placeholder="Current password"
-            />
+              placeholder="Current password" />
             <InputError :message="form.errors.current_password" />
           </div>
 
@@ -89,8 +83,7 @@ const updatePassword = () => {
               type="password"
               class="mt-1 block w-full"
               autocomplete="new-password"
-              placeholder="New password"
-            />
+              placeholder="New password" />
             <InputError :message="form.errors.password" />
           </div>
 
@@ -102,23 +95,20 @@ const updatePassword = () => {
               type="password"
               class="mt-1 block w-full"
               autocomplete="new-password"
-              placeholder="Confirm password"
-            />
+              placeholder="Confirm password" />
             <InputError :message="form.errors.password_confirmation" />
           </div>
 
           <div class="flex items-center gap-4">
             <Button :disabled="form.processing">Save password</Button>
 
-            <TransitionRoot
-              :show="form.recentlySuccessful"
-              enter="transition ease-in-out"
-              enter-from="opacity-0"
-              leave="transition ease-in-out"
-              leave-to="opacity-0"
-            >
-              <p class="text-sm text-neutral-600">Saved</p>
-            </TransitionRoot>
+            <Transition
+              enter-active-class="transition ease-in-out"
+              enter-from-class="opacity-0"
+              leave-active-class="transition ease-in-out"
+              leave-to-class="opacity-0">
+              <p v-show="form.recentlySuccessful" class="text-sm text-neutral-600">Saved.</p>
+            </Transition>
           </div>
         </form>
       </div>

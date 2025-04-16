@@ -33,7 +33,14 @@ const submit = () => {
       <form @submit.prevent="submit">
         <div class="grid gap-2">
           <Label for="email">Email address</Label>
-          <Input id="email" type="email" name="email" autocomplete="off" v-model="form.email" autofocus placeholder="email@example.com" />
+          <Input
+            id="email"
+            type="email"
+            name="email"
+            autocomplete="off"
+            v-model="form.email"
+            autofocus
+            placeholder="email@example.com" />
           <InputError :message="form.errors.email" />
         </div>
 
@@ -47,7 +54,7 @@ const submit = () => {
 
       <div class="space-x-1 text-center text-sm text-muted-foreground">
         <span>Or, return to</span>
-        <TextLink :href="useRoutes('login')">log in</TextLink>
+        <TextLink :href="route('login')">log in</TextLink>
       </div>
     </div>
   </AuthLayout>

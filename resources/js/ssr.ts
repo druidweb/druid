@@ -12,8 +12,7 @@ createServer((page) =>
     page,
     render: renderToString,
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) =>
-      resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
+    resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
     setup({ App, props, plugin }) {
       const app = createSSRApp({ render: () => h(App, props) });
 
@@ -38,5 +37,5 @@ createServer((page) =>
 
       return app;
     },
-  })
+  }),
 );
