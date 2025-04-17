@@ -1,5 +1,42 @@
 # Changelog
 
+# [1.1.0](https://github.com/druidweb/druid/compare/v1.0.5...v1.1.0) (2025-04-17)
+
+
+* Merge branch '1.x' ([65dc767](https://github.com/druidweb/druid/commit/65dc76797765ce4cfd91f97b9a4ca41010307cf1))
+* Merge branch 'main' into 1.x ([48d6047](https://github.com/druidweb/druid/commit/48d6047feee07a5dd9fe005534e5b9a8343d8a82))
+
+
+### Bug Fixes
+
+* adjust workflows ([4eb1410](https://github.com/druidweb/druid/commit/4eb14109ba0a011a62e8d3bc5929e84db4329620))
+
+
+### Features
+
+* remove reverb for pusher service ([4ecfebf](https://github.com/druidweb/druid/commit/4ecfebf6f795c3f9a5bfac521412ea06a5ff0262))
+* update to tailwind 4 ([c8cd3b4](https://github.com/druidweb/druid/commit/c8cd3b424e6c444fe0401583539709f473ec4cb0))
+
+
+### Maintenance
+
+* adjusted workflow to fix a needs value ([03497dc](https://github.com/druidweb/druid/commit/03497dcc9ab090dfe9e8bdc97eb9bd2b284ac626))
+* merge main into 1.x [skip ci] ([5fc22d4](https://github.com/druidweb/druid/commit/5fc22d41199791ba68e92b7afa61fe41c433e34a))
+* merge main into 1.x [skip ci] ([aee3de3](https://github.com/druidweb/druid/commit/aee3de3ffdb66146ad0b97ed8f2af4afcac50ed7))
+* merge main into 1.x [skip ci] ([438a146](https://github.com/druidweb/druid/commit/438a1466503eb02298b7438a458266459d8f29e0))
+* merge main into 1.x [skip ci] ([8242a16](https://github.com/druidweb/druid/commit/8242a167722a4b2d90c8406a1ce4464eb8ff89a9))
+* merge main into 1.x [skip ci] ([858a575](https://github.com/druidweb/druid/commit/858a575cce1e5576c97eb1ec3129856e8e7f5533))
+* merge main into 1.x [skip ci] ([b9eb25a](https://github.com/druidweb/druid/commit/b9eb25aa4e92f1818cf6c93d694086780e844edc))
+* **style:** fix code style ([c02fa67](https://github.com/druidweb/druid/commit/c02fa67f57e9abfeb9923253ee31fbb19b9e9cc1))
+* **style:** fix code style ([2460276](https://github.com/druidweb/druid/commit/2460276134af88020082796e13d074929e0dd569))
+* **style:** fix code style ([e9e3b6e](https://github.com/druidweb/druid/commit/e9e3b6e108a9e8400422ab31df2093da577927c1))
+* update gitignore ([5e32f0f](https://github.com/druidweb/druid/commit/5e32f0fad35fbd4ada0971402f2e0f2679355229))
+
+
+### Work in Progress
+
+* still working on ssr ([cf6c23d](https://github.com/druidweb/druid/commit/cf6c23df47288c7567bbcaa5f24d2f853150a038))
+
 ## [1.0.5](https://github.com/druidweb/druid/compare/v1.0.4...v1.0.5) (2025-04-03)
 
 
