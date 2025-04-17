@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.1](https://github.com/druidweb/druid/compare/v1.1.0...v1.1.1) (2025-04-17)
+
+
+### Code Refactoring
+
+* update various for new shadcn file ([4378a43](https://github.com/druidweb/druid/commit/4378a43a6243b023f308668e47138704a076db0f))
+
+
+### Maintenance
+
+* incomplete staging ([5e0d73f](https://github.com/druidweb/druid/commit/5e0d73f2b80c03515cad435f6c4b439006851c65))
+
 # [1.1.0](https://github.com/druidweb/druid/compare/v1.0.5...v1.1.0) (2025-04-17)
 
 
