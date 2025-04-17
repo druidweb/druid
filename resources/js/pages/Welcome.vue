@@ -3,10 +3,7 @@ import { Head, Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-  <Head title="Welcome">
-    <link rel="preconnect" href="https://rsms.me/" />
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-  </Head>
+  <Head title="Welcome" />
   <div class="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
     <header class="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
       <nav class="flex items-center justify-end gap-4">
@@ -198,7 +195,7 @@ import { Head, Link } from '@inertiajs/vue3';
               />
             </g>
             <g
-              :style="{ mixBlendMode: 'plus-darker' }"
+              :style="{ mixBlendMode: 'multiply' }"
               class="translate-y-0 opacity-100 transition-all delay-300 duration-750 starting:translate-y-4 starting:opacity-0"
             >
               <path

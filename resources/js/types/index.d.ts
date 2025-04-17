@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-vue-next';
 import { Config, RouteParams } from 'ziggy-js';
+import { PageProps } from '@inertiajs/core';
 
 export interface Auth {
   user: User;
@@ -17,7 +18,7 @@ export interface NavItem {
   isActive?: boolean;
 }
 
-export interface SharedData {
+export interface SharedData extends PageProps {
   name: string;
   quote: { message: string; author: string };
   auth: Auth;
@@ -28,6 +29,8 @@ export interface SharedData {
     defaults: Record<string, unknown>;
     routes: Record<string, string>;
   };
+  sidebarOpen: boolean;
+  [key: string]: unknown;
 }
 
 export interface User {
