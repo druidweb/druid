@@ -1,6 +1,6 @@
 {
   "$schema": "https://getcomposer.org/schema.json",
-  "name": "daisorg/dais-app-starter-kit",
+  "name": "druidweb/druid",
   "type": "project",
   "description": "A modern, opinionated starter kit for Laravel 12+ applications",
   "keywords": [
@@ -11,20 +11,19 @@
   "license": "MIT",
   "require": {
     "php": "^8.2",
-    "inertiajs/inertia-laravel": "^2.0.1",
-    "laravel/framework": "^12.3.0",
-    "laravel/reverb": "*",
+    "inertiajs/inertia-laravel": "^2.0.2",
+    "laravel/framework": "^12.9.0",
     "laravel/sanctum": "^4.0.8",
     "laravel/tinker": "^2.10.1",
     "predis/predis": "^2.3.0",
-    "pusher/pusher-php-server": "*",
+    "pusher/pusher-php-server": "^7.2.7",
     "tightenco/ziggy": "^2.5.2"
   },
   "require-dev": {
     "fakerphp/faker": "^1.24.1",
     "mockery/mockery": "^1.6.12",
-    "nunomaduro/collision": "^8.7.0",
-    "pestphp/pest": "^3.7.4",
+    "nunomaduro/collision": "^8.8.0",
+    "pestphp/pest": "^3.8.1",
     "pestphp/pest-plugin-drift": "^3.0.0",
     "pestphp/pest-plugin-laravel": "^3.1.0",
     "zenphp/fixr": "^1.0.3"
@@ -56,12 +55,6 @@
       "@php artisan key:generate --ansi",
       "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
       "@php artisan migrate --graceful --ansi"
-    ],
-    "start": [
-      "bun run reverb:start"
-    ],
-    "stop": [
-      "bun run reverb:stop"
     ],
     "dev": [
       "Composer\\Config::disableProcessTimeout",
