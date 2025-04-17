@@ -12,7 +12,7 @@
       "@/*": ["./resources/js/*"],
       "ziggy-js": ["./vendor/tightenco/ziggy"]
     },
-    "types": ["vite/client", "@vue/runtime-core", "./resources/js", "./resources/js/types"],
+    "types": ["vite/client", "@vue/runtime-core", "./resources/js/types"],
     "resolveJsonModule": true,
 
     "allowJs": true,

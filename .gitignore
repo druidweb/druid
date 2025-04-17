@@ -5,7 +5,6 @@
 /public/storage
 /storage/*.key
 /storage/pail
-/bootstrap/ssr
 /vendor
 .DS_Store
 bun.lock

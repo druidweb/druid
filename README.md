@@ -1,4 +1,4 @@
-# Dais App Starter Kit
+# Druid Starter Kit
 
 A modern, opinionated starter kit for Laravel 12+ applications with Vue 3, TypeScript, and Tailwind CSS.
 
@@ -10,7 +10,6 @@ A modern, opinionated starter kit for Laravel 12+ applications with Vue 3, TypeS
 - 🎨 [Tailwind CSS](https://tailwindcss.com) with dark mode support
 - 📱 [Inertia.js](https://inertiajs.com) - Modern single-page apps without API complexity
 - 🔒 [Laravel Sanctum](https://laravel.com/docs/sanctum) - API authentication
-- 🚦 [Laravel Reverb](https://laravel.com/docs/reverb) - WebSocket server
 - 🧪 [Pest PHP](https://pestphp.com) - Testing with pleasure
 - 📝 [ESLint](https://eslint.org) + [Prettier](https://prettier.io) - Consistent code style
 - 🔄 Automated releases with semantic-release
@@ -21,7 +20,7 @@ A modern, opinionated starter kit for Laravel 12+ applications with Vue 3, TypeS
 
 - PHP 8.2 or higher
 - Composer 2+
-- Node.js 18+ (or Bun)
+- Node.js 18+ (or preferably Bun)
 - SQLite / MySQL / PostgreSQL
 
 ## Installation
@@ -35,7 +34,7 @@ composer global require laravel/installer
 Then create a new Laravel application using this starter kit:
 
 ```bash
-laravel new --using=daisorg/dais-app-starter-kit
+laravel new --using=druidweb/druid
 ```
 
 For more information about Laravel starter kits, please refer to the [Laravel documentation](https://laravel.com/docs/12.x/starter-kits).
@@ -47,13 +46,13 @@ For more information about Laravel starter kits, please refer to the [Laravel do
 bun run cn
 
 # Start development server
-composer dev
+bun run dev
 
 # Build for production
 bun run build
 
 # Run tests
-./vendor/bin/pest
+php artisan test
 
 # Format code
 bun run format
