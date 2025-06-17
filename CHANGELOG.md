@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.4](https://github.com/druidweb/druid/compare/v1.1.3...v1.1.4) (2025-06-17)
+
+
+### Bug Fixes
+
+* pre-commit hook update ([a617a88](https://github.com/druidweb/druid/commit/a617a886da617be77aeec0b81e917dbc4771c321))
+
+
+### Code Refactoring
+
+* add maintenance workflow ([235a877](https://github.com/druidweb/druid/commit/235a8774df821cce5aed2e48842b69fca8963ef2))
+
 ## [1.1.3](https://github.com/druidweb/druid/compare/v1.1.2...v1.1.3) (2025-06-17)
 
 
