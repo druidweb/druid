@@ -1,3 +1,10 @@
+<p align="center">
+<a href="https://github.com/druidweb/druid/actions"><img src="https://github.com/druidweb/druid/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/druidweb/druid"><img src="https://img.shields.io/packagist/dt/druidweb/druid" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/druidweb/druid"><img src="https://img.shields.io/packagist/v/druidweb/druid" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/druidweb/druid"><img src="https://img.shields.io/packagist/l/druidweb/druid" alt="License"></a>
+</p>
+
 # Druid Starter Kit
 
 A modern, opinionated starter kit for Laravel 12+ applications with Vue 3, TypeScript, and Tailwind CSS.
