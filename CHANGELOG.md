@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/druidweb/druid/compare/v1.1.2...v1.1.3) (2025-06-17)
+
+
+### Bug Fixes
+
+* removed modules path from composer ([be8de4e](https://github.com/druidweb/druid/commit/be8de4e3a0fc5971352281020d7f80a9b1893c65))
+
 ## [1.1.2](https://github.com/druidweb/druid/compare/v1.1.1...v1.1.2) (2025-06-17)
 
 
