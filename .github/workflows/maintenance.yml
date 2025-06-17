@@ -15,14 +15,8 @@ jobs:
   verify:
     uses: ./.github/workflows/verify.yml
 
-  test:
-    needs: verify
-    uses: ./.github/workflows/test.yml
-    with:
-      ref: ${{ github.sha }}
-
-  coverage:
-    needs: [verify, test]
+  test-coverage:
+    needs: [verify]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -35,7 +29,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -74,5 +69,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -f clover.xml
-          git diff --staged --quiet || git commit -m "chore: update test coverage report [skip ci]"
-          git push
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update test coverage report [skip ci]"
+            git push origin ${{ github.ref_name }}
+          fi
