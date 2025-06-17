@@ -15,7 +15,7 @@
     "laravel/framework": "^12.9.0",
     "laravel/sanctum": "^4.0.8",
     "laravel/tinker": "^2.10.1",
-    "predis/predis": "^2.3.0",
+    "predis/predis": "^3.0.1",
     "pusher/pusher-php-server": "^7.2.7",
     "tightenco/ziggy": "^2.5.2"
   },
