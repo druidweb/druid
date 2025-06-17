@@ -3,8 +3,6 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 test('password can be updated', function () {
   $user = User::factory()->create();
 
@@ -39,4 +37,12 @@ test('correct password must be provided to update password', function () {
   $response
     ->assertSessionHasErrors('current_password')
     ->assertRedirect('/settings/password');
+});
+
+test('password settings page can be displayed', function () {
+  $user = User::factory()->create();
+
+  $response = $this->actingAs($user)->get('/settings/password');
+
+  $response->assertStatus(200);
 });

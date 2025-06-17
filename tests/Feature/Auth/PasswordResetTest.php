@@ -4,8 +4,6 @@ use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 test('reset password link screen can be rendered', function () {
   $response = $this->get('/forgot-password');
 
@@ -59,4 +57,17 @@ test('password can be reset with valid token', function () {
 
     return true;
   });
+});
+
+test('password reset fails with invalid token', function () {
+  $user = User::factory()->create();
+
+  $response = $this->post('/reset-password', [
+    'token' => 'invalid-token',
+    'email' => $user->email,
+    'password' => 'password',
+    'password_confirmation' => 'password',
+  ]);
+
+  $response->assertSessionHasErrors('email');
 });

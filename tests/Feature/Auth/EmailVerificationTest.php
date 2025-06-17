@@ -5,8 +5,6 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 test('email verification screen can be rendered', function () {
   $user = User::factory()->unverified()->create();
 
@@ -45,4 +43,43 @@ test('email is not verified with invalid hash', function () {
   $this->actingAs($user)->get($verificationUrl);
 
   expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
+});
+
+test('email verification notification can be sent', function () {
+  $user = User::factory()->unverified()->create();
+
+  $response = $this->actingAs($user)->post('/email/verification-notification');
+
+  $response->assertRedirect();
+  $response->assertSessionHas('status', 'verification-link-sent');
+});
+
+test('email verification notification redirects if already verified', function () {
+  $user = User::factory()->create(); // Already verified
+
+  $response = $this->actingAs($user)->post('/email/verification-notification');
+
+  $response->assertRedirect(route('dashboard', absolute: false));
+});
+
+test('email verification prompt redirects verified users to dashboard', function () {
+  $user = User::factory()->create(); // Already verified
+
+  $response = $this->actingAs($user)->get('/verify-email');
+
+  $response->assertRedirect(route('dashboard', absolute: false));
+});
+
+test('already verified user gets redirected when trying to verify again', function () {
+  $user = User::factory()->create(); // Already verified
+
+  $verificationUrl = URL::temporarySignedRoute(
+    'verification.verify',
+    now()->addMinutes(60),
+    ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
+  );
+
+  $response = $this->actingAs($user)->get($verificationUrl);
+
+  $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
 });
