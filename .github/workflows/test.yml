@@ -36,9 +36,6 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Create SQLite Database
-        run: touch database/database.sqlite
-
       - name: Install Dependencies
         run: |
           composer install --no-interaction --prefer-dist --optimize-autoloader
