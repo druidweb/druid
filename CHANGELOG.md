@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.5](https://github.com/druidweb/druid/compare/v1.1.4...v1.1.5) (2025-06-17)
+
+
+### Code Refactoring
+
+* updated maintenance added dependabot ([15c1446](https://github.com/druidweb/druid/commit/15c14467bae87ea63f2d06f61e4a03e0fcf32eae))
+
 ## [1.1.4](https://github.com/druidweb/druid/compare/v1.1.3...v1.1.4) (2025-06-17)
 
 
