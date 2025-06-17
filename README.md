@@ -20,7 +20,7 @@ A modern, opinionated starter kit for Laravel 12+ applications with Vue 3, TypeS
 
 - PHP 8.2 or higher
 - Composer 2+
-- Node.js 18+ (or preferably Bun)
+- Node.js 18+ (preferably Bun)
 - SQLite / MySQL / PostgreSQL
 
 ## Installation

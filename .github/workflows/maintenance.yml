@@ -3,7 +3,7 @@ name: Maintenance Branch Workflow
 on:
   push:
     branches:
-      - '+([0-9]).x'
+      - '*.x'
 
 permissions:
   contents: write
