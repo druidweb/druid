@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.1.2](https://github.com/druidweb/druid/compare/v1.1.1...v1.1.2) (2025-06-17)
+
+
+### Bug Fixes
+
+* removed modules package for errors ([91e388a](https://github.com/druidweb/druid/commit/91e388a2a3f92328c47c276b997f237b6294e257))
+
+
+### Code Refactoring
+
+* added module support ([f6f916d](https://github.com/druidweb/druid/commit/f6f916d12f95bf77c280fc6d8f9af147613b64fc))
+
+
+### Maintenance
+
+* style fix ([452d301](https://github.com/druidweb/druid/commit/452d301272fae5f1b324bb0787112ee5fbf01c6d))
+* style updates ([fc1b589](https://github.com/druidweb/druid/commit/fc1b5890d58cc1edd4a273b5eb819773c420113c))
+* style updates ([d5f527b](https://github.com/druidweb/druid/commit/d5f527bd6aa3213e8ddb6a7cb38c311d2502576c))
+* update tests workflow removed sqlite file ([b77a70b](https://github.com/druidweb/druid/commit/b77a70b59fa8b68ce3a54beb1e1cb0e83f44075a))
+
 ## [1.1.1](https://github.com/druidweb/druid/compare/v1.1.0...v1.1.1) (2025-04-17)
 
 
