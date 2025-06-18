@@ -1,4 +1,6 @@
-import { vi } from 'vitest'
+import type { ComponentMountingOptions } from '@vue/test-utils';
+import { mount, VueWrapper } from '@vue/test-utils';
+import { vi } from 'vitest';
 
 // Mock Inertia.js
 vi.mock('@inertiajs/vue3', () => ({
@@ -50,13 +52,37 @@ vi.mock('@inertiajs/vue3', () => ({
     name: 'Link',
     template: '<a><slot /></a>',
   },
-}))
+}));
 
 // Mock Ziggy
 vi.mock('ziggy-js', () => ({
   default: vi.fn((name: string) => `/${name}`),
   route: vi.fn((name: string) => `/${name}`),
-}))
+}));
 
 // Global test utilities
-global.route = vi.fn((name: string) => `/${name}`)
+global.route = vi.fn((name: string) => `/${name}`);
+
+// Test utility functions
+export function mountComponent<T>(component: T, options: ComponentMountingOptions<T> = {}): VueWrapper {
+  return mount(component, {
+    global: {
+      ...options.global,
+    },
+    ...options,
+  });
+}
+
+export function createMockProps(overrides = {}) {
+  return {
+    title: 'Test Component',
+    isVisible: true,
+    items: [],
+    ...overrides,
+  };
+}
+
+export async function triggerAsyncAction(wrapper: VueWrapper, action: () => Promise<void>) {
+  await action();
+  await wrapper.vm.$nextTick();
+}
