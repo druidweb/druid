@@ -76,7 +76,9 @@ jobs:
           git add clover.xml
           if ! git diff --staged --quiet; then
             git commit -m "chore: update test coverage report [skip ci]"
+            git stash --include-untracked || true
             git pull --rebase origin main
+            git stash pop || true
             git push origin main
           fi
 
