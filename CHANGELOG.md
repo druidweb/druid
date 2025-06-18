@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.1.6](https://github.com/druidweb/druid/compare/v1.1.5...v1.1.6) (2025-06-18)
+
+
+### Bug Fixes
+
+* changed coverage to run on main ([c44be12](https://github.com/druidweb/druid/commit/c44be12ff4abb9201272895e7e328dc7cbe7903b))
+
+
+### Code Testing
+
+* verify pre-commit hook runs tests ([05e6f7f](https://github.com/druidweb/druid/commit/05e6f7fb15348d853548cbcc510aab938564ed56))
+
+
+### Maintenance
+
+* **deps:** bump @rollup/rollup-linux-x64-gnu from 4.36.0 to 4.43.0 ([737f52a](https://github.com/druidweb/druid/commit/737f52ac8378db1eb2b2a8e913f61b6c6861643e))
+* **deps:** bump @rollup/rollup-linux-x64-gnu from 4.36.0 to 4.43.0 ([94b25ac](https://github.com/druidweb/druid/commit/94b25aca583d1fb0f4cfa3de0e9d6d50c8eab0f5))
+* **deps:** bump @types/node from 22.15.32 to 24.0.3 ([1071c5a](https://github.com/druidweb/druid/commit/1071c5a7b1672538f225e02b3ca00009434b5b76))
+* **deps:** bump @types/node from 22.15.32 to 24.0.3 ([a240110](https://github.com/druidweb/druid/commit/a2401105f5f6824b4fb8ecf23a5adc956c5962da))
+* **deps:** bump lucide from 0.482.0 to 0.515.0 ([a063000](https://github.com/druidweb/druid/commit/a063000ff28055504723a24431f377d97b533c09))
+* **deps:** bump lucide from 0.482.0 to 0.515.0 ([da605d2](https://github.com/druidweb/druid/commit/da605d2b9020757bba65c79935c1c7fbcad0946c))
+* **deps:** bump lucide-vue-next from 0.488.0 to 0.516.0 ([65adab2](https://github.com/druidweb/druid/commit/65adab25f8e60cfd5d7a8c9e52e803d68acb4a9c))
+* **deps:** bump lucide-vue-next from 0.488.0 to 0.516.0 ([c0c4b06](https://github.com/druidweb/druid/commit/c0c4b06c2c6adfd7df9e4c90b6566c4e129aebe1))
+* **deps:** bump predis/predis from 2.4.0 to 3.0.1 ([c71a236](https://github.com/druidweb/druid/commit/c71a236fed58ec4d9c13e53d228e44bfe231bba3))
+* **deps:** bump predis/predis from 2.4.0 to 3.0.1 ([aed9da2](https://github.com/druidweb/druid/commit/aed9da2ce8d9d320c2cc0c5688bbc3f26e0ff825))
+* update dependencies ([38e9a62](https://github.com/druidweb/druid/commit/38e9a62b2c343e937bd2781372bbde7edefad413))
+* update readme ([7d3887c](https://github.com/druidweb/druid/commit/7d3887cfb6b9c7944d464f9f1d95f4d14d820c30))
+
+
+### Work in Progress
+
+* another try at coverage ([4ea33da](https://github.com/druidweb/druid/commit/4ea33da09ab1ef31ce967b8eed754c9ca768b96f))
+* more coverage display work ([962a647](https://github.com/druidweb/druid/commit/962a647dc40be624671554ddd7b3b3c063d4ca95))
+* working on coverage display ([20919ea](https://github.com/druidweb/druid/commit/20919ea1518b46239de6d4083d4064f79524a1f3))
+
 ## [1.1.5](https://github.com/druidweb/druid/compare/v1.1.4...v1.1.5) (2025-06-17)
 
 
