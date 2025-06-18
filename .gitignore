@@ -1,5 +1,8 @@
 /.phpunit.cache
 /node_modules
+/coverage/
+/tests/Browser/screenshots/
+/tests/Browser/console/
 /public/build
 /public/hot
 /public/storage
@@ -8,6 +11,7 @@
 /vendor
 .DS_Store
 bun.lock
+vitest.md
 .env
 .env.backup
 .env.production

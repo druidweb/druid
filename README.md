@@ -20,6 +20,8 @@ A modern, opinionated starter kit for Laravel 12+ applications with Vue 3, TypeS
 - 📱 [Inertia.js](https://inertiajs.com) - Modern single-page apps without API complexity
 - 🔒 [Laravel Sanctum](https://laravel.com/docs/sanctum) - API authentication
 - 🧪 [Pest PHP](https://pestphp.com) - Testing with pleasure
+- 🌐 [Laravel Dusk](https://laravel.com/docs/dusk) - Browser testing for Laravel
+- ⚡️ [Vitest](https://vitest.dev) - Fast JavaScript unit testing
 - 🔍 [Larastan](https://github.com/larastan/larastan) - Static analysis for Laravel
 - 📝 [ESLint](https://eslint.org) + [Prettier](https://prettier.io) - Consistent code style
 - 🔄 Automated releases with semantic-release
@@ -68,6 +70,12 @@ composer test
 # Run tests with coverage
 composer test:coverage
 
+# Run browser tests (Laravel Dusk)
+composer test:browser
+
+# Run JavaScript tests (Vitest)
+bun run test:js
+
 # Run static analysis
 composer analyse
 
@@ -89,11 +97,12 @@ This starter kit follows semantic versioning using maintenance branches:
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-## Security
+## Security Vulnerabilities
 
-If you discover any security-related issues, please email hello@druidweb.com instead of using the issue tracker.
+Please review [our security policy](https://github.com/druidweb/druid/security/policy) on how to report security vulnerabilities.
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
 # Test coverage generation

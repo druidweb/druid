@@ -7,14 +7,7 @@ export default defineConfigWithVueTs(
   vue.configs['flat/essential'],
   vueTsConfigs.recommended,
   {
-    ignores: [
-      'vendor',
-      'node_modules',
-      'public',
-      'bootstrap/ssr',
-      'tailwind.config.js',
-      'resources/js/components/ui/*',
-    ],
+    ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js', 'resources/js/components/ui/*', 'tests/**/*'],
   },
   {
     rules: {
@@ -22,5 +15,5 @@ export default defineConfigWithVueTs(
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
-  prettier
+  prettier,
 );
