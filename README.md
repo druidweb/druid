@@ -63,10 +63,13 @@ bun run dev
 bun run build
 
 # Run tests
-php artisan test
+composer test
+
+# Run tests with coverage
+composer test:coverage
 
 # Run static analysis
-bun run analyse
+composer analyse
 
 # Format code
 bun run format
@@ -93,4 +96,4 @@ If you discover any security-related issues, please email hello@druidweb.com ins
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-# Test static analysis
+# Test composer commands
