@@ -25,7 +25,7 @@ A modern, opinionated starter kit for Laravel 12+ applications with Vue 3, TypeS
 - 🔄 Automated releases with semantic-release
 - 👷 GitHub Actions workflows for testing and deployment
 - 🏗️ Pre-configured development environment
-- 💯 100% code coverage
+- 💯 100% code coverage with automated reporting
 
 ## Requirements
 
@@ -96,3 +96,4 @@ If you discover any security-related issues, please email hello@druidweb.com ins
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+# Test coverage generation

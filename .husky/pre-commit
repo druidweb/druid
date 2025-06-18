@@ -33,9 +33,9 @@ fi
 
 echo "✅ Static analysis passed!"
 
-# Run tests to ensure they pass before commit
-echo "Running tests..."
-composer test
+# Run tests with coverage to ensure they pass before commit
+echo "Running tests with coverage..."
+composer test:coverage
 
 # Check if tests passed
 if [ $? -ne 0 ]; then
@@ -46,3 +46,9 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "✅ All tests passed!"
+
+# Stage the updated coverage file if it exists
+if [ -f "clover.xml" ]; then
+  git add clover.xml
+  echo "📊 Coverage report updated and staged"
+fi
