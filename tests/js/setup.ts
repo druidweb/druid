@@ -82,6 +82,29 @@ export function createMockProps(overrides = {}) {
   };
 }
 
+export function createMockUser(overrides = {}) {
+  return {
+    id: 1,
+    name: 'Test User',
+    email: 'test@example.com',
+    avatar: null,
+    ...overrides,
+  };
+}
+
+export function createMockPageProps(overrides = {}) {
+  return {
+    auth: {
+      user: createMockUser(),
+    },
+    ...overrides,
+  };
+}
+
+export function createMockBreadcrumbs(overrides = []) {
+  return [{ title: 'Home', href: '/' }, { title: 'Dashboard', href: '/dashboard' }, ...overrides];
+}
+
 export async function triggerAsyncAction(wrapper: VueWrapper, action: () => Promise<void>) {
   await action();
   await wrapper.vm.$nextTick();
