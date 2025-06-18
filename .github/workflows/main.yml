@@ -67,7 +67,7 @@ jobs:
         run: bun run prod
 
       - name: Run Tests with Coverage
-        run: ./vendor/bin/pest --coverage --coverage-clover=clover.xml
+        run: composer test:coverage
 
       - name: Commit Coverage Report
         run: |

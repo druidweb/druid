@@ -19,9 +19,23 @@ if [ -n "$MODIFIED_FILES" ]; then
   echo "$MODIFIED_FILES" | grep -E "auto-imports\.d\.ts$" | xargs -r git add
 fi
 
+# Run static analysis
+echo "Running static analysis..."
+composer analyse
+
+# Check if static analysis passed
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Static analysis failed! Commit aborted."
+  echo "Please fix the issues above before committing."
+  exit 1
+fi
+
+echo "✅ Static analysis passed!"
+
 # Run tests to ensure they pass before commit
 echo "Running tests..."
-./vendor/bin/pest
+composer test
 
 # Check if tests passed
 if [ $? -ne 0 ]; then

@@ -96,4 +96,3 @@ If you discover any security-related issues, please email hello@druidweb.com ins
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-# Test composer commands
