@@ -18,3 +18,17 @@ fi
 if [ -n "$MODIFIED_FILES" ]; then
   echo "$MODIFIED_FILES" | grep -E "auto-imports\.d\.ts$" | xargs -r git add
 fi
+
+# Run tests to ensure they pass before commit
+echo "Running tests..."
+./vendor/bin/pest
+
+# Check if tests passed
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Tests failed! Commit aborted."
+  echo "Please fix failing tests before committing."
+  exit 1
+fi
+
+echo "✅ All tests passed!"
