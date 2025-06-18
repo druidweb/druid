@@ -97,9 +97,9 @@ This starter kit follows semantic versioning using maintenance branches:
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-## Security
+## Security Vulnerabilities
 
-If you discover any security-related issues, please email hello@druidweb.com instead of using the issue tracker.
+Please review [our security policy](https://github.com/druidweb/druid/security/policy) on how to report security vulnerabilities.
 
 ## License
 
