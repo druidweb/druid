@@ -25,6 +25,66 @@ jobs:
     with:
       ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
+  coverage:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [verify, test]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3']
+
+    name: Generate Coverage
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: pcov
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          bun i
+
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Publish Ziggy Configuration
+        run: php artisan ziggy:generate --types
+
+      - name: Build Assets
+        run: bun run prod
+
+      - name: Run Tests with Coverage
+        run: ./vendor/bin/pest --coverage --coverage-clover=clover.xml
+
+      - name: Commit Coverage Report
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add clover.xml
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update test coverage report [skip ci]"
+            git push origin main
+          fi
+
   release:
     if: |
       github.event_name == 'push' &&
