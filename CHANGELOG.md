@@ -1,5 +1,35 @@
 # Changelog
 
+# [1.2.0](https://github.com/druidweb/druid/compare/v1.1.6...v1.2.0) (2025-06-18)
+
+
+### Bug Fixes
+
+* forgot to stash change to clover before push ([98073b7](https://github.com/druidweb/druid/commit/98073b729319895d887504dc075f4d0ddeb5cae2))
+* remove ci coverage ([4481a1a](https://github.com/druidweb/druid/commit/4481a1afdf8a8b4a5023725bbac3af2b999444f1))
+* updated main workflow to add checkout ([42e257c](https://github.com/druidweb/druid/commit/42e257cf5bb0f24a4cfd794dce6bcbcd2e819b19))
+
+
+### Code Refactoring
+
+* add strict types and final classes ([7c20db1](https://github.com/druidweb/druid/commit/7c20db1d458903e96a9beb9881eb53565ffb9cd6))
+
+
+### Code Testing
+
+* verify static analysis in pre-commit hook ([890eb90](https://github.com/druidweb/druid/commit/890eb90cf5ad2cb621d50972d4d8aee3679ed774))
+
+
+### Features
+
+* add composer scripts for testing and analysis ([4f07da1](https://github.com/druidweb/druid/commit/4f07da1be8e7f4ea6021a1a977c3f22c9cec4020))
+
+
+### Maintenance
+
+* update test coverage report [skip ci] ([e9c79fe](https://github.com/druidweb/druid/commit/e9c79fed47c52d4f8f9f0aff7118951436aaada4))
+* update test coverage report [skip ci] ([3d243d8](https://github.com/druidweb/druid/commit/3d243d8dfd344da8a58fde267c34106d545d04a9))
+
 ## [1.1.6](https://github.com/druidweb/druid/compare/v1.1.5...v1.1.6) (2025-06-18)
 
 
