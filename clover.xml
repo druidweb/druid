@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1750219182">
-  <project timestamp="1750219182">
+<coverage generated="1750221007">
+  <project timestamp="1750221007">
     <package name="App\Http\Controllers\Auth">
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Auth/AuthenticatedSessionController.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Auth/AuthenticatedSessionController.php">
         <class name="App\Http\Controllers\Auth\AuthenticatedSessionController" namespace="App\Http\Controllers\Auth">
           <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="11" elements="14" coveredelements="14"/>
         </class>
@@ -22,7 +22,7 @@
         <line num="49" type="stmt" count="1"/>
         <metrics loc="52" ncloc="43" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="11" elements="14" coveredelements="14"/>
       </file>
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Auth/ConfirmablePasswordController.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Auth/ConfirmablePasswordController.php">
         <class name="App\Http\Controllers\Auth\ConfirmablePasswordController" namespace="App\Http\Controllers\Auth">
           <metrics complexity="3" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="12" coveredelements="12"/>
         </class>
@@ -40,7 +40,7 @@
         <line num="39" type="stmt" count="1"/>
         <metrics loc="42" ncloc="36" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="12" coveredelements="12"/>
       </file>
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Auth/EmailVerificationNotificationController.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Auth/EmailVerificationNotificationController.php">
         <class name="App\Http\Controllers\Auth\EmailVerificationNotificationController" namespace="App\Http\Controllers\Auth">
           <metrics complexity="2" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="5" coveredelements="5"/>
         </class>
@@ -51,7 +51,7 @@
         <line num="22" type="stmt" count="1"/>
         <metrics loc="25" ncloc="22" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="5" coveredelements="5"/>
       </file>
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Auth/EmailVerificationPromptController.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Auth/EmailVerificationPromptController.php">
         <class name="App\Http\Controllers\Auth\EmailVerificationPromptController" namespace="App\Http\Controllers\Auth">
           <metrics complexity="2" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="4" coveredelements="4"/>
         </class>
@@ -61,7 +61,7 @@
         <line num="20" type="stmt" count="2"/>
         <metrics loc="23" ncloc="20" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="4" coveredelements="4"/>
       </file>
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Auth/NewPasswordController.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Auth/NewPasswordController.php">
         <class name="App\Http\Controllers\Auth\NewPasswordController" namespace="App\Http\Controllers\Auth">
           <metrics complexity="3" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="26" coveredelements="26"/>
         </class>
@@ -93,7 +93,7 @@
         <line num="67" type="stmt" count="1"/>
         <metrics loc="70" ncloc="56" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="26" coveredelements="26"/>
       </file>
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Auth/PasswordResetLinkController.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Auth/PasswordResetLinkController.php">
         <class name="App\Http\Controllers\Auth\PasswordResetLinkController" namespace="App\Http\Controllers\Auth">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="12" coveredelements="12"/>
         </class>
@@ -111,7 +111,7 @@
         <line num="39" type="stmt" count="3"/>
         <metrics loc="42" ncloc="34" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="12" coveredelements="12"/>
       </file>
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Auth/RegisteredUserController.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Auth/RegisteredUserController.php">
         <class name="App\Http\Controllers\Auth\RegisteredUserController" namespace="App\Http\Controllers\Auth">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
         </class>
@@ -133,7 +133,7 @@
         <line num="49" type="stmt" count="1"/>
         <metrics loc="52" ncloc="44" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
       </file>
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Auth/VerifyEmailController.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Auth/VerifyEmailController.php">
         <class name="App\Http\Controllers\Auth\VerifyEmailController" namespace="App\Http\Controllers\Auth">
           <metrics complexity="3" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="6" elements="7" coveredelements="7"/>
         </class>
@@ -148,7 +148,7 @@
       </file>
     </package>
     <package name="App\Http\Controllers">
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Controller.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Controller.php">
         <class name="App\Http\Controllers\Controller" namespace="App\Http\Controllers">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
@@ -156,7 +156,7 @@
       </file>
     </package>
     <package name="App\Http\Controllers\Settings">
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Settings/PasswordController.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Settings/PasswordController.php">
         <class name="App\Http\Controllers\Settings\PasswordController" namespace="App\Http\Controllers\Settings">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="14" coveredelements="14"/>
         </class>
@@ -176,7 +176,7 @@
         <line num="41" type="stmt" count="1"/>
         <metrics loc="44" ncloc="38" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="14" coveredelements="14"/>
       </file>
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Settings/ProfileController.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Controllers/Settings/ProfileController.php">
         <class name="App\Http\Controllers\Settings\ProfileController" namespace="App\Http\Controllers\Settings">
           <metrics complexity="4" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="18" elements="21" coveredelements="21"/>
         </class>
@@ -205,7 +205,7 @@
       </file>
     </package>
     <package name="App\Http\Middleware">
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Middleware/HandleInertiaRequests.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Middleware/HandleInertiaRequests.php">
         <class name="App\Http\Middleware\HandleInertiaRequests" namespace="App\Http\Middleware">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="12" coveredelements="12"/>
         </class>
@@ -225,7 +225,7 @@
       </file>
     </package>
     <package name="App\Http\Requests\Auth">
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Requests/Auth/LoginRequest.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Requests/Auth/LoginRequest.php">
         <class name="App\Http\Requests\Auth\LoginRequest" namespace="App\Http\Requests\Auth">
           <metrics complexity="7" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="23" coveredstatements="23" elements="28" coveredelements="28"/>
         </class>
@@ -261,7 +261,7 @@
       </file>
     </package>
     <package name="App\Http\Requests\Settings">
-      <file name="/Users/vince/WWW/druidweb/druid/app/Http/Requests/Settings/ProfileUpdateRequest.php">
+      <file name="/home/runner/work/druid/druid/app/Http/Requests/Settings/ProfileUpdateRequest.php">
         <class name="App\Http\Requests\Settings\ProfileUpdateRequest" namespace="App\Http\Requests\Settings">
           <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="11" elements="12" coveredelements="12"/>
         </class>
@@ -281,7 +281,7 @@
       </file>
     </package>
     <package name="App\Models">
-      <file name="/Users/vince/WWW/druidweb/druid/app/Models/User.php">
+      <file name="/home/runner/work/druid/druid/app/Models/User.php">
         <class name="App\Models\User" namespace="App\Models">
           <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="5" coveredelements="5"/>
         </class>
@@ -294,7 +294,7 @@
       </file>
     </package>
     <package name="App\Providers">
-      <file name="/Users/vince/WWW/druidweb/druid/app/Providers/AppServiceProvider.php">
+      <file name="/home/runner/work/druid/druid/app/Providers/AppServiceProvider.php">
         <class name="App\Providers\AppServiceProvider" namespace="App\Providers">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="4" coveredelements="4"/>
         </class>
