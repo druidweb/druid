@@ -12,21 +12,24 @@ A modern, opinionated starter kit for Laravel 12+ applications with Vue 3, TypeS
 
 ## Features
 
-- 🚀 [Laravel 12+](https://laravel.com) - Latest Laravel with PHP 8.2+ support
+- 🚀 [Laravel 12](https://laravel.com) - Latest Laravel with PHP 8.3+ support
 - ⚡️ [Vue 3](https://vuejs.org) with [Vite](https://vitejs.dev)
+- 🧩 [Shadcn-Vue](https://www.shadcn-vue.com) - Beautiful, accessible, and responsive UI components
 - 🔧 [TypeScript](https://www.typescriptlang.org) - Full type safety
-- 🎨 [Tailwind CSS](https://tailwindcss.com) with dark mode support
+- 🎨 [Tailwind 4](https://tailwindcss.com) with dark mode support
 - 📱 [Inertia.js](https://inertiajs.com) - Modern single-page apps without API complexity
 - 🔒 [Laravel Sanctum](https://laravel.com/docs/sanctum) - API authentication
 - 🧪 [Pest PHP](https://pestphp.com) - Testing with pleasure
+- 🔍 [Larastan](https://github.com/larastan/larastan) - Static analysis for Laravel
 - 📝 [ESLint](https://eslint.org) + [Prettier](https://prettier.io) - Consistent code style
 - 🔄 Automated releases with semantic-release
 - 👷 GitHub Actions workflows for testing and deployment
 - 🏗️ Pre-configured development environment
+- 💯 100% code coverage with automated reporting
 
 ## Requirements
 
-- PHP 8.2 or higher
+- PHP 8.3 or higher
 - Composer 2+
 - Node.js 18+ (preferably Bun)
 - SQLite / MySQL / PostgreSQL
@@ -51,7 +54,7 @@ For more information about Laravel starter kits, please refer to the [Laravel do
 
 ```bash
 # Update all dependencies
-bun run cn
+bun run cb
 
 # Start development server
 bun run dev
@@ -60,7 +63,13 @@ bun run dev
 bun run build
 
 # Run tests
-php artisan test
+composer test
+
+# Run tests with coverage
+composer test:coverage
+
+# Run static analysis
+composer analyse
 
 # Format code
 bun run format
@@ -87,3 +96,4 @@ If you discover any security-related issues, please email hello@druidweb.com ins
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+# Test coverage generation

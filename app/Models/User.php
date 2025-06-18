@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -16,7 +18,6 @@ class User extends Authenticatable
   /** @use HasFactory<\Database\Factories\UserFactory> */
   use HasFactory;
 
-  /** @use Notifiable<\Illuminate\Notifications\Notification> */
   use Notifiable;
 
   /**

@@ -1,0 +1,27 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 6
+    paths:
+        - app/
+        - config/
+        - database/
+        - routes/
+
+    # Exclude files/directories
+    excludePaths:
+        - bootstrap/
+        - storage/
+        - vendor/
+        - config/
+
+    # Laravel specific configuration
+
+    # Ignore common Laravel patterns
+    ignoreErrors: []
+
+    # Additional rules
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkUninitializedProperties: true
+    checkDynamicProperties: false
