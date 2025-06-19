@@ -1,6 +1,15 @@
 import AppContent from '@/components/AppContent.vue';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createMockProps, mountComponent } from '../setup';
+
+// Mock SidebarInset component
+vi.mock('@/components/ui/sidebar/SidebarInset.vue', () => ({
+  default: {
+    name: 'SidebarInset',
+    template: '<div data-testid="sidebar-inset"><slot /></div>',
+    props: ['class'],
+  },
+}));
 
 describe('AppContent', () => {
   it('renders correctly with default props', () => {
@@ -65,5 +74,26 @@ describe('AppContent', () => {
     // The computed className should be applied to the main element
     const mainElement = wrapper.find('main');
     expect(mainElement.classes()).toContain(testClass);
+  });
+
+  it('renders SidebarInset when variant is sidebar', () => {
+    const wrapper = mountComponent(AppContent, {
+      props: createMockProps({ variant: 'sidebar' }),
+    });
+
+    expect(wrapper.findComponent({ name: 'SidebarInset' }).exists()).toBe(true);
+    // When variant is sidebar, main should not be rendered (v-else condition)
+    expect(wrapper.find('main').exists()).toBe(false);
+  });
+
+  it('applies custom class to SidebarInset when variant is sidebar', () => {
+    const customClass = 'sidebar-custom-class';
+    const wrapper = mountComponent(AppContent, {
+      props: createMockProps({ variant: 'sidebar', class: customClass }),
+    });
+
+    const sidebarInset = wrapper.findComponent({ name: 'SidebarInset' });
+    expect(sidebarInset.exists()).toBe(true);
+    expect(sidebarInset.props('class')).toBe(customClass);
   });
 });

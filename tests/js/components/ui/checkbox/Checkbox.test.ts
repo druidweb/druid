@@ -2,42 +2,48 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 
-// Mock reka-ui components
-vi.mock('reka-ui', () => ({
-  CheckboxRoot: {
-    name: 'CheckboxRoot',
-    props: ['class', 'checked', 'disabled', 'required', 'name', 'value'],
-    emits: ['update:checked'],
-    template: `
-      <div
-        :class="$props.class"
-        data-slot="checkbox"
-        :data-state="$props.checked ? 'checked' : 'unchecked'"
-        role="checkbox"
-        :aria-checked="$props.checked"
-        :disabled="$props.disabled ? 'disabled' : null"
-        @click="!$props.disabled && $emit('update:checked', !$props.checked)"
-      >
-        <slot />
-      </div>
-    `,
-  },
-  CheckboxIndicator: {
-    name: 'CheckboxIndicator',
-    props: ['class'],
-    template: '<div :class="$props.class" data-slot="checkbox-indicator"><slot /></div>',
-  },
-  useForwardPropsEmits: vi.fn((props, emits) => ({ ...props, ...emits })),
-}));
+// Mock reka-ui components - use markRaw to prevent Vue from making them reactive
+vi.mock('reka-ui', () => {
+  const { markRaw } = require('vue');
+  return {
+    CheckboxRoot: markRaw({
+      name: 'CheckboxRoot',
+      props: ['class', 'checked', 'disabled', 'required', 'name', 'value'],
+      emits: ['update:checked'],
+      template: `
+        <div
+          :class="$props.class"
+          data-slot="checkbox"
+          :data-state="$props.checked ? 'checked' : 'unchecked'"
+          role="checkbox"
+          :aria-checked="$props.checked"
+          :disabled="$props.disabled ? 'disabled' : null"
+          @click="!$props.disabled && $emit('update:checked', !$props.checked)"
+        >
+          <slot />
+        </div>
+      `,
+    }),
+    CheckboxIndicator: markRaw({
+      name: 'CheckboxIndicator',
+      props: ['class'],
+      template: '<div :class="$props.class" data-slot="checkbox-indicator"><slot /></div>',
+    }),
+    useForwardPropsEmits: vi.fn((props, emits) => ({ ...props, ...emits })),
+  };
+});
 
-// Mock lucide icon
-vi.mock('lucide-vue-next', () => ({
-  Check: {
-    name: 'Check',
-    props: ['class'],
-    template: '<svg :class="$props.class" data-testid="check-icon"><path /></svg>',
-  },
-}));
+// Mock lucide icon - use markRaw to prevent Vue from making it reactive
+vi.mock('lucide-vue-next', () => {
+  const { markRaw } = require('vue');
+  return {
+    Check: markRaw({
+      name: 'Check',
+      props: ['class'],
+      template: '<svg :class="$props.class" data-testid="check-icon"><path /></svg>',
+    }),
+  };
+});
 
 // Mock utils
 vi.mock('@/lib/utils', () => ({
@@ -157,5 +163,29 @@ describe('Checkbox', () => {
     expect(wrapper.vm.name).toBe('test-checkbox');
     expect(wrapper.vm.value).toBe('test-value');
     expect(wrapper.vm.required).toBe(true);
+  });
+
+  it('properly delegates props excluding class', () => {
+    const wrapper = createWrapper({
+      class: 'custom-class',
+      disabled: true,
+      checked: true,
+      'data-testid': 'test-checkbox',
+      name: 'test-name',
+      value: 'test-value',
+    });
+
+    // Should have the custom class applied
+    expect(wrapper.classes()).toContain('custom-class');
+
+    // Should have delegated props (this covers the computed delegatedProps lines 12-14)
+    // Note: These props are delegated to the CheckboxRoot component, not accessible via wrapper.vm
+    expect(wrapper.vm.disabled).toBe(true);
+    expect(wrapper.vm.name).toBe('test-name');
+    expect(wrapper.vm.value).toBe('test-value');
+
+    // The class prop should be excluded from delegated props but still applied
+    const checkbox = wrapper.find('[data-slot="checkbox"]');
+    expect(checkbox.exists()).toBe(true);
   });
 });

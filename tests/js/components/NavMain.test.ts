@@ -18,11 +18,12 @@ vi.mock('@inertiajs/vue3', async () => {
   };
 });
 
-// Mock icon component
-const MockIcon = {
+// Mock icon component - use markRaw to prevent Vue from making it reactive
+const { markRaw } = require('vue');
+const MockIcon = markRaw({
   name: 'MockIcon',
   template: '<svg><rect /></svg>',
-};
+});
 
 function createWrapper(props = {}, options = {}) {
   const TestComponent = {

@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
+import { mount } from '@vue/test-utils';
+import { describe, expect, it, vi } from 'vitest';
 
 // Mock the composable
 const mockUpdateAppearance = vi.fn();
@@ -11,24 +11,27 @@ vi.mock('@/composables/useAppearance', () => ({
   }),
 }));
 
-// Mock lucide icons
-vi.mock('lucide-vue-next', () => ({
-  Monitor: {
-    name: 'Monitor',
-    props: ['class'],
-    template: '<svg :class="$props.class" data-testid="monitor-icon"><rect /></svg>',
-  },
-  Moon: {
-    name: 'Moon',
-    props: ['class'],
-    template: '<svg :class="$props.class" data-testid="moon-icon"><circle /></svg>',
-  },
-  Sun: {
-    name: 'Sun',
-    props: ['class'],
-    template: '<svg :class="$props.class" data-testid="sun-icon"><circle /></svg>',
-  },
-}));
+// Mock lucide icons - create non-reactive components
+vi.mock('lucide-vue-next', () => {
+  const { markRaw } = require('vue');
+  return {
+    Monitor: markRaw({
+      name: 'Monitor',
+      props: ['class'],
+      template: '<svg :class="$props.class" data-testid="monitor-icon"><rect /></svg>',
+    }),
+    Moon: markRaw({
+      name: 'Moon',
+      props: ['class'],
+      template: '<svg :class="$props.class" data-testid="moon-icon"><circle /></svg>',
+    }),
+    Sun: markRaw({
+      name: 'Sun',
+      props: ['class'],
+      template: '<svg :class="$props.class" data-testid="sun-icon"><circle /></svg>',
+    }),
+  };
+});
 
 describe('AppearanceTabs', () => {
   const createWrapper = (props = {}) => {
@@ -132,8 +135,8 @@ describe('AppearanceTabs', () => {
   it('has correct button structure and classes', () => {
     const wrapper = createWrapper();
     const buttons = wrapper.findAll('button');
-    
-    buttons.forEach(button => {
+
+    buttons.forEach((button) => {
       expect(button.classes()).toContain('flex');
       expect(button.classes()).toContain('items-center');
       expect(button.classes()).toContain('rounded-md');
@@ -146,8 +149,8 @@ describe('AppearanceTabs', () => {
   it('renders icons with correct classes', () => {
     const wrapper = createWrapper();
     const icons = wrapper.findAll('svg');
-    
-    icons.forEach(icon => {
+
+    icons.forEach((icon) => {
       expect(icon.classes()).toContain('-ml-1');
       expect(icon.classes()).toContain('h-4');
       expect(icon.classes()).toContain('w-4');
@@ -157,8 +160,8 @@ describe('AppearanceTabs', () => {
   it('renders labels with correct classes', () => {
     const wrapper = createWrapper();
     const labels = wrapper.findAll('span');
-    
-    labels.forEach(label => {
+
+    labels.forEach((label) => {
       expect(label.classes()).toContain('ml-1.5');
       expect(label.classes()).toContain('text-sm');
     });

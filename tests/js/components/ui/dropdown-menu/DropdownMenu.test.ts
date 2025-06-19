@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
 import { DropdownMenu } from '@/components/ui/dropdown-menu';
+import { mount } from '@vue/test-utils';
+import { describe, expect, it, vi } from 'vitest';
 
 // Mock reka-ui components
 vi.mock('reka-ui', () => ({
@@ -9,7 +9,7 @@ vi.mock('reka-ui', () => ({
     props: ['open', 'modal', 'dir'],
     emits: ['update:open'],
     template: `
-      <div 
+      <div
         data-slot="dropdown-menu"
         data-testid="dropdown-menu-root"
         :data-state="$props.open ? 'open' : 'closed'"
@@ -42,10 +42,13 @@ describe('DropdownMenu', () => {
   });
 
   it('renders slot content', () => {
-    const wrapper = createWrapper({}, {
-      default: '<div data-testid="slot-content">Menu content</div>',
-    });
-    
+    const wrapper = createWrapper(
+      {},
+      {
+        default: '<div data-testid="slot-content">Menu content</div>',
+      },
+    );
+
     expect(wrapper.find('[data-testid="slot-content"]').exists()).toBe(true);
     expect(wrapper.text()).toContain('Menu content');
   });
@@ -68,7 +71,7 @@ describe('DropdownMenu', () => {
       dir: 'ltr',
     };
     const wrapper = createWrapper(props);
-    
+
     // Props should be forwarded to the underlying component
     expect(wrapper.vm.modal).toBe(true);
     expect(wrapper.vm.dir).toBe('ltr');
@@ -76,19 +79,22 @@ describe('DropdownMenu', () => {
 
   it('emits events correctly', () => {
     const wrapper = createWrapper();
-    
+
     // The component should be able to emit update:open
     expect(wrapper.vm.$emit).toBeDefined();
   });
 
   it('renders multiple slot elements', () => {
-    const wrapper = createWrapper({}, {
-      default: `
+    const wrapper = createWrapper(
+      {},
+      {
+        default: `
         <div data-testid="trigger">Trigger</div>
         <div data-testid="content">Content</div>
       `,
-    });
-    
+      },
+    );
+
     expect(wrapper.find('[data-testid="trigger"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="content"]').exists()).toBe(true);
   });

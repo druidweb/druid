@@ -85,6 +85,35 @@ vi.mock('ziggy-js', () => ({
   route: vi.fn((name: string) => `/${name}`),
 }));
 
+// Mock @vueuse/core globally
+vi.mock('@vueuse/core', async (importOriginal) => {
+  const actual = await importOriginal();
+  const { ref, computed } = await import('vue');
+
+  return {
+    ...actual,
+    useVModel: vi.fn((props, key, emit, options) => {
+      const value = ref(options?.defaultValue ?? props[key] ?? false);
+
+      return computed({
+        get: () => value.value,
+        set: (newValue) => {
+          value.value = newValue;
+          if (emit) {
+            emit(`update:${key}`, newValue);
+          }
+        },
+      });
+    }),
+    useMediaQuery: vi.fn(() => ref(false)),
+    useEventListener: vi.fn(),
+    useCookies: vi.fn(() => ({
+      get: vi.fn(() => 'true'),
+      set: vi.fn(),
+    })),
+  };
+});
+
 // Global test utilities
 global.route = vi.fn((name: string) => `/${name}`);
 

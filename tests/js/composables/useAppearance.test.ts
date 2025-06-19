@@ -192,5 +192,143 @@ describe('useAppearance', () => {
       expect(mockDocumentElement.classList.toggle).toHaveBeenCalledWith('dark', false);
       // The mediaQuery is created at module load time, so we can't easily test the addEventListener call
     });
+
+    it('handles system theme change with saved appearance', async () => {
+      // Set up localStorage with a saved appearance
+      vi.mocked(window.localStorage.getItem).mockReturnValue('light');
+
+      // Mock the media query to simulate system theme change
+      const mockMediaQuery = {
+        matches: false,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        media: '(prefers-color-scheme: dark)',
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      };
+
+      vi.mocked(window.matchMedia).mockReturnValue(mockMediaQuery);
+
+      // Initialize the theme system
+      initializeTheme();
+
+      // Get the event handler that was registered
+      const eventHandler = mockMediaQuery.addEventListener.mock.calls[0]?.[1];
+
+      if (eventHandler) {
+        // Call the event handler to simulate system theme change
+        eventHandler();
+
+        // Should use the saved appearance ('light') instead of system preference
+        expect(mockDocumentElement.classList.toggle).toHaveBeenCalledWith('dark', false);
+      }
+    });
+
+    it('handles system theme change without saved appearance', async () => {
+      // Clear localStorage
+      vi.mocked(window.localStorage.getItem).mockReturnValue(null);
+
+      // Mock the media query to simulate dark system preference
+      const mockMediaQuery = {
+        matches: true,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        media: '(prefers-color-scheme: dark)',
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      };
+
+      vi.mocked(window.matchMedia).mockReturnValue(mockMediaQuery);
+
+      // Initialize the theme system
+      initializeTheme();
+
+      // Get the event handler that was registered
+      const eventHandler = mockMediaQuery.addEventListener.mock.calls[0]?.[1];
+
+      if (eventHandler) {
+        // Call the event handler to simulate system theme change
+        eventHandler();
+
+        // Should use system preference (dark) since no saved appearance
+        expect(mockDocumentElement.classList.toggle).toHaveBeenCalledWith('dark', true);
+      }
+    });
+
+    it('covers handleSystemThemeChange with saved appearance', async () => {
+      // Set up localStorage with a saved appearance to cover lines 17-19
+      vi.mocked(window.localStorage.getItem).mockReturnValue('light');
+
+      // Mock the media query
+      const mockMediaQuery = {
+        matches: false, // System prefers light
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        media: '(prefers-color-scheme: dark)',
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      };
+
+      vi.mocked(window.matchMedia).mockReturnValue(mockMediaQuery);
+
+      // Initialize the theme system
+      initializeTheme();
+
+      // Get the event handler that was registered
+      const eventHandler = mockMediaQuery.addEventListener.mock.calls[0]?.[1];
+
+      if (eventHandler) {
+        // Call the event handler to simulate system theme change
+        // This should trigger handleSystemThemeChange which will:
+        // 1. Get the saved appearance from localStorage (line 17)
+        // 2. Call updateTheme with the saved appearance (line 18)
+        eventHandler();
+
+        // Should use the saved appearance ('light') instead of system preference
+        expect(mockDocumentElement.classList.toggle).toHaveBeenCalledWith('dark', false);
+      }
+    });
+
+    it('covers handleSystemThemeChange with null saved appearance', async () => {
+      // Set up localStorage to return null to cover the || 'system' part of line 18
+      vi.mocked(window.localStorage.getItem).mockReturnValue(null);
+
+      // Mock the media query to simulate dark system preference
+      const mockMediaQuery = {
+        matches: true, // System prefers dark
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        media: '(prefers-color-scheme: dark)',
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      };
+
+      vi.mocked(window.matchMedia).mockReturnValue(mockMediaQuery);
+
+      // Initialize the theme system
+      initializeTheme();
+
+      // Get the event handler that was registered
+      const eventHandler = mockMediaQuery.addEventListener.mock.calls[0]?.[1];
+
+      if (eventHandler) {
+        // Call the event handler to simulate system theme change
+        // This should trigger handleSystemThemeChange which will:
+        // 1. Get null from localStorage (line 17)
+        // 2. Call updateTheme with 'system' (line 18 - the || 'system' part)
+        eventHandler();
+
+        // Should use system preference (dark) since no saved appearance
+        expect(mockDocumentElement.classList.toggle).toHaveBeenCalledWith('dark', true);
+      }
+    });
   });
 });

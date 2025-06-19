@@ -1,8 +1,6 @@
 <?php
 
-pest()->extend(Tests\DuskTestCase::class)
-//  ->use(Illuminate\Foundation\Testing\DatabaseMigrations::class)
-  ->in('Browser');
+use Tests\TestCase;
 
 /**
  * TEST CASE
@@ -11,7 +9,7 @@ pest()->extend(Tests\DuskTestCase::class)
  * case class. By default, that class is "PHPUnit\Framework\TestCase". Of course, you may
  * need to change it using the "pest()" function to bind a different classes or traits.
  */
-pest()->extend(Tests\TestCase::class)->in('Feature');
+pest()->extend(TestCase::class)->in('Feature');
 
 /**
  * EXPECTATIONS

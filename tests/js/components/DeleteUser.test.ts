@@ -130,4 +130,49 @@ describe('DeleteUser', () => {
     const wrapper = createWrapper();
     expect(wrapper.html()).toContain('aria-expanded="false"');
   });
+
+  it('calls deleteUser function when form is submitted', async () => {
+    const wrapper = createWrapper();
+
+    // Access the component instance to call deleteUser directly
+    const vm = wrapper.vm as any;
+    const mockEvent = { preventDefault: vi.fn() };
+
+    // Call deleteUser directly since the form might not be easily accessible
+    vm.deleteUser(mockEvent);
+
+    expect(mockEvent.preventDefault).toHaveBeenCalled();
+    expect(mockForm.delete).toHaveBeenCalledWith('/profile.destroy', {
+      preserveScroll: true,
+      onSuccess: expect.any(Function),
+      onError: expect.any(Function),
+      onFinish: expect.any(Function),
+    });
+  });
+
+  it('calls closeModal function and clears form', () => {
+    const wrapper = createWrapper();
+
+    // Access the component instance to call closeModal directly
+    const vm = wrapper.vm as any;
+    vm.closeModal();
+
+    expect(mockForm.clearErrors).toHaveBeenCalled();
+    expect(mockForm.reset).toHaveBeenCalled();
+  });
+
+  it('handles form submission with preventDefault', async () => {
+    const wrapper = createWrapper();
+    const form = wrapper.find('form');
+
+    // Create a proper event object
+    const event = new Event('submit');
+    const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
+    // Trigger the submit handler directly
+    const vm = wrapper.vm as any;
+    vm.deleteUser(event);
+
+    expect(preventDefaultSpy).toHaveBeenCalled();
+  });
 });
