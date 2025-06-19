@@ -188,4 +188,22 @@ describe('Checkbox', () => {
     const checkbox = wrapper.find('[data-slot="checkbox"]');
     expect(checkbox.exists()).toBe(true);
   });
+
+  it('covers delegatedProps destructuring with class prop', () => {
+    // This test specifically targets lines 12-14 by ensuring the destructuring happens
+    const wrapper = mount(Checkbox, {
+      props: {
+        class: 'test-class-coverage',
+        checked: false,
+        disabled: false,
+      },
+    });
+
+    // Verify the component renders and the class is applied
+    expect(wrapper.find('[data-slot="checkbox"]').exists()).toBe(true);
+    expect(wrapper.find('[data-slot="checkbox"]').classes()).toContain('test-class-coverage');
+
+    // This ensures the delegatedProps computed property executes the destructuring
+    expect(wrapper.vm.$props.class).toBe('test-class-coverage');
+  });
 });

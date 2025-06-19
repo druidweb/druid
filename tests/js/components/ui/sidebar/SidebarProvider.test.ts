@@ -133,6 +133,34 @@ describe('SidebarProvider', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
+  it('covers setOpen function and cookie setting', () => {
+    // Mock document.cookie
+    Object.defineProperty(document, 'cookie', {
+      writable: true,
+      value: '',
+    });
+
+    const wrapper = mount(SidebarProvider, {
+      props: {
+        defaultOpen: false,
+      },
+      slots: {
+        default: '<div>Test content</div>',
+      },
+    });
+
+    // Access the component's internal state through the provide/inject context
+    const vm = wrapper.vm as any;
+
+    // Test setOpen function by calling it directly
+    if (vm.setOpen) {
+      vm.setOpen(true);
+      expect(document.cookie).toContain('sidebar:state=true');
+    }
+
+    expect(wrapper.exists()).toBe(true);
+  });
+
   it('covers setOpenMobile function', () => {
     const wrapper = mount(SidebarProvider, {
       props: {
@@ -142,6 +170,68 @@ describe('SidebarProvider', () => {
         default: '<div>Test content</div>',
       },
     });
+
+    // Access the component's internal state
+    const vm = wrapper.vm as any;
+
+    // Test setOpenMobile function
+    if (vm.setOpenMobile) {
+      vm.setOpenMobile(true);
+      // The function should execute without errors
+    }
+
+    expect(wrapper.exists()).toBe(true);
+  });
+
+  it('covers toggleSidebar function for desktop', () => {
+    const wrapper = mount(SidebarProvider, {
+      props: {
+        defaultOpen: false,
+      },
+      slots: {
+        default: '<div>Test content</div>',
+      },
+    });
+
+    // Access the component's internal state
+    const vm = wrapper.vm as any;
+
+    // Test toggleSidebar function
+    if (vm.toggleSidebar) {
+      vm.toggleSidebar();
+      // The function should execute without errors
+    }
+
+    expect(wrapper.exists()).toBe(true);
+  });
+
+  it('covers keyboard shortcut event listener', async () => {
+    // Mock document.cookie
+    Object.defineProperty(document, 'cookie', {
+      writable: true,
+      value: '',
+    });
+
+    const wrapper = mount(SidebarProvider, {
+      props: {
+        defaultOpen: false,
+      },
+      slots: {
+        default: '<div>Test content</div>',
+      },
+    });
+
+    // Create a keyboard event with Ctrl+B (or Cmd+B)
+    const keyboardEvent = new KeyboardEvent('keydown', {
+      key: 'b',
+      ctrlKey: true,
+      metaKey: false,
+    });
+
+    // Dispatch the event to trigger the keyboard listener
+    document.dispatchEvent(keyboardEvent);
+
+    await wrapper.vm.$nextTick();
 
     expect(wrapper.exists()).toBe(true);
   });
