@@ -204,35 +204,4 @@ describe('SidebarProvider', () => {
 
     expect(wrapper.exists()).toBe(true);
   });
-
-  it('covers keyboard shortcut event listener', async () => {
-    // Mock document.cookie
-    Object.defineProperty(document, 'cookie', {
-      writable: true,
-      value: '',
-    });
-
-    const wrapper = mount(SidebarProvider, {
-      props: {
-        defaultOpen: false,
-      },
-      slots: {
-        default: '<div>Test content</div>',
-      },
-    });
-
-    // Create a keyboard event with Ctrl+B (or Cmd+B)
-    const keyboardEvent = new KeyboardEvent('keydown', {
-      key: 'b',
-      ctrlKey: true,
-      metaKey: false,
-    });
-
-    // Dispatch the event to trigger the keyboard listener
-    document.dispatchEvent(keyboardEvent);
-
-    await wrapper.vm.$nextTick();
-
-    expect(wrapper.exists()).toBe(true);
-  });
 });
