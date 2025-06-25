@@ -3,9 +3,6 @@ const Ziggy = {
   port: null,
   defaults: {},
   routes: {
-    'dusk.login': { uri: '_dusk\/login\/{userId}\/{guard?}', methods: ['GET', 'HEAD'], parameters: ['userId', 'guard'] },
-    'dusk.logout': { uri: '_dusk\/logout\/{guard?}', methods: ['GET', 'HEAD'], parameters: ['guard'] },
-    'dusk.user': { uri: '_dusk\/user\/{guard?}', methods: ['GET', 'HEAD'], parameters: ['guard'] },
     'sanctum.csrf-cookie': { uri: 'sanctum\/csrf-cookie', methods: ['GET', 'HEAD'] },
     home: { uri: '\/', methods: ['GET', 'HEAD'] },
     dashboard: { uri: 'dashboard', methods: ['GET', 'HEAD'] },
