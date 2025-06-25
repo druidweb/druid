@@ -1,6 +1,5 @@
 <?php
 
-use Tests\DuskTestCase;
 use Tests\TestCase;
 
 /**
@@ -11,18 +10,6 @@ use Tests\TestCase;
  * need to change it using the "pest()" function to bind a different classes or traits.
  */
 pest()->extend(TestCase::class)->in('Feature');
-
-/**
- * BROWSER TESTS
- *
- * Laravel Dusk provides comprehensive end-to-end testing and browser automation for our
- * Inertia.js + Vue.js application. These tests simulate real user interactions in a
- * headless Chrome browser, testing the complete user experience.
- *
- * Tests use the DuskTestCase which includes database migrations and Chrome driver
- * configuration optimized for CI/CD environments.
- */
-pest()->extend(DuskTestCase::class)->in('Browser');
 
 /**
  * EXPECTATIONS

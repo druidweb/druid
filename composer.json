@@ -17,7 +17,8 @@
     "laravel/tinker": "^2.10.1",
     "predis/predis": "^3.0.1",
     "pusher/pusher-php-server": "^7.2.7",
-    "tightenco/ziggy": "^2.5.2"
+    "tightenco/ziggy": "^2.5.2",
+    "zenphp/modulr": "^1.0"
   },
   "require-dev": {
     "fakerphp/faker": "^1.24.1",
@@ -25,7 +26,6 @@
     "mockery/mockery": "^1.6.12",
     "nunomaduro/collision": "^8.8.0",
     "pestphp/pest": "^3.8.1",
-    "pestphp/pest-plugin-drift": "^3.0.0",
     "pestphp/pest-plugin-laravel": "^3.1.0",
     "zenphp/fixr": "^1.0.3"
   },
@@ -67,14 +67,8 @@
     "test:coverage": [
       "@php artisan test --coverage --coverage-clover=clover.xml"
     ],
-    "test:browser": [
-      "@php artisan pest:dusk"
-    ],
     "analyse": [
       "./vendor/bin/phpstan analyse"
-    ],
-    "analyse:baseline": [
-      "./vendor/bin/phpstan analyse --generate-baseline"
     ]
   },
   "extra": {
