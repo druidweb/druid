@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.2](https://github.com/druidweb/druid/compare/v1.2.1...v1.2.2) (2025-06-25)
+
+
+### Code Refactoring
+
+* deps updates and header img readme ([758728c](https://github.com/druidweb/druid/commit/758728cbb07f8557c8224ee6ec8fc76613c84370))
+
+
+### Maintenance
+
+* **deps:** bump @rollup/rollup-linux-x64-gnu from 4.43.0 to 4.44.0 ([ec0b4f1](https://github.com/druidweb/druid/commit/ec0b4f1833f872543c9abcb463fc312d8fd5478c))
+* **deps:** bump @rollup/rollup-linux-x64-gnu from 4.43.0 to 4.44.0 ([bc2bc88](https://github.com/druidweb/druid/commit/bc2bc889a77d30de58fffd3b6c3e46c80af68595))
+* **deps:** bump lucide from 0.515.0 to 0.522.0 ([bf5770f](https://github.com/druidweb/druid/commit/bf5770f493518bb9b46096583ca5505e8ef70c19))
+* **deps:** bump lucide from 0.515.0 to 0.522.0 ([3e6eba3](https://github.com/druidweb/druid/commit/3e6eba312b417f67ad3c073bb8c61f62d9eb9305))
+* **deps:** bump lucide-vue-next from 0.516.0 to 0.522.0 ([ddeebf3](https://github.com/druidweb/druid/commit/ddeebf38f979bf26f37e9029fb9312d1b8c47471))
+* **deps:** bump lucide-vue-next from 0.516.0 to 0.522.0 ([d92a9f9](https://github.com/druidweb/druid/commit/d92a9f9563079ed987e391496f094cb1c60e0598))
+
 ## [1.2.1](https://github.com/druidweb/druid/compare/v1.2.0...v1.2.1) (2025-06-25)
 
 
