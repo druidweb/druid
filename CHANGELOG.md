@@ -1,5 +1,48 @@
 # Changelog
 
+## [1.2.2](https://github.com/druidweb/druid/compare/v1.2.1...v1.2.2) (2025-06-25)
+
+
+### Code Refactoring
+
+* deps updates and header img readme ([758728c](https://github.com/druidweb/druid/commit/758728cbb07f8557c8224ee6ec8fc76613c84370))
+
+
+### Maintenance
+
+* **deps:** bump @rollup/rollup-linux-x64-gnu from 4.43.0 to 4.44.0 ([ec0b4f1](https://github.com/druidweb/druid/commit/ec0b4f1833f872543c9abcb463fc312d8fd5478c))
+* **deps:** bump @rollup/rollup-linux-x64-gnu from 4.43.0 to 4.44.0 ([bc2bc88](https://github.com/druidweb/druid/commit/bc2bc889a77d30de58fffd3b6c3e46c80af68595))
+* **deps:** bump lucide from 0.515.0 to 0.522.0 ([bf5770f](https://github.com/druidweb/druid/commit/bf5770f493518bb9b46096583ca5505e8ef70c19))
+* **deps:** bump lucide from 0.515.0 to 0.522.0 ([3e6eba3](https://github.com/druidweb/druid/commit/3e6eba312b417f67ad3c073bb8c61f62d9eb9305))
+* **deps:** bump lucide-vue-next from 0.516.0 to 0.522.0 ([ddeebf3](https://github.com/druidweb/druid/commit/ddeebf38f979bf26f37e9029fb9312d1b8c47471))
+* **deps:** bump lucide-vue-next from 0.516.0 to 0.522.0 ([d92a9f9](https://github.com/druidweb/druid/commit/d92a9f9563079ed987e391496f094cb1c60e0598))
+
+## [1.2.1](https://github.com/druidweb/druid/compare/v1.2.0...v1.2.1) (2025-06-25)
+
+
+### Bug Fixes
+
+* remove dusk and it’s tests ([0b519a3](https://github.com/druidweb/druid/commit/0b519a3805f7e3027204377e23c6eab00aae360c))
+
+
+### Maintenance
+
+* rename js to Vue in tests directory ([c8eb645](https://github.com/druidweb/druid/commit/c8eb645f540c1b760ee05af00b15d8803a8c6c47))
+* update component test coverage to 99.38% ([d13be5d](https://github.com/druidweb/druid/commit/d13be5d42917b947972ef0bf8075ae21e463f716))
+* update component test remain at 99.38% ([37cf92f](https://github.com/druidweb/druid/commit/37cf92f4b83fdfd498c0a0646255815a8387cac4))
+* upgrade component test coverage to 28.99% ([7cb1eb5](https://github.com/druidweb/druid/commit/7cb1eb5724dc589185bb4ed414c5d6a973cbcca0))
+* upgrade component test coverage to 3.17% ([020401a](https://github.com/druidweb/druid/commit/020401a605cfa12223af5039a5ecc7faa39ddcfc))
+* upgrade component test coverage to 61.57% ([baf7e7d](https://github.com/druidweb/druid/commit/baf7e7d5798963c400795038198aed4909049ecd))
+* upgrade component test coverage to 75.9% ([9df5ac9](https://github.com/druidweb/druid/commit/9df5ac92c7c60f6113172ed7f8b8e7cb37266541))
+* upgrade component test coverage to 79.39% ([3f0ed1f](https://github.com/druidweb/druid/commit/3f0ed1f2eaf0e12be12044df876306910af5ba98))
+* upgrade component test coverage to 97.53% ([1044e09](https://github.com/druidweb/druid/commit/1044e09359eab957e41325b7728b4119dcd3aa60))
+* upgrade component test coverage to 98.97% ([53a2d6b](https://github.com/druidweb/druid/commit/53a2d6bade8c529fadf0a8a4b66c4c3bba52dc36))
+
+
+### Work in Progress
+
+* adding dusk for e2e testing ([b7be2ba](https://github.com/druidweb/druid/commit/b7be2bac24d610d11b4d637c85e8c02f8f875006))
+
 # [1.2.0](https://github.com/druidweb/druid/compare/v1.1.6...v1.2.0) (2025-06-18)
 
 
