@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.3](https://github.com/druidweb/druid/compare/v1.2.2...v1.2.3) (2025-07-11)
+
+
+### Code Refactoring
+
+* **deps:** update dependencies ([a09c686](https://github.com/druidweb/druid/commit/a09c686c7a8defbdc544ca2b7414246431d68aa2))
+
+
+### Maintenance
+
+* **deps:** bump @rollup/rollup-linux-x64-gnu from 4.44.0 to 4.44.1 ([91c0171](https://github.com/druidweb/druid/commit/91c01712bd6ffcd26b5cbde82de40de88776fc1d))
+* **deps:** bump @rollup/rollup-linux-x64-gnu from 4.44.0 to 4.44.1 ([bb8b2ab](https://github.com/druidweb/druid/commit/bb8b2ab2ad5cad5b2cfa4f19347c6c1e73032cc5))
+* **deps:** bump lucide-vue-next from 0.523.0 to 0.525.0 ([64450b0](https://github.com/druidweb/druid/commit/64450b03ccdee7970ccc55efb0b3cb5ee5de99dc))
+* **deps:** bump lucide-vue-next from 0.523.0 to 0.525.0 ([3b367ac](https://github.com/druidweb/druid/commit/3b367acb357fd5e1763b10e6b5a121aef12c4894))
+* updated description on readme ([be45932](https://github.com/druidweb/druid/commit/be45932fe316fbfa452a0e407ff250708f0a71b8))
+
 ## [1.2.2](https://github.com/druidweb/druid/compare/v1.2.1...v1.2.2) (2025-06-25)
 
 
