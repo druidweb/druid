@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.4](https://github.com/druidweb/druid/compare/v1.2.3...v1.2.4) (2025-07-12)
+
+
+### Code Refactoring
+
+* updated testing suite ([d0e7c50](https://github.com/druidweb/druid/commit/d0e7c50b55f712a84a6133cd9339431bb8759b5a))
+
+
+### Maintenance
+
+* **fix:** typo in vite.config ([278c3a1](https://github.com/druidweb/druid/commit/278c3a12c5c1c5efcefced1d211e75b97c09e057))
+
+
+### Work in Progress
+
+* continue modernizing codebase ([9831d43](https://github.com/druidweb/druid/commit/9831d430cc3dc9314c3c1b0e6f1cada596a21e57))
+
 ## [1.2.3](https://github.com/druidweb/druid/compare/v1.2.2...v1.2.3) (2025-07-11)
 
 
