@@ -10,7 +10,8 @@
     "moduleResolution": "bundler",
     "paths": {
       "@/*": ["./resources/js/*"],
-      "ziggy-js": ["./vendor/tightenco/ziggy"]
+      "ziggy-js": ["./vendor/tightenco/ziggy"],
+      "zorah-js": ["./vendor/zenphp/zorah"]
     },
     "types": ["vite/client", "@vue/runtime-core", "./resources/js/types"],
     "resolveJsonModule": true,

@@ -1,9 +1,9 @@
+import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
 import path from 'node:path';
-import { defineConfig, loadEnv } from 'vite';
-import tailwindcss from '@tailwindcss/vite';
 import AutoImport from 'unplugin-auto-import/vite';
+import { defineConfig, loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
@@ -56,12 +56,7 @@ export default defineConfig(({ mode }) => {
             '@/lib/utils': [['default', 'utils']],
           },
         ],
-        dirs: [
-          './resources/js/components',
-          './resources/js/composables',
-          './resources/js/layouts',
-          './resources/js/pages',
-        ],
+        dirs: ['./resources/js/components', './resources/js/composables', './resources/js/layouts', './resources/js/pages'],
         dts: './resources/js/types/auto-imports.d.ts',
         vueTemplate: true,
         defaultExportByFilename: true,
@@ -75,6 +70,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': path.resolve(__dirname, './resources/js'),
         'ziggy-js': path.resolve('vendor/tightenco/ziggy'),
+        'zorah-js': path.resolve('vendor/zenphp/zorah'),
       },
     },
   };

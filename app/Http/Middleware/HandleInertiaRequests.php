@@ -24,6 +24,7 @@ final class HandleInertiaRequests extends Middleware
    *
    * @see https://inertiajs.com/asset-versioning
    */
+  #[\Override]
   public function version(Request $request): ?string
   {
     return parent::version($request);
@@ -36,14 +37,20 @@ final class HandleInertiaRequests extends Middleware
    *
    * @return array<string, mixed>
    */
+  #[\Override]
   public function share(Request $request): array
   {
-    [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
+    $randomQuote = Inspiring::quotes()->random();
+    $quoteString = is_string($randomQuote) ? $randomQuote : '';
+    [$message, $author] = str($quoteString)->explode('-');
 
     return array_merge(parent::share($request), [
       ...parent::share($request),
       'name' => config('app.name'),
-      'quote' => ['message' => trim($message), 'author' => trim($author)],
+      'quote' => [
+        'message' => trim(is_string($message) ? $message : ''),
+        'author' => trim(is_string($author) ? $author : ''),
+      ],
       'auth' => [
         'user' => $request->user(),
       ],

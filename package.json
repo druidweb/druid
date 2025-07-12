@@ -10,13 +10,12 @@
     "format:check": "prettier --check resources/",
     "lint": "eslint . --fix",
     "fix": "./vendor/bin/fixr --dirty && bun run format && bun run lint",
-    "analyse": "./vendor/bin/phpstan analyse",
     "test:js": "vitest --run",
     "test:js:watch": "vitest",
     "test:js:ui": "vitest --ui",
     "test:js:coverage": "vitest --coverage --run",
     "prod": "bun zz && vite build && vite build --ssr",
-    "zz": "php artisan ziggy:generate --types"
+    "zz": "php artisan ziggy:generate --types && php artisan zorah:generate"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",

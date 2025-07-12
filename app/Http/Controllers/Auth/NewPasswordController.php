@@ -36,7 +36,8 @@ final class NewPasswordController extends Controller
    */
   public function store(Request $request): RedirectResponse
   {
-    $request->validate([
+    /** @var array{token: string, email: string, password: string} $validated */
+    $validated = $request->validate([
       'token' => 'required',
       'email' => 'required|email',
       'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -47,9 +48,10 @@ final class NewPasswordController extends Controller
     // database. Otherwise we will parse the error and return the response.
     $status = Password::reset(
       $request->only('email', 'password', 'password_confirmation', 'token'),
-      function ($user) use ($request) {
+      function ($user) use ($validated): void {
+        /** @var \App\Models\User $user */
         $user->forceFill([
-          'password' => Hash::make($request->password),
+          'password' => Hash::make($validated['password']),
           'remember_token' => Str::random(60),
         ])->save();
 
@@ -60,12 +62,15 @@ final class NewPasswordController extends Controller
     // If the password was successfully reset, we will redirect the user back to
     // the application's home authenticated view. If there is an error we can
     // redirect them back to where they came from with their error message.
-    if ($status == Password::PasswordReset) {
+    if ($status === Password::PASSWORD_RESET) {
       return to_route('login')->with('status', __($status));
     }
 
+    // Ensure status is a string for the error message
+    $statusMessage = is_string($status) ? $status : 'passwords.reset';
+
     throw ValidationException::withMessages([
-      'email' => [__($status)],
+      'email' => [__($statusMessage)],
     ]);
   }
 }
