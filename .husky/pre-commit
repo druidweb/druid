@@ -21,7 +21,7 @@ fi
 
 # Run static analysis
 echo "Running static analysis..."
-composer analyse
+composer test:types
 
 # Check if static analysis passed
 if [ $? -ne 0 ]; then
@@ -33,7 +33,7 @@ fi
 
 # Run tests with coverage to ensure they pass before commit
 echo "Running tests with coverage..."
-composer test:coverage
+composer test:feat:coverage
 
 # Check if tests passed
 if [ $? -ne 0 ]; then

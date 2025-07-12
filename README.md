@@ -84,10 +84,10 @@ bun run test:js
 composer test
 
 # Run tests with coverage
-composer test:coverage
+composer test:feat:coverage
 
 # Run static analysis
-composer analyse
+composer test:types
 ```
 
 ## Maintenance Branches
@@ -110,3 +110,4 @@ Please review [our security policy](https://github.com/druidweb/druid/security/p
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+# Test comment

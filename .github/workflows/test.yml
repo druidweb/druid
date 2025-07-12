@@ -48,13 +48,13 @@ jobs:
         run: php artisan key:generate
 
       - name: Publish Ziggy Configuration
-        run: php artisan ziggy:generate --types
+        run: php artisan ziggy:generate --types && php artisan zorah:generate
 
       - name: Build Assets
         run: bun run prod
 
       - name: Run Static Analysis
-        run: composer analyse
+        run: composer test:types
 
       - name: Run Tests
-        run: composer test
+        run: composer test:feat

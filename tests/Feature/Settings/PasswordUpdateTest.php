@@ -3,7 +3,7 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-test('password can be updated', function () {
+test('password can be updated', function (): void {
   $user = User::factory()->create();
 
   $response = $this
@@ -22,7 +22,7 @@ test('password can be updated', function () {
   expect(Hash::check('new-password', $user->refresh()->password))->toBeTrue();
 });
 
-test('correct password must be provided to update password', function () {
+test('correct password must be provided to update password', function (): void {
   $user = User::factory()->create();
 
   $response = $this
@@ -39,7 +39,7 @@ test('correct password must be provided to update password', function () {
     ->assertRedirect('/settings/password');
 });
 
-test('password settings page can be displayed', function () {
+test('password settings page can be displayed', function (): void {
   $user = User::factory()->create();
 
   $response = $this->actingAs($user)->get('/settings/password');
