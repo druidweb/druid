@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
 return RectorConfig::configure()
   ->withPaths([
@@ -11,6 +12,7 @@ return RectorConfig::configure()
     __DIR__.'/database',
     __DIR__.'/public',
     __DIR__.'/tests',
+    __DIR__.'/routes',
   ])
   ->withPreparedSets(
     deadCode: true,
@@ -19,6 +21,14 @@ return RectorConfig::configure()
     privatization: true,
     naming: true,
     earlyReturn: true,
-    instanceOf: true
+    instanceOf: true,
+    strictBooleans: true
   )
-  ->withPhpSets(php84: true);
+  ->withPhpSets(php84: true)
+  ->withRules([
+    DeclareStrictTypesRector::class,
+  ])
+  ->withSkip([
+    '*/vendor/*',
+    '*/bootstrap/cache/*',
+  ]);

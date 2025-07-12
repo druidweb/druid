@@ -88,7 +88,7 @@
       "@test:types",
       "@test:refactor"
     ],
-    "baseline": "./vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M"
+    "baseline": "./vendor/bin/phpstan analyse --generate-baseline --allow-empty-baseline --memory-limit=256M"
   },
   "extra": {
     "laravel": {
