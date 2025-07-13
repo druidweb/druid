@@ -48,12 +48,20 @@ export type BreadcrumbItemType = BreadcrumbItem;
 declare global {
   function route(): Config;
   function route<T extends keyof typeof Ziggy.routes>(name: T, params?: RouteParams<T>, absolute?: boolean): string;
+  function __(key: string, replace?: Record<string, any>): string;
+  function trans(key: string, replace?: Record<string, any>): string;
+
+  interface Window {
+    locale: string;
+  }
 }
 
 // Vue component custom properties
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     route: typeof route;
+    __: typeof __;
+    trans: typeof trans;
     $page: {
       props: SharedData;
     };
