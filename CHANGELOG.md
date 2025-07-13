@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.6](https://github.com/druidweb/druid/compare/v1.2.5...v1.2.6) (2025-07-13)
+
+
+### Bug Fixes
+
+* **tests:** update ziggy test ([7fb94d1](https://github.com/druidweb/druid/commit/7fb94d1cbd92328c137f9767772f8ff13a91916e))
+
 ## [1.2.5](https://github.com/druidweb/druid/compare/v1.2.4...v1.2.5) (2025-07-13)
 
 

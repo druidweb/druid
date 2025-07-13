@@ -20,7 +20,8 @@ describe('Ziggy Configuration', () => {
 
   it('has correct base configuration', async () => {
     const { Ziggy } = await import('@/ziggy');
-    expect(Ziggy.url).toBe('https://druid.test');
+    const expectedUrl = `https://${process.env.VITE_APP_DOMAIN}`;
+    expect(Ziggy.url).toBe(expectedUrl);
     expect(Ziggy.port).toBe(null);
     expect(Ziggy.defaults).toEqual({});
     expect(Ziggy.routes).toBeDefined();
