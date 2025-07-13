@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.5](https://github.com/druidweb/druid/compare/v1.2.4...v1.2.5) (2025-07-13)
+
+
+### Code Refactoring
+
+* add language support zorah ([ac27fd8](https://github.com/druidweb/druid/commit/ac27fd829c3ef3cb3cea59e3fd0d92b04fa16ef9))
+
+
+### Maintenance
+
+* fix readme and new clover ([bb0f439](https://github.com/druidweb/druid/commit/bb0f439ddeb185bab11a481cf86c632cffee4660))
+
 ## [1.2.4](https://github.com/druidweb/druid/compare/v1.2.3...v1.2.4) (2025-07-12)
 
 
