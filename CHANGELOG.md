@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.7](https://github.com/druidweb/druid/compare/v1.2.6...v1.2.7) (2025-07-17)
+
+
+### Bug Fixes
+
+* add trusted packages to package.json ([12db8dc](https://github.com/druidweb/druid/commit/12db8dcfa267b920c66a8a61a8d4c388f5833915))
+
 ## [1.2.6](https://github.com/druidweb/druid/compare/v1.2.5...v1.2.6) (2025-07-13)
 
 
