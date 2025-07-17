@@ -107,6 +107,8 @@
     }
   },
   "trustedDependencies": [
-    "@tailwindcss/oxide"
+    "@tailwindcss/oxide",
+    "esbuild",
+    "vue-demi"
   ]
 }
