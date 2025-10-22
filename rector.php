@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
+use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
@@ -21,12 +23,13 @@ return RectorConfig::configure()
     privatization: true,
     naming: true,
     earlyReturn: true,
-    instanceOf: true,
-    strictBooleans: true
+    instanceOf: true
   )
   ->withPhpSets(php84: true)
   ->withRules([
     DeclareStrictTypesRector::class,
+    NullableCompareToNullRector::class,
+    StrictArraySearchRector::class,
   ])
   ->withSkip([
     '*/vendor/*',
