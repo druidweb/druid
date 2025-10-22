@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761154189">
-  <project timestamp="1761154189" name="Clover Coverage">
+<coverage generated="1761154303">
+  <project timestamp="1761154303" name="Clover Coverage">
     <package name="App\Http\Controllers\Auth">
       <file name="/Users/vince/WWW/druidweb/druid/app/Http/Controllers/Auth/AuthenticatedSessionController.php">
         <class name="App\Http\Controllers\Auth\AuthenticatedSessionController" namespace="App\Http\Controllers\Auth">
