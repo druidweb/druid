@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.9](https://github.com/druidweb/druid/compare/v1.2.8...v1.2.9) (2025-10-23)
+
+
+### Bug Fixes
+
+* fixed clover file generation ([7b04b9b](https://github.com/druidweb/druid/commit/7b04b9ba0ec063e80da22cde56952a30f1b9da8e))
+
+
+### Maintenance
+
+* update clover file ([f50b1e6](https://github.com/druidweb/druid/commit/f50b1e62fa4d8e20b4ea7c841c1b4449f8f71518))
+* update coverage report to 100% ([ab4a742](https://github.com/druidweb/druid/commit/ab4a7422274e235abf993d97250f978b66e229bf))
+
 ## [1.2.8](https://github.com/druidweb/druid/compare/v1.2.7...v1.2.8) (2025-10-23)
 
 
