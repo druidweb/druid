@@ -16,7 +16,7 @@ fi
 
 # Also stage any auto-generated files that might have been modified
 if [ -n "$MODIFIED_FILES" ]; then
-  echo "$MODIFIED_FILES" | grep -E "auto-imports\.d\.ts$" | xargs -r git add
+  echo "$MODIFIED_FILES" | grep -E "(auto-imports\.d\.ts|clover\.xml)$" | xargs -r git add
 fi
 
 # Run all tests to ensure they pass before commit
