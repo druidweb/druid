@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.2.8](https://github.com/druidweb/druid/compare/v1.2.7...v1.2.8) (2025-10-23)
+
+
+* Merge branch 'main' into 1.x ([eb6cf94](https://github.com/druidweb/druid/commit/eb6cf9408c4ebdcc0ad7c296ac4d11798c16e693))
+* Merge branch 'main' into 1.x ([84b59c6](https://github.com/druidweb/druid/commit/84b59c6d5dadb36326031370d75428a9e7453248))
+* Merge branch 'main' into 1.x ([b1fa2e1](https://github.com/druidweb/druid/commit/b1fa2e15b7bf9b0cbdf967bd34e351c52a4a13df))
+* Merge branch 'main' into 1.x ([ac07f5b](https://github.com/druidweb/druid/commit/ac07f5b4ee79becc0c557d431f2d7851a92a66bb))
+* Merge branch 'main' into 1.x ([7cd242d](https://github.com/druidweb/druid/commit/7cd242d573f9d209892c5202a6062744adbc5cc4))
+* Merge branch 'main' into 1.x ([6e9b4f8](https://github.com/druidweb/druid/commit/6e9b4f88dac10493043214ed98b67986f5baba61))
+* Merge branch 'main' into 1.x ([f00fe9c](https://github.com/druidweb/druid/commit/f00fe9ca8bcb2a932f824c5da330557e2441c25a))
+* Merge branch 'main' into 1.x ([12fe003](https://github.com/druidweb/druid/commit/12fe0038abf158621c784a7c8af9334b32cad13c))
+* Merge branch 'main' into 1.x ([1ae9cca](https://github.com/druidweb/druid/commit/1ae9ccab421fe877608866e2b55e108897ca69aa))
+* Merge branch 'main' into 1.x ([16a3955](https://github.com/druidweb/druid/commit/16a395572dc918a4db73cf7facd530d67cebe98e))
+
+
+### Code Refactoring
+
+* updating testing suite ([6ad4bd8](https://github.com/druidweb/druid/commit/6ad4bd8b940435e97174c57399c68b004d8b7bbc))
+
+
+### Maintenance
+
+* commit clover file ([86fbed1](https://github.com/druidweb/druid/commit/86fbed1ead3906f138d46047a17fdbe1fbaae8d9))
+* deps updates ([cbf6eed](https://github.com/druidweb/druid/commit/cbf6eed6cb9a7ce63756e313f69efa1b893d6635))
+* **deps:** bump @rollup/rollup-linux-x64-gnu from 4.44.2 to 4.45.0 ([#18](https://github.com/druidweb/druid/issues/18)) ([16434c2](https://github.com/druidweb/druid/commit/16434c2206311a79e56cf2ca6a53a69a46f09661))
+* **deps:** bump laravel/sanctum from 4.1.2 to 4.2.0 ([1a3f413](https://github.com/druidweb/druid/commit/1a3f4135d0c2307aa7b78a2ee0bb6aa47ae66aeb))
+* **deps:** bump laravel/sanctum from 4.1.2 to 4.2.0 ([#24](https://github.com/druidweb/druid/issues/24)) ([246689a](https://github.com/druidweb/druid/commit/246689a536cf64c98fd0982ce11e5409f9e57cce))
+* **deps:** bump predis/predis from 3.0.1 to 3.2.0 ([bea4120](https://github.com/druidweb/druid/commit/bea4120d7cb549df9e1fe659e97438e51a7dae35))
+* **deps:** bump predis/predis from 3.0.1 to 3.2.0 ([#32](https://github.com/druidweb/druid/issues/32)) ([c28b761](https://github.com/druidweb/druid/commit/c28b761327851fd513790302bad5590d57a8d834))
+* **deps:** bump zenphp/modulr from 1.0.10 to 1.0.12 ([#17](https://github.com/druidweb/druid/issues/17)) ([8f0d2e8](https://github.com/druidweb/druid/commit/8f0d2e8cb9b33781fc1dc3b233558a98b3791223))
+* **deps:** update deps for prs ([2dd953d](https://github.com/druidweb/druid/commit/2dd953db952e4e2bf3624bcc091ea0ace5c8f7fc))
+* reorder hook to run fixes and tests first ([a05bf05](https://github.com/druidweb/druid/commit/a05bf05eac86d7d960972aa67d945b3c8b22ff85))
+* update hook to recommit changed files ([14622fc](https://github.com/druidweb/druid/commit/14622fc3ab6989761f9edc4e30ff48e487fe8496))
+* update test coverage report [skip ci] ([5904a7a](https://github.com/druidweb/druid/commit/5904a7a73561fb675cff856b3916fd4c7159e269))
+* update workflows ([5c048b9](https://github.com/druidweb/druid/commit/5c048b931e354ddaf80276c62358e9884ed9f5ff))
+
 ## [1.2.7](https://github.com/druidweb/druid/compare/v1.2.6...v1.2.7) (2025-07-17)
 
 
