@@ -82,7 +82,7 @@
     "test:feat": "./vendor/bin/pest tests/Feature --parallel",
     "test:browser": "./vendor/bin/pest --testsuite=Browser --parallel",
     "test:js": "bun run test",
-    "test:feat:coverage": "./vendor/bin/pest --testsuite=Feature --parallel --coverage --min=100",
+    "test:feat:coverage": "./vendor/bin/pest --testsuite=Feature --parallel --coverage --min=100 --coverage-clover=clover.xml",
     "test:js:coverage": "bun test:coverage",
     "test:types": "./vendor/bin/pest --type-coverage --min=100 --compact",
     "test:refactor": "./vendor/bin/rector process --dry-run",
