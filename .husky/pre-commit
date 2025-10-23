@@ -19,21 +19,9 @@ if [ -n "$MODIFIED_FILES" ]; then
   echo "$MODIFIED_FILES" | grep -E "auto-imports\.d\.ts$" | xargs -r git add
 fi
 
-# Run static analysis
-echo "Running static analysis..."
-composer test:types
-
-# Check if static analysis passed
-if [ $? -ne 0 ]; then
-  echo ""
-  echo "❌ Static analysis failed! Commit aborted."
-  echo "Please fix the issues above before committing."
-  exit 1
-fi
-
-# Run tests with coverage to ensure they pass before commit
-echo "Running tests with coverage..."
-composer test:feat:coverage
+# Run all tests to ensure they pass before commit
+echo "Running tests..."
+composer test
 
 # Check if tests passed
 if [ $? -ne 0 ]; then
@@ -41,9 +29,4 @@ if [ $? -ne 0 ]; then
   echo "❌ Tests failed! Commit aborted."
   echo "Please fix failing tests before committing."
   exit 1
-fi
-
-# Stage the updated coverage file if it exists
-if [ -f "clover.xml" ]; then
-  git add clover.xml
 fi

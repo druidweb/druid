@@ -1,6 +1,7 @@
 /.phpunit.cache
 /coverage
 /node_modules
+/tests/Browser/Screenshots
 /public/build
 /public/hot
 /public/storage

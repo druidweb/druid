@@ -11,22 +11,13 @@ use Illuminate\Validation\Rule;
 final class ProfileUpdateRequest extends FormRequest
 {
   /**
-   * Get the authenticated user for the request.
-   */
-  #[\Override]
-  public function user($guard = null): ?User
-  {
-    /** @var \App\Models\User|null */
-    return parent::user($guard);
-  }
-
-  /**
    * Get the validation rules that apply to the request.
    *
    * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
    */
   public function rules(): array
   {
+    /** @var \App\Models\User|null $user */
     $user = $this->user();
     $userId = $user?->id;
 

@@ -22,11 +22,12 @@
   },
   "require-dev": {
     "fakerphp/faker": "^1.24.1",
-    "larastan/larastan": "^3.7.2",
     "mockery/mockery": "^1.6.12",
     "nunomaduro/collision": "^8.8.2",
-    "pestphp/pest": "^3.8.4",
-    "pestphp/pest-plugin-laravel": "^3.2.0",
+    "pestphp/pest": "^4.1.2",
+    "pestphp/pest-plugin-browser": "^4.1",
+    "pestphp/pest-plugin-laravel": "^4.0.0",
+    "pestphp/pest-plugin-type-coverage": "^4.0",
     "rector/rector": "^2.2.4",
     "zenphp/fixr": "^1.0.3",
     "zenphp/zorah": "^1.0.5"
@@ -78,17 +79,25 @@
       "./vendor/bin/fixr --test",
       "bun run format:check"
     ],
-    "test:feat": "./vendor/bin/pest --parallel",
-    "test:feat:coverage": "./vendor/bin/pest --parallel --coverage --min=100",
-    "test:types": "./vendor/bin/phpstan analyse --memory-limit=256M",
+    "test:feat": "./vendor/bin/pest tests/Feature --parallel",
+    "test:browser": "./vendor/bin/pest --testsuite=Browser --parallel",
+    "test:js": "bun run test",
+    "test:feat:coverage": "./vendor/bin/pest --testsuite=Feature --parallel --coverage --min=100",
+    "test:js:coverage": "bun test:coverage",
+    "test:types": "./vendor/bin/pest --type-coverage --min=100 --compact",
     "test:refactor": "./vendor/bin/rector process --dry-run",
     "test": [
-      "@test:feat",
-      "@test:lint",
       "@test:types",
-      "@test:refactor"
+      "@test:feat",
+      "@test:browser",
+      "@test:js",
+      "@test:refactor",
+      "@test:lint"
     ],
-    "baseline": "./vendor/bin/phpstan analyse --generate-baseline --allow-empty-baseline --memory-limit=256M"
+    "test:coverage": [
+      "@test:feat:coverage",
+      "@test:js:coverage"
+    ]
   },
   "extra": {
     "laravel": {

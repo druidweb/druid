@@ -12,6 +12,7 @@ use Tests\TestCase;
  * need to change it using the "pest()" function to bind a different classes or traits.
  */
 pest()->extend(TestCase::class)->in('Feature');
+pest()->extend(TestCase::class)->in('Browser');
 
 /**
  * EXPECTATIONS
@@ -29,7 +30,3 @@ expect()->extend('toBeOne', fn () => $this->toBe(1));
  * project that you don't want to repeat in every file. Here you can also expose helpers as
  * global functions to help you to reduce the number of lines of code in your test files.
  */
-function something(): void
-{
-  // ..
-}

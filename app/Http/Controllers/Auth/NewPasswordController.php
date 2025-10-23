@@ -48,14 +48,13 @@ final class NewPasswordController extends Controller
     // database. Otherwise we will parse the error and return the response.
     $status = Password::reset(
       $request->only('email', 'password', 'password_confirmation', 'token'),
-      function ($user) use ($validated): void {
-        /** @var \App\Models\User $user */
-        $user->forceFill([
+      function (\Illuminate\Contracts\Auth\CanResetPassword $canResetPassword) use ($validated): void {
+        $canResetPassword->forceFill([
           'password' => Hash::make($validated['password']),
           'remember_token' => Str::random(60),
         ])->save();
 
-        event(new PasswordReset($user));
+        event(new PasswordReset($canResetPassword));
       }
     );
 

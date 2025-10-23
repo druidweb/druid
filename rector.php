@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\Config\RectorConfig;
+use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
 return RectorConfig::configure()
@@ -34,4 +35,7 @@ return RectorConfig::configure()
   ->withSkip([
     '*/vendor/*',
     '*/bootstrap/cache/*',
+    RenameVariableToMatchMethodCallReturnTypeRector::class => [
+      __DIR__.'/tests/Browser',
+    ],
   ]);
