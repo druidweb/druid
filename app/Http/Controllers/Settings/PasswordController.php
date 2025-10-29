@@ -4,33 +4,29 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Settings;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\RouteDiscovery\Attributes\Route;
 
-final class PasswordController extends Controller
+class PasswordController
 {
   /**
    * Show the user's password settings page.
    */
-  public function edit(Request $request): Response
+  #[Route('settings/password', name: 'user-password.edit', middleware: ['auth'])]
+  public function edit(): Response
   {
-    $user = $request->user();
-
-    return Inertia::render('settings/Password', [
-      'mustVerifyEmail' => $user instanceof MustVerifyEmail,
-      'status' => $request->session()->get('status'),
-    ]);
+    return Inertia::render('settings/Password');
   }
 
   /**
    * Update the user's password.
    */
+  #[Route('settings/password', name: 'user-password.update', middleware: ['auth', 'throttle:6,1'])]
   public function update(Request $request): RedirectResponse
   {
     /** @var array{current_password: string, password: string} $validated */
@@ -39,16 +35,10 @@ final class PasswordController extends Controller
       'password' => ['required', Password::defaults(), 'confirmed'],
     ]);
 
+    /** @var User $user */
     $user = $request->user();
-
-    // @codeCoverageIgnoreStart
-    if ($user === null) {
-      return redirect()->route('login');
-    }
-    // @codeCoverageIgnoreEnd
-
     $user->update([
-      'password' => Hash::make($validated['password']),
+      'password' => $validated['password'],
     ]);
 
     return back();

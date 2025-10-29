@@ -48,8 +48,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
-    setupFiles: ['./tests/vitest/setup.ts'],
-    include: ['tests/vitest/**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    setupFiles: ['./tests/Vue/setup.ts'],
+    include: ['tests/Vue/**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    exclude: ['**/node_modules/**', '**/vendor/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text'],

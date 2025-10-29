@@ -1,6 +1,5 @@
-import { PageProps } from '@inertiajs/core';
+import { InertiaLinkProps } from '@inertiajs/vue3';
 import type { LucideIcon } from 'lucide-vue-next';
-import { Config, RouteParams } from 'ziggy-js';
 
 export interface Auth {
   user: User;
@@ -13,25 +12,17 @@ export interface BreadcrumbItem {
 
 export interface NavItem {
   title: string;
-  href: string;
+  href: NonNullable<InertiaLinkProps['href']>;
   icon?: LucideIcon;
   isActive?: boolean;
 }
 
-export interface SharedData extends PageProps {
+export type AppPageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
   name: string;
   quote: { message: string; author: string };
   auth: Auth;
-  ziggy: {
-    location: string;
-    url: string;
-    port: null | number;
-    defaults: Record<string, unknown>;
-    routes: Record<string, string>;
-  };
   sidebarOpen: boolean;
-  [key: string]: unknown;
-}
+};
 
 export interface User {
   id: number;
@@ -44,26 +35,3 @@ export interface User {
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
-
-declare global {
-  function route(): Config;
-  function route<T extends keyof typeof Ziggy.routes>(name: T, params?: RouteParams<T>, absolute?: boolean): string;
-  function __(key: string, replace?: Record<string, any>): string;
-  function trans(key: string, replace?: Record<string, any>): string;
-
-  interface Window {
-    locale: string;
-  }
-}
-
-// Vue component custom properties
-declare module '@vue/runtime-core' {
-  interface ComponentCustomProperties {
-    route: typeof route;
-    __: typeof __;
-    trans: typeof trans;
-    $page: {
-      props: SharedData;
-    };
-  }
-}

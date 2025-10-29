@@ -27,8 +27,7 @@ const props = withDefaults(defineProps<SidebarMenuButtonProps>(), {
     :class="cn(sidebarMenuButtonVariants({ variant, size }), props.class)"
     :as="as"
     :as-child="asChild"
-    v-bind="$attrs"
-  >
+    v-bind="$attrs">
     <slot />
   </Primitive>
 </template>

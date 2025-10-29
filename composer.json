@@ -2,35 +2,38 @@
   "$schema": "https://getcomposer.org/schema.json",
   "name": "druidweb/druid",
   "type": "project",
-  "description": "A modern, opinionated starter kit for Laravel 12+ applications",
+  "description": "The skeleton application for the Laravel framework.",
   "keywords": [
     "laravel",
-    "framework",
-    "starter-kit"
+    "framework"
   ],
   "license": "MIT",
   "require": {
     "php": "^8.4",
     "inertiajs/inertia-laravel": "^2.0.10",
-    "laravel/framework": "^12.35.0",
-    "laravel/sanctum": "^4.2.0",
+    "laravel/fortify": "^1.31.2",
+    "laravel/framework": "^12.35.1",
     "laravel/tinker": "^2.10.1",
-    "predis/predis": "^3.2.0",
-    "pusher/pusher-php-server": "^7.2.7",
-    "tightenco/ziggy": "^2.6.0",
-    "zenphp/modulr": "^1.0.12"
+    "laravel/wayfinder": "^0.1.12",
+    "nunomaduro/essentials": "^1.0.1",
+    "spatie/laravel-route-discovery": "^1.4"
   },
   "require-dev": {
+    "driftingly/rector-laravel": "^2.1",
     "fakerphp/faker": "^1.24.1",
+    "larastan/larastan": "^3.7.2",
+    "laravel/boost": "^1.5.1",
+    "laravel/pail": "^1.2.3",
+    "laravel/sail": "^1.46.0",
     "mockery/mockery": "^1.6.12",
     "nunomaduro/collision": "^8.8.2",
     "pestphp/pest": "^4.1.2",
-    "pestphp/pest-plugin-browser": "^4.1",
+    "pestphp/pest-plugin-browser": "^4.1.1",
     "pestphp/pest-plugin-laravel": "^4.0.0",
-    "pestphp/pest-plugin-type-coverage": "^4.0",
-    "rector/rector": "^2.2.4",
-    "zenphp/fixr": "^1.0.3",
-    "zenphp/zorah": "^1.0.5"
+    "pestphp/pest-plugin-type-coverage": "^4.0.2",
+    "rector/rector": "^2.2.6",
+    "zenphp/fixr": "^1.0.4",
+    "zenphp/zorah": "^1.0"
   },
   "autoload": {
     "psr-4": {
@@ -45,6 +48,45 @@
     }
   },
   "scripts": {
+    "setup": [
+      "composer install",
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+      "@php artisan key:generate",
+      "@php artisan migrate --force",
+      "bun install",
+      "bun run build"
+    ],
+    "dev": [
+      "Composer\\Config::disableProcessTimeout",
+      "bunx concurrently -c \"#c4b5fd,#fb7185,#fdba74\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"bun run dev\" --names=queue,logs,vite --kill-others"
+    ],
+    "dev:ssr": [
+      "bun run build:ssr",
+      "Composer\\Config::disableProcessTimeout",
+      "bunx concurrently -c \"#c4b5fd,#fb7185,#fdba74\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"php artisan inertia:start-ssr\" --names=queue,logs,ssr --kill-others"
+    ],
+    "lint": [
+      "./vendor/bin/rector",
+      "./vendor/bin/fixr",
+      "bun run lint",
+      "bun run format"
+    ],
+    "test:types": "./vendor/bin/pest --type-coverage --min=100",
+    "test:lint": [
+      "./vendor/bin/rector --dry-run",
+      "./vendor/bin/fixr --test",
+      "bun run lint:check",
+      "bun run format:check"
+    ],
+    "test:int": "./vendor/bin/pest --parallel --coverage --exactly=100.0",
+    "test:static": "./vendor/bin/phpstan analyze",
+    "test": [
+      "@test:types",
+      "@test:static",
+      "@test:lint",
+      "@test:types",
+      "@test:int"
+    ],
     "post-autoload-dump": [
       "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
       "@php artisan package:discover --ansi"
@@ -60,43 +102,8 @@
       "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
       "@php artisan migrate --graceful --ansi"
     ],
-    "dev": [
-      "Composer\\Config::disableProcessTimeout",
-      "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
-    ],
-    "lint": [
-      "./vendor/bin/fixr",
-      "bun run lint"
-    ],
-    "refactor": "./vendor/bin/rector process",
-    "fix": [
-      "@refactor",
-      "@test:types",
-      "bun run format",
-      "./vendor/bin/fixr"
-    ],
-    "test:lint": [
-      "./vendor/bin/fixr --test",
-      "bun run format:check"
-    ],
-    "test:feat": "./vendor/bin/pest tests/Feature --parallel",
-    "test:browser": "./vendor/bin/pest --testsuite=Browser --parallel",
-    "test:js": "bun run test",
-    "test:feat:coverage": "./vendor/bin/pest --testsuite=Feature --parallel --coverage --min=100 --coverage-clover=clover.xml",
-    "test:js:coverage": "bun test:coverage",
-    "test:types": "./vendor/bin/pest --type-coverage --min=100 --compact",
-    "test:refactor": "./vendor/bin/rector process --dry-run",
-    "test": [
-      "@test:types",
-      "@test:feat",
-      "@test:browser",
-      "@test:js",
-      "@test:refactor",
-      "@test:lint"
-    ],
-    "test:coverage": [
-      "@test:feat:coverage",
-      "@test:js:coverage"
+    "pre-package-uninstall": [
+      "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
     ]
   },
   "extra": {
@@ -113,6 +120,6 @@
       "php-http/discovery": true
     }
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true
 }

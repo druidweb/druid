@@ -5,19 +5,15 @@ import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
+import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { getInitials } from '@/composables/useInitials';
+import { toUrl, urlIsActive } from '@/lib/utils';
+import { dashboard } from '@/routes';
 import type { BreadcrumbItem, NavItem } from '@/types';
-import { Link, usePage } from '@inertiajs/vue3';
+import { InertiaLinkProps, Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next';
 import { computed } from 'vue';
 
@@ -32,16 +28,17 @@ const props = withDefaults(defineProps<Props>(), {
 const page = usePage();
 const auth = computed(() => page.props.auth);
 
-const isCurrentRoute = computed(() => (url: string) => page.url === url);
+const isCurrentRoute = computed(() => (url: NonNullable<InertiaLinkProps['href']>) => urlIsActive(url, page.url));
 
 const activeItemStyles = computed(
-  () => (url: string) => (isCurrentRoute.value(url) ? 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100' : ''),
+  () => (url: NonNullable<InertiaLinkProps['href']>) =>
+    isCurrentRoute.value(toUrl(url)) ? 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100' : '',
 );
 
 const mainNavItems: NavItem[] = [
   {
     title: 'Dashboard',
-    href: '/dashboard',
+    href: dashboard(),
     icon: LayoutGrid,
   },
 ];
@@ -54,7 +51,7 @@ const rightNavItems: NavItem[] = [
   },
   {
     title: 'Documentation',
-    href: 'https://laravel.com/docs/starter-kits',
+    href: 'https://laravel.com/docs/starter-kits#vue',
     icon: BookOpen,
   },
 ];
@@ -62,7 +59,7 @@ const rightNavItems: NavItem[] = [
 
 <template>
   <div>
-    <div class="border-sidebar-border/80 border-b">
+    <div class="border-b border-sidebar-border/80">
       <div class="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
         <!-- Mobile Menu -->
         <div class="lg:hidden">
@@ -83,9 +80,8 @@ const rightNavItems: NavItem[] = [
                     v-for="item in mainNavItems"
                     :key="item.title"
                     :href="item.href"
-                    class="hover:bg-accent flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium"
-                    :class="activeItemStyles(item.href)"
-                  >
+                    class="flex items-center gap-x-3 rounded px-3 py-2 text-sm font-medium hover:bg-accent"
+                    :class="activeItemStyles(item.href)">
                     <component v-if="item.icon" :is="item.icon" class="h-5 w-5" />
                     {{ item.title }}
                   </Link>
@@ -94,11 +90,10 @@ const rightNavItems: NavItem[] = [
                   <a
                     v-for="item in rightNavItems"
                     :key="item.title"
-                    :href="item.href"
+                    :href="toUrl(item.href)"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="flex items-center space-x-2 text-sm font-medium"
-                  >
+                    class="flex items-center space-x-2 text-sm font-medium">
                     <component v-if="item.icon" :is="item.icon" class="h-5 w-5" />
                     <span>{{ item.title }}</span>
                   </a>
@@ -108,7 +103,7 @@ const rightNavItems: NavItem[] = [
           </Sheet>
         </div>
 
-        <Link :href="route('dashboard')" class="flex items-center gap-x-2">
+        <Link :href="dashboard()" class="flex items-center gap-x-2">
           <AppLogo />
         </Link>
 
@@ -117,11 +112,9 @@ const rightNavItems: NavItem[] = [
           <NavigationMenu class="ml-10 flex h-full items-stretch">
             <NavigationMenuList class="flex h-full items-stretch space-x-2">
               <NavigationMenuItem v-for="(item, index) in mainNavItems" :key="index" class="relative flex h-full items-center">
-                <Link :href="item.href">
-                  <NavigationMenuLink :class="[navigationMenuTriggerStyle(), activeItemStyles(item.href), 'h-9 cursor-pointer px-3']">
-                    <component v-if="item.icon" :is="item.icon" class="mr-2 h-4 w-4" />
-                    {{ item.title }}
-                  </NavigationMenuLink>
+                <Link :class="[navigationMenuTriggerStyle(), activeItemStyles(item.href), 'h-9 cursor-pointer px-3']" :href="item.href">
+                  <component v-if="item.icon" :is="item.icon" class="mr-2 h-4 w-4" />
+                  {{ item.title }}
                 </Link>
                 <div v-if="isCurrentRoute(item.href)" class="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>
               </NavigationMenuItem>
@@ -131,7 +124,7 @@ const rightNavItems: NavItem[] = [
 
         <div class="ml-auto flex items-center space-x-2">
           <div class="relative flex items-center space-x-1">
-            <Button variant="ghost" size="icon" class="group h-9 w-9 cursor-pointer">
+            <Button variant="ghost" size="icon" class="group h-9 w-9">
               <Search class="size-5 opacity-80 group-hover:opacity-100" />
             </Button>
 
@@ -140,8 +133,8 @@ const rightNavItems: NavItem[] = [
                 <TooltipProvider :delay-duration="0">
                   <Tooltip>
                     <TooltipTrigger>
-                      <Button variant="ghost" size="icon" as-child class="group h-9 w-9 cursor-pointer">
-                        <a :href="item.href" target="_blank" rel="noopener noreferrer">
+                      <Button variant="ghost" size="icon" as-child class="group h-9 w-9">
+                        <a :href="toUrl(item.href)" target="_blank" rel="noopener noreferrer">
                           <span class="sr-only">{{ item.title }}</span>
                           <component :is="item.icon" class="size-5 opacity-80 group-hover:opacity-100" />
                         </a>
@@ -158,10 +151,10 @@ const rightNavItems: NavItem[] = [
 
           <DropdownMenu>
             <DropdownMenuTrigger :as-child="true">
-              <Button variant="ghost" size="icon" class="focus-within:ring-primary relative size-10 w-auto rounded-full p-1 focus-within:ring-2">
+              <Button variant="ghost" size="icon" class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary">
                 <Avatar class="size-8 overflow-hidden rounded-full">
                   <AvatarImage v-if="auth.user.avatar" :src="auth.user.avatar" :alt="auth.user.name" />
-                  <AvatarFallback class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white">
+                  <AvatarFallback class="rounded bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white">
                     {{ getInitials(auth.user?.name) }}
                   </AvatarFallback>
                 </Avatar>
@@ -175,7 +168,7 @@ const rightNavItems: NavItem[] = [
       </div>
     </div>
 
-    <div v-if="props.breadcrumbs.length > 1" class="border-sidebar-border/70 flex w-full border-b">
+    <div v-if="props.breadcrumbs.length > 1" class="flex w-full border-b border-sidebar-border/70">
       <div class="mx-auto flex h-12 w-full items-center justify-start px-4 text-neutral-500 md:max-w-7xl">
         <Breadcrumbs :breadcrumbs="breadcrumbs" />
       </div>

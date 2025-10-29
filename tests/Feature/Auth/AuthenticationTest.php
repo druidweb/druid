@@ -3,17 +3,19 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use Illuminate\Support\Facades\RateLimiter;
+use Laravel\Fortify\Features;
 
 test('login screen can be rendered', function (): void {
-  $response = $this->get('/login');
+  $response = $this->get(route('login'));
 
   $response->assertStatus(200);
 });
 
 test('users can authenticate using the login screen', function (): void {
-  $user = User::factory()->create();
+  $user = User::factory()->withoutTwoFactor()->create();
 
-  $response = $this->post('/login', [
+  $response = $this->post(route('login.store'), [
     'email' => $user->email,
     'password' => 'password',
   ]);
@@ -22,10 +24,38 @@ test('users can authenticate using the login screen', function (): void {
   $response->assertRedirect(route('dashboard', absolute: false));
 });
 
+test('users with two factor enabled are redirected to two factor challenge', function (): void {
+  if (! Features::canManageTwoFactorAuthentication()) {
+    $this->markTestSkipped('Two-factor authentication is not enabled.');
+  }
+
+  Features::twoFactorAuthentication([
+    'confirm' => true,
+    'confirmPassword' => true,
+  ]);
+
+  $user = User::factory()->create();
+
+  $user->forceFill([
+    'two_factor_secret' => encrypt('test-secret'),
+    'two_factor_recovery_codes' => encrypt(json_encode(['code1', 'code2'])),
+    'two_factor_confirmed_at' => now(),
+  ])->save();
+
+  $response = $this->post(route('login'), [
+    'email' => $user->email,
+    'password' => 'password',
+  ]);
+
+  $response->assertRedirect(route('two-factor.login'));
+  $response->assertSessionHas('login.id', $user->id);
+  $this->assertGuest();
+});
+
 test('users can not authenticate with invalid password', function (): void {
   $user = User::factory()->create();
 
-  $this->post('/login', [
+  $this->post(route('login.store'), [
     'email' => $user->email,
     'password' => 'wrong-password',
   ]);
@@ -36,28 +66,21 @@ test('users can not authenticate with invalid password', function (): void {
 test('users can logout', function (): void {
   $user = User::factory()->create();
 
-  $response = $this->actingAs($user)->post('/logout');
+  $response = $this->actingAs($user)->post(route('logout'));
 
   $this->assertGuest();
-  $response->assertRedirect('/');
+  $response->assertRedirect(route('home'));
 });
 
-test('login is rate limited after too many failed attempts', function (): void {
+test('users are rate limited', function (): void {
   $user = User::factory()->create();
 
-  // Make 5 failed login attempts to trigger rate limiting
-  for ($i = 0; $i < 5; $i++) {
-    $this->post('/login', [
-      'email' => $user->email,
-      'password' => 'wrong-password',
-    ]);
-  }
+  RateLimiter::increment(md5('login'.implode('|', [$user->email, '127.0.0.1'])), amount: 5);
 
-  // The 6th attempt should be rate limited
-  $response = $this->post('/login', [
+  $response = $this->post(route('login.store'), [
     'email' => $user->email,
     'password' => 'wrong-password',
   ]);
 
-  $response->assertSessionHasErrors('email');
+  $response->assertTooManyRequests();
 });

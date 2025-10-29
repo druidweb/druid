@@ -1,2 +1,2 @@
-# Auto-generated files
-resources/js/types/auto-imports.d.ts
+# Exclude mail templates
+resources/views/mail/*

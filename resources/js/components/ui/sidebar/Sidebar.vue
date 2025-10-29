@@ -24,9 +24,8 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
   <div
     v-if="collapsible === 'none'"
     data-slot="sidebar"
-    :class="cn('bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col', props.class)"
-    v-bind="$attrs"
-  >
+    :class="cn('flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground', props.class)"
+    v-bind="$attrs">
     <slot />
   </div>
 
@@ -36,11 +35,10 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
       data-slot="sidebar"
       data-mobile="true"
       :side="side"
-      class="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+      class="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
       :style="{
         '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
-      }"
-    >
+      }">
       <SheetHeader class="sr-only">
         <SheetTitle>Sidebar</SheetTitle>
         <SheetDescription>Displays the mobile sidebar.</SheetDescription>
@@ -53,13 +51,12 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
   <div
     v-else
-    class="group peer text-sidebar-foreground hidden md:block"
+    class="group peer hidden text-sidebar-foreground md:block"
     data-slot="sidebar"
     :data-state="state"
     :data-collapsible="state === 'collapsed' ? collapsible : ''"
     :data-variant="variant"
-    :data-side="side"
-  >
+    :data-side="side">
     <!-- This is what handles the sidebar gap on desktop  -->
     <div
       :class="
@@ -71,8 +68,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
             ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
             : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',
         )
-      "
-    />
+      " />
     <div
       :class="
         cn(
@@ -87,12 +83,10 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
           props.class,
         )
       "
-      v-bind="$attrs"
-    >
+      v-bind="$attrs">
       <div
         data-sidebar="sidebar"
-        class="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
-      >
+        class="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm">
         <slot />
       </div>
     </div>

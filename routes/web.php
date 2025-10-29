@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+\Illuminate\Support\Facades\Route::get('settings/appearance',
+  fn () => \Inertia\Inertia::render('settings/Appearance'))
+  ->middleware('auth')
+  ->name('appearance.edit');
 
-Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
+\Illuminate\Support\Facades\Route::redirect('settings', '/settings/profile')
+  ->middleware('auth');
 
-Route::get('dashboard', fn () => Inertia::render('Dashboard'))->middleware(['auth', 'verified'])->name('dashboard');
-
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+\Spatie\RouteDiscovery\Discovery\Discover::controllers()
+  ->in(app_path('Http/Controllers'));

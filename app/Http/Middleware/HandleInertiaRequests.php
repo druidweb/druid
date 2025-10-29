@@ -8,7 +8,7 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
-final class HandleInertiaRequests extends Middleware
+class HandleInertiaRequests extends Middleware
 {
   /**
    * The root template that's loaded on the first page visit.
@@ -24,7 +24,6 @@ final class HandleInertiaRequests extends Middleware
    *
    * @see https://inertiajs.com/asset-versioning
    */
-  #[\Override]
   public function version(Request $request): ?string
   {
     return parent::version($request);
@@ -37,23 +36,22 @@ final class HandleInertiaRequests extends Middleware
    *
    * @return array<string, mixed>
    */
-  #[\Override]
   public function share(Request $request): array
   {
+    /** @var string $randomQuote */
     $randomQuote = Inspiring::quotes()->random();
-    $quoteString = is_string($randomQuote) ? $randomQuote : '';
-    [$message, $author] = str($quoteString)->explode('-');
+    $quote = str($randomQuote)->explode('-');
+    $message = $quote[0] ?? '';
+    $author = $quote[1] ?? '';
 
-    return array_merge(parent::share($request), [
+    return [
       ...parent::share($request),
       'name' => config('app.name'),
-      'quote' => [
-        'message' => trim(is_string($message) ? $message : ''),
-        'author' => trim(is_string($author) ? $author : ''),
-      ],
+      'quote' => ['message' => trim((string) $message), 'author' => trim((string) $author)],
       'auth' => [
         'user' => $request->user(),
       ],
-    ]);
+      'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+    ];
   }
 }
