@@ -86,7 +86,6 @@ describe('Breadcrumbs', () => {
       },
     });
 
-    const html = wrapper.html();
     // Should have separators between items (3 items = 2 separators)
     // The separator is rendered as an SVG element
     const svgs = wrapper.findAll('svg');

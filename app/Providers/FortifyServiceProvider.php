@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -23,14 +24,12 @@ class FortifyServiceProvider extends ServiceProvider
    */
   public function register(): void
   {
-    $this->app->singleton(PasswordConfirmedResponse::class, function () {
-      return new class implements PasswordConfirmedResponse
+    $this->app->singleton(fn (): PasswordConfirmedResponse => new class implements PasswordConfirmedResponse
+    {
+      public function toResponse(mixed $request): RedirectResponse
       {
-        public function toResponse($request)
-        {
-          return redirect()->intended('/dashboard');
-        }
-      };
+        return redirect()->intended('/dashboard');
+      }
     });
   }
 

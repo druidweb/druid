@@ -14,8 +14,11 @@ class ConfirmPassword
    */
   public function __invoke(?string $password = null): bool
   {
+    /** @var string|null $guardName */
+    $guardName = config('fortify.guard');
+
     /** @var StatefulGuard $guard */
-    $guard = Auth::guard(config('fortify.guard'));
+    $guard = Auth::guard($guardName);
 
     $user = $guard->user();
 
@@ -29,4 +32,3 @@ class ConfirmPassword
     ]);
   }
 }
-
