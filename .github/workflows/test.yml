@@ -29,7 +29,6 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: composer:v2
-          coverage: xdebug
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
@@ -47,8 +46,8 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
-      - name: Publish Ziggy Configuration
-        run: php artisan ziggy:generate --types && php artisan zorah:generate
+      - name: Publish Wayfinder Routes
+        run: php artisan wayfinder:generate --types && php artisan zorah:generate
 
       - name: Build Assets
         run: bun run prod
@@ -57,4 +56,4 @@ jobs:
         run: composer test:types
 
       - name: Run Tests
-        run: composer test:feat
+        run: composer test:int
