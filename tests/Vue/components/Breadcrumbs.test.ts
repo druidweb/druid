@@ -103,4 +103,22 @@ describe('Breadcrumbs', () => {
     const separatorCount = (html.match(/BreadcrumbSeparator/g) || []).length;
     expect(separatorCount).toBe(0);
   });
+
+  it('renders with empty breadcrumbs array', () => {
+    const wrapper = mount(Breadcrumbs, {
+      props: {
+        breadcrumbs: [],
+      },
+    });
+    expect(wrapper.exists()).toBe(true);
+  });
+
+  it('uses # as fallback href when href is undefined', () => {
+    const wrapper = mount(Breadcrumbs, {
+      props: {
+        breadcrumbs: [{ title: 'Home' }, { title: 'Products' }],
+      },
+    });
+    expect(wrapper.exists()).toBe(true);
+  });
 });

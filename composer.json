@@ -71,14 +71,16 @@
       "bun run lint",
       "bun run format"
     ],
-    "test:types": "./vendor/bin/pest --type-coverage --min=100",
+    "test:types": "./vendor/bin/pest --type-coverage --parallel --min=100",
     "test:lint": [
       "./vendor/bin/rector --dry-run",
       "./vendor/bin/fixr --test",
       "bun run lint:check",
       "bun run format:check"
     ],
-    "test:int": "./vendor/bin/pest --parallel --coverage --exactly=100.0",
+    "test:int": "./vendor/bin/pest --parallel --exclude-group=browser",
+    "test:coverage": "./vendor/bin/pest --parallel --coverage --exactly=100.0 --exclude-group=browser",
+    "test:browser": "./vendor/bin/pest --group=browser",
     "test:static": "./vendor/bin/phpstan analyze",
     "test": [
       "@test:types",

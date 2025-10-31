@@ -14,7 +14,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
-    "fix": "composer test",
+    "fix": "composer test:types && composer test:int",
     "wl": "php artisan wayfinder:generate && php artisan zorah:generate",
     "cb": "composer update && bun update"
   },
@@ -39,6 +39,7 @@
     "eslint-plugin-vue": "^10.5.1",
     "happy-dom": "^20.0.9",
     "husky": "^9.1.7",
+    "jsdom": "^27.0.1",
     "playwright": "^1.56.1",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.3.0",

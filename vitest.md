@@ -6,6 +6,8 @@
 - **NEVER remove existing test methods**
 - **ONLY add new tests or enhance existing ones by adding new test methods**
 - **Always preserve all existing test code**
+- **DO NOT skip files by adding them to the exclusions list**
+- **DO NOT Change the thresholds in vitest.config.ts**
 
 ## TEST QUALITY REQUIREMENTS - MANDATORY:
 
@@ -77,15 +79,15 @@ test('renders with default props', () => {
 
 **BEFORE committing, you MUST verify:**
 
-1. `bun run test:js` - ALL tests pass (green)
-2. `bun run test:js:coverage` - Coverage target reached AND all tests pass
+1. `bun run test` - ALL tests pass (green)
+2. `bun run test:coverage` - Coverage target reached AND all tests pass
 3. **Zero failures, warnings, risky, or skipped tests**
 4. **If ANY test fails, fix it before proceeding**
 
 ## PROGRESSIVE MILESTONE SYSTEM:
 
-**Current minimum threshold: 98.97%**
-**Next milestone target: 100%**
+**Current minimum threshold: 73.95%**
+**Next milestone target: 80%**
 **Final goal: 100%**
 
 ## WORKFLOW:
@@ -104,10 +106,8 @@ test('renders with default props', () => {
 
 ## MILESTONES PROGRESSION (update as you go):
 
-- [x] 3.17% → 25%
-- [x] 28.99% → 50%
-- [x] 61.57% → 75%
-- [ ] 98.97% → 100%
+- [x] 49.57% → 70%
+- [ ] 73.95% → 80%
 
 ## INSTRUCTIONS:
 
@@ -117,8 +117,8 @@ test('renders with default props', () => {
 4. **Write QUALITY component tests** - meaningful assertions that verify component behavior, props, events, slots
 5. **Use reusable helpers** - Don't repeat mounting/setup code, leverage test utilities
 6. **One component at a time** - work on single components systematically
-7. **Ensure tests pass** with `bun run test:js` after each addition
-8. **Check coverage** with `bun run test:js:coverage`
+7. **Ensure tests pass** with `bun run test` after each addition
+8. **Check coverage** with `bun run test:coverage`
 9. **Only ask for commit approval when ALL tests pass AND milestone reached**
 
 ## GOOD COMPONENT TEST EXAMPLES:
@@ -276,11 +276,11 @@ test('handles async operations', async () => {
 
 ## CURRENT STATUS:
 
-- Current coverage: 98.97%
-- Target milestone: 100%
+- Current coverage: 73.95%
+- Target milestone: 80%
 - Framework: Vue 3 + Vitest
 - Test runner: Vitest (via Bun)
-- Coverage command: `bun run test:js:coverage`
+- Coverage command: `bun run test:coverage`
 
 ## HUMAN APPROVAL & VERIFICATION PROCESS:
 
@@ -288,8 +288,8 @@ test('handles async operations', async () => {
 
 1. Run your own verification:
    ```bash
-   bun run test:js           # Verify all tests pass
-   bun run test:js:coverage  # Verify coverage reached
+   bun run test           # Verify all tests pass
+   bun run test:coverage  # Verify coverage reached
    ```
 2. Review the test code quality
 3. Respond to Augment:

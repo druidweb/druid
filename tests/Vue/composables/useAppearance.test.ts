@@ -1,4 +1,5 @@
 import { initializeTheme, updateTheme, useAppearance } from '@/composables/useAppearance';
+import { mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('updateTheme', () => {
@@ -27,6 +28,17 @@ describe('updateTheme', () => {
 
     updateTheme('system');
     expect(document.documentElement.classList.contains('dark')).toBe(false);
+  });
+
+  it('returns early when window is undefined (SSR)', () => {
+    const originalWindow = global.window;
+    // @ts-expect-error - Testing SSR scenario
+    delete global.window;
+
+    // Should not throw
+    expect(() => updateTheme('dark')).not.toThrow();
+
+    global.window = originalWindow;
   });
 });
 
@@ -59,6 +71,17 @@ describe('initializeTheme', () => {
 
     initializeTheme();
     expect(addEventListenerMock).toHaveBeenCalledWith('change', expect.any(Function));
+  });
+
+  it('returns early when window is undefined (SSR)', () => {
+    const originalWindow = global.window;
+    // @ts-expect-error - Testing SSR scenario
+    delete global.window;
+
+    // Should not throw
+    expect(() => initializeTheme()).not.toThrow();
+
+    global.window = originalWindow;
   });
 });
 
@@ -107,5 +130,22 @@ describe('useAppearance', () => {
     updateAppearance('dark');
 
     expect(document.cookie).toContain('appearance=dark');
+  });
+
+  it('loads saved appearance from localStorage on mount', async () => {
+    localStorage.setItem('appearance', 'light');
+
+    // Mount a component to trigger onMounted
+    const wrapper = mount({
+      setup() {
+        const { appearance } = useAppearance();
+        return { appearance };
+      },
+      template: '<div>{{ appearance }}</div>',
+    });
+
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.appearance).toBe('light');
   });
 });

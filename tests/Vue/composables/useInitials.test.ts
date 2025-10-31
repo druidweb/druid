@@ -41,5 +41,32 @@ describe('getInitials', () => {
   it('handles single letter names', () => {
     expect(getInitials('J D')).toBe('JD');
   });
+
+  it('returns empty string for string with only spaces after trim', () => {
+    // This edge case tests when split returns empty array
+    expect(getInitials('     ')).toBe('');
+  });
 });
 
+describe('useInitials', () => {
+  it('returns getInitials function', () => {
+    const { getInitials: fn } = useInitials();
+    expect(fn).toBeDefined();
+    expect(typeof fn).toBe('function');
+  });
+
+  it('getInitials from useInitials works correctly', () => {
+    const { getInitials: fn } = useInitials();
+    expect(fn('John Doe')).toBe('JD');
+  });
+
+  it('handles empty string via useInitials', () => {
+    const { getInitials: fn } = useInitials();
+    expect(fn('')).toBe('');
+  });
+
+  it('handles single name via useInitials', () => {
+    const { getInitials: fn } = useInitials();
+    expect(fn('Alice')).toBe('A');
+  });
+});
