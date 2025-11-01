@@ -1,5 +1,5 @@
+import { Sheet, SheetDescription, SheetTitle } from '@/components/ui/sheet';
 import SheetContent from '@/components/ui/sheet/SheetContent.vue';
-import { Sheet } from '@/components/ui/sheet';
 import { mount } from '@vue/test-utils';
 import { h } from 'vue';
 
@@ -10,7 +10,8 @@ describe('SheetContent', () => {
         open: true,
       },
       slots: {
-        default: () => h(SheetContent, props),
+        default: () =>
+          h(SheetContent, props, () => [h(SheetTitle, {}, () => 'Test Sheet Title'), h(SheetDescription, {}, () => 'Test sheet description')]),
       },
     });
   };
@@ -48,4 +49,3 @@ describe('SheetContent', () => {
     expect(wrapper.exists()).toBe(true);
   });
 });
-

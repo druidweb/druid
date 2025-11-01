@@ -1,1 +1,7 @@
 bun run fix
+
+composer test:static
+
+composer test:types
+
+composer test:feat

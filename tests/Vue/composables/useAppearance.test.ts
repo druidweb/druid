@@ -87,27 +87,46 @@ describe('initializeTheme', () => {
 
 describe('useAppearance', () => {
   it('returns appearance ref and updateAppearance function', () => {
-    const { appearance, updateAppearance } = useAppearance();
-    expect(appearance).toBeDefined();
-    expect(updateAppearance).toBeInstanceOf(Function);
+    const wrapper = mount({
+      setup() {
+        const { appearance, updateAppearance } = useAppearance();
+        return { appearance, updateAppearance };
+      },
+      template: '<div></div>',
+    });
+
+    expect(wrapper.vm.appearance).toBeDefined();
+    expect(wrapper.vm.updateAppearance).toBeInstanceOf(Function);
   });
 
   it('updates appearance and stores in localStorage', async () => {
-    const { appearance, updateAppearance } = useAppearance();
+    const wrapper = mount({
+      setup() {
+        const { appearance, updateAppearance } = useAppearance();
+        return { appearance, updateAppearance };
+      },
+      template: '<div></div>',
+    });
 
-    updateAppearance('dark');
+    wrapper.vm.updateAppearance('dark');
 
-    expect(appearance.value).toBe('dark');
+    expect(wrapper.vm.appearance).toBe('dark');
     expect(localStorage.getItem('appearance')).toBe('dark');
     expect(document.documentElement.classList.contains('dark')).toBe(true);
   });
 
   it('updates appearance to light', async () => {
-    const { appearance, updateAppearance } = useAppearance();
+    const wrapper = mount({
+      setup() {
+        const { appearance, updateAppearance } = useAppearance();
+        return { appearance, updateAppearance };
+      },
+      template: '<div></div>',
+    });
 
-    updateAppearance('light');
+    wrapper.vm.updateAppearance('light');
 
-    expect(appearance.value).toBe('light');
+    expect(wrapper.vm.appearance).toBe('light');
     expect(localStorage.getItem('appearance')).toBe('light');
     expect(document.documentElement.classList.contains('dark')).toBe(false);
   });
@@ -116,18 +135,30 @@ describe('useAppearance', () => {
     const matchMediaMock = vi.fn().mockReturnValue({ matches: true });
     vi.stubGlobal('matchMedia', matchMediaMock);
 
-    const { appearance, updateAppearance } = useAppearance();
+    const wrapper = mount({
+      setup() {
+        const { appearance, updateAppearance } = useAppearance();
+        return { appearance, updateAppearance };
+      },
+      template: '<div></div>',
+    });
 
-    updateAppearance('system');
+    wrapper.vm.updateAppearance('system');
 
-    expect(appearance.value).toBe('system');
+    expect(wrapper.vm.appearance).toBe('system');
     expect(localStorage.getItem('appearance')).toBe('system');
   });
 
   it('sets cookie when updating appearance', () => {
-    const { updateAppearance } = useAppearance();
+    const wrapper = mount({
+      setup() {
+        const { updateAppearance } = useAppearance();
+        return { updateAppearance };
+      },
+      template: '<div></div>',
+    });
 
-    updateAppearance('dark');
+    wrapper.vm.updateAppearance('dark');
 
     expect(document.cookie).toContain('appearance=dark');
   });

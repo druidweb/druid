@@ -1,4 +1,4 @@
-import { Dialog } from '@/components/ui/dialog';
+import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import DialogContent from '@/components/ui/dialog/DialogContent.vue';
 import { mount } from '@vue/test-utils';
 import { h } from 'vue';
@@ -10,7 +10,8 @@ describe('DialogContent', () => {
         open: true,
       },
       slots: {
-        default: () => h(DialogContent, props),
+        default: () =>
+          h(DialogContent, props, () => [h(DialogTitle, {}, () => 'Test Dialog Title'), h(DialogDescription, {}, () => 'Test dialog description')]),
       },
     });
   };

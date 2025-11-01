@@ -1,5 +1,20 @@
 import { config, type VueWrapper } from '@vue/test-utils';
-import { beforeEach, expect } from 'vitest';
+import { beforeEach, expect, vi } from 'vitest';
+
+// Mock window.matchMedia
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(), // deprecated
+    removeListener: vi.fn(), // deprecated
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
 
 // Configure Vue Test Utils globally
 config.global.stubs = {
@@ -33,10 +48,10 @@ beforeEach(() => {
 /**
  * Helper to test translation rendering in components
  * @param wrapper - Vue wrapper instance
- * @param translationKey - The translation key to look for
+ * @param _translationKey - The translation key to look for
  * @param expectedText - The expected translated text
  */
-export function expectTranslation(wrapper: VueWrapper, translationKey: string, expectedText: string) {
+export function expectTranslation(wrapper: VueWrapper, _translationKey: string, expectedText: string) {
   const html = wrapper.html();
   expect(html).toContain(expectedText);
 }
