@@ -1,5 +1,28 @@
 # Changelog
 
+# [1.3.0](https://github.com/druidweb/druid/compare/v1.2.9...v1.3.0) (2025-11-01)
+
+
+### Features
+
+* add two-factor auth remove browser tests ([6b6cc88](https://github.com/druidweb/druid/commit/6b6cc8811b6333aafb625ceae29f5f7529a2cd2a))
+
+
+### Maintenance
+
+* **deps:** bump laravel/framework from 12.35.0 to 12.35.1 ([d3172bc](https://github.com/druidweb/druid/commit/d3172bcd87e39e0cd234d619eea8a6d1c1447a02))
+* **deps:** bump laravel/framework from 12.35.0 to 12.35.1 ([#89](https://github.com/druidweb/druid/issues/89)) ([9abba94](https://github.com/druidweb/druid/commit/9abba9424045d0dce0960f6b7b96c4d236a9cf0d))
+
+
+### Work in Progress
+
+* add semantic release and further tests ([18dc4a5](https://github.com/druidweb/druid/commit/18dc4a5020b96a84bbf5ea847d482ccf9ff0657e))
+* complete update and refactor ([557ba1d](https://github.com/druidweb/druid/commit/557ba1dea9e37166ad3dbb4f168c668fb3edca36))
+* configuration changes ([4706f13](https://github.com/druidweb/druid/commit/4706f132b0d56a61324826a277492465ea63e033))
+* **js-testing:** continue work on js testing ([c1a61a8](https://github.com/druidweb/druid/commit/c1a61a827817fc57032de94d8cd1c1c73f82819a))
+* remove auto-imports from version control ([c874c25](https://github.com/druidweb/druid/commit/c874c25cf316fd03b79e0c04ae078975a2677ed9))
+* **workflows:** update workflow fix typo ([a973c0b](https://github.com/druidweb/druid/commit/a973c0b0b87567b6ef9f1f16650b75aa6d192df8))
+
 ## [1.2.9](https://github.com/druidweb/druid/compare/v1.2.8...v1.2.9) (2025-10-23)
 
 
