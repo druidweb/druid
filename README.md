@@ -18,6 +18,8 @@ The most comprehensive and battle-tested Laravel + Vue starter kit available. Bu
 
 Unlike other starter kits that give you a basic setup and leave you to figure out the rest, Druid provides a complete development ecosystem. Every component is tested, every workflow is automated, and every decision has been made with scalability and maintainability in mind. From comprehensive testing with Pest and Vitest to automated semantic releases, this isn't just a starter kit, it's a complete foundation for building production applications that can grow with your business.
 
+> NOTE: Druid contains the latest updates from Vue Starter kit including Two-Factor Authentication with Fortify.
+
 ## Features
 
 - 🚀 [Laravel 12](https://laravel.com) - Latest Laravel with PHP 8.3+ support
@@ -38,9 +40,9 @@ Unlike other starter kits that give you a basic setup and leave you to figure ou
 
 ## Requirements
 
-- PHP 8.3 or higher
+- PHP 8.4 or higher
 - Composer 2+
-- Node.js 18+ (preferably Bun)
+- Node.js 24+ (preferably Bun)
 - SQLite / MySQL / PostgreSQL
 
 ## Installation
@@ -66,28 +68,19 @@ For more information about Laravel starter kits, please refer to the [Laravel do
 bun run cb
 
 # Start development server
-bun run dev
+composer dev
 
 # Build for production
 bun run build
 
 # Format code
-bun run format
+composer lint
 
-# Lint code
-bun run lint
-
-# Run JavaScript tests (Vitest)
-bun run test:js
-
-# Run tests
+# Run PHP static, type, and feature tests
 composer test
 
-# Run tests with coverage
-composer test:feat:coverage
-
-# Run static analysis
-composer test:types
+# Run JavaScript tests --currently 89% coverage
+bun run test
 ```
 
 ## Maintenance Branches
