@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Teams\Features;
 use Illuminate\Support\Facades\Mail;
 
-it('can invite team members to team', function () {
+it('can invite team members to team', function (): void {
   if (! Features::sendsTeamInvitations()) {
     $this->markTestSkipped('Team invitations not enabled.');
   }
@@ -26,7 +26,7 @@ it('can invite team members to team', function () {
   $this->assertCount(1, $user->currentTeam->fresh()->teamInvitations);
 });
 
-it('can cancel team member invitations', function () {
+it('can cancel team member invitations', function (): void {
   if (! Features::sendsTeamInvitations()) {
     $this->markTestSkipped('Team invitations not enabled.');
   }

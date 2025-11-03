@@ -8,8 +8,11 @@ use App\Contracts\CreatesTeams;
 use App\Contracts\DeletesTeams;
 use App\Contracts\UpdatesTeamNames;
 use App\Teams\Teams;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
@@ -20,7 +23,6 @@ class TeamController extends Controller
   /**
    * Show the team management screen.
    *
-   * @param  \Illuminate\Http\Request  $request
    * @param  int  $teamId
    * @return \Inertia\Response
    */
@@ -48,7 +50,6 @@ class TeamController extends Controller
   /**
    * Show the team creation screen.
    *
-   * @param  \Illuminate\Http\Request  $request
    * @return \Inertia\Response
    */
   public function create(Request $request)
@@ -61,10 +62,9 @@ class TeamController extends Controller
   /**
    * Create a new team.
    *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\RedirectResponse
+   * @return RedirectResponse
    */
-  public function store(Request $request)
+  public function store(Request $request): Response|Redirector|RedirectResponse
   {
     $creator = app(CreatesTeams::class);
 
@@ -76,11 +76,9 @@ class TeamController extends Controller
   /**
    * Update the given team's name.
    *
-   * @param  \Illuminate\Http\Request  $request
    * @param  int  $teamId
-   * @return \Illuminate\Http\RedirectResponse
    */
-  public function update(Request $request, $teamId)
+  public function update(Request $request, $teamId): RedirectResponse
   {
     $team = Teams::newTeamModel()->findOrFail($teamId);
 
@@ -92,11 +90,10 @@ class TeamController extends Controller
   /**
    * Delete the given team.
    *
-   * @param  \Illuminate\Http\Request  $request
    * @param  int  $teamId
-   * @return \Illuminate\Http\RedirectResponse
+   * @return RedirectResponse
    */
-  public function destroy(Request $request, $teamId)
+  public function destroy(Request $request, $teamId): Response|Redirector|RedirectResponse
   {
     $team = Teams::newTeamModel()->findOrFail($teamId);
 

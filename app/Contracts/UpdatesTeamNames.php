@@ -2,8 +2,11 @@
 
 namespace App\Contracts;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
+
 /**
- * @method void update(\Illuminate\Foundation\Auth\User $user, \Illuminate\Database\Eloquent\Model $team, array $input)
+ * @method void update(User $user, Model $team, array $input)
  */
 interface UpdatesTeamNames
 {

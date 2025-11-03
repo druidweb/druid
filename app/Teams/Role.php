@@ -3,6 +3,7 @@
 namespace App\Teams;
 
 use JsonSerializable;
+use ReturnTypeWillChange;
 
 class Role implements JsonSerializable
 {
@@ -37,9 +38,6 @@ class Role implements JsonSerializable
   /**
    * Create a new role instance.
    *
-   * @param  string  $key
-   * @param  string  $name
-   * @param  array  $permissions
    * @return void
    */
   public function __construct(string $key, string $name, array $permissions)
@@ -52,10 +50,9 @@ class Role implements JsonSerializable
   /**
    * Describe the role.
    *
-   * @param  string  $description
    * @return $this
    */
-  public function description(string $description)
+  public function description(string $description): static
   {
     $this->description = $description;
 
@@ -67,7 +64,7 @@ class Role implements JsonSerializable
    *
    * @return array
    */
-  #[\ReturnTypeWillChange]
+  #[ReturnTypeWillChange]
   public function jsonSerialize()
   {
     return [

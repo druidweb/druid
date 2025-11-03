@@ -16,10 +16,8 @@ class UpdateTeamMemberRole
    * @param  mixed  $user
    * @param  mixed  $team
    * @param  int  $teamMemberId
-   * @param  string  $role
-   * @return void
    */
-  public function update($user, $team, $teamMemberId, string $role)
+  public function update($user, $team, $teamMemberId, string $role): void
   {
     Gate::forUser($user)->authorize('updateTeamMember', $team);
 
@@ -33,6 +31,6 @@ class UpdateTeamMemberRole
       'role' => $role,
     ]);
 
-    TeamMemberUpdated::dispatch($team->fresh(), Teams::findUserByIdOrFail($teamMemberId));
+    event(new TeamMemberUpdated($team->fresh(), Teams::findUserByIdOrFail($teamMemberId)));
   }
 }

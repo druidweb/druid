@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Models\Team;
 use App\Models\User;
 
-it('can delete teams', function () {
+it('can delete teams', function (): void {
   $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
   $user->ownedTeams()->save($team = Team::factory()->make([
@@ -22,7 +22,7 @@ it('can delete teams', function () {
   $this->assertCount(0, $otherUser->fresh()->teams);
 });
 
-it('cannot delete personal teams', function () {
+it('cannot delete personal teams', function (): void {
   $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
   $this->delete('/teams/'.$user->currentTeam->id);

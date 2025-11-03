@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 
-it('allows users to leave teams', function () {
+it('allows users to leave teams', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
 
   $user->currentTeam->users()->attach(
@@ -18,7 +18,7 @@ it('allows users to leave teams', function () {
   $this->assertCount(0, $user->currentTeam->fresh()->users);
 });
 
-it('prevents team owners from leaving their own team', function () {
+it('prevents team owners from leaving their own team', function (): void {
   $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
   $response = $this->delete('/teams/'.$user->currentTeam->id.'/members/'.$user->id);

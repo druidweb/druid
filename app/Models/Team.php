@@ -5,12 +5,17 @@ namespace App\Models;
 use App\Events\TeamCreated;
 use App\Events\TeamDeleted;
 use App\Events\TeamUpdated;
+use Database\Factories\TeamFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 class Team extends Model
 {
-  /** @use HasFactory<\Database\Factories\TeamFactory> */
+  /** @use HasFactory<TeamFactory> */
   use HasFactory;
 
   /**
@@ -49,7 +54,7 @@ class Team extends Model
   /**
    * Get the owner of the team.
    *
-   * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+   * @return BelongsTo
    */
   public function owner()
   {
@@ -59,7 +64,7 @@ class Team extends Model
   /**
    * Get all of the team's users including its owner.
    *
-   * @return \Illuminate\Support\Collection
+   * @return Collection
    */
   public function allUsers()
   {
@@ -69,7 +74,7 @@ class Team extends Model
   /**
    * Get all of the users that belong to the team.
    *
-   * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+   * @return BelongsToMany
    */
   public function users()
   {
@@ -82,35 +87,34 @@ class Team extends Model
   /**
    * Determine if the given user belongs to the team.
    *
-   * @param  \App\Models\User  $user
-   * @return bool
+   * @param  User  $user
    */
-  public function hasUser($user)
+  public function hasUser($user): bool
   {
-    return $this->users->contains($user) || $user->ownsTeam($this);
+    if ($this->users->contains($user)) {
+      return true;
+    }
+
+    return $user->ownsTeam($this);
   }
 
   /**
    * Determine if the given email address belongs to a user on the team.
    *
-   * @param  string  $email
    * @return bool
    */
   public function hasUserWithEmail(string $email)
   {
-    return $this->allUsers()->contains(function ($user) use ($email) {
-      return $user->email === $email;
-    });
+    return $this->allUsers()->contains(fn ($user): bool => $user->email === $email);
   }
 
   /**
    * Determine if the given user has the given permission on the team.
    *
-   * @param  \App\Models\User  $user
-   * @param  string  $permission
+   * @param  User  $user
    * @return bool
    */
-  public function userHasPermission($user, $permission)
+  public function userHasPermission($user, string $permission)
   {
     return $user->hasTeamPermission($this, $permission);
   }
@@ -118,7 +122,7 @@ class Team extends Model
   /**
    * Get all of the pending user invitations for the team.
    *
-   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   * @return HasMany
    */
   public function teamInvitations()
   {
@@ -128,10 +132,9 @@ class Team extends Model
   /**
    * Remove the given user from the team.
    *
-   * @param  \App\Models\User  $user
-   * @return void
+   * @param  User  $user
    */
-  public function removeUser($user)
+  public function removeUser($user): void
   {
     if ($user->current_team_id === $this->id) {
       $user->forceFill([
@@ -144,10 +147,8 @@ class Team extends Model
 
   /**
    * Purge all of the team's resources.
-   *
-   * @return void
    */
-  public function purge()
+  public function purge(): void
   {
     $this->owner()->where('current_team_id', $this->id)
       ->update(['current_team_id' => null]);

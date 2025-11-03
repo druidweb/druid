@@ -8,19 +8,19 @@ use App\Contracts\InvitesTeamMembers;
 use App\Contracts\RemovesTeamMembers;
 use App\Teams\Features;
 use App\Teams\Teams;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Routing\Redirector;
 
 class TeamMemberController extends Controller
 {
   /**
    * Add a new team member to a team.
    *
-   * @param  \Illuminate\Http\Request  $request
    * @param  int  $teamId
-   * @return \Illuminate\Http\RedirectResponse
    */
-  public function store(Request $request, $teamId)
+  public function store(Request $request, $teamId): RedirectResponse
   {
     $team = Teams::newTeamModel()->findOrFail($teamId);
 
@@ -46,12 +46,10 @@ class TeamMemberController extends Controller
   /**
    * Update the given team member's role.
    *
-   * @param  \Illuminate\Http\Request  $request
    * @param  int  $teamId
    * @param  int  $userId
-   * @return \Illuminate\Http\RedirectResponse
    */
-  public function update(Request $request, $teamId, $userId)
+  public function update(Request $request, $teamId, $userId): RedirectResponse
   {
     app(UpdateTeamMemberRole::class)->update(
       $request->user(),
@@ -66,12 +64,11 @@ class TeamMemberController extends Controller
   /**
    * Remove the given user from the given team.
    *
-   * @param  \Illuminate\Http\Request  $request
    * @param  int  $teamId
    * @param  int  $userId
-   * @return \Illuminate\Http\RedirectResponse
+   * @return RedirectResponse
    */
-  public function destroy(Request $request, $teamId, $userId)
+  public function destroy(Request $request, $teamId, $userId): Redirector|RedirectResponse
   {
     $team = Teams::newTeamModel()->findOrFail($teamId);
 

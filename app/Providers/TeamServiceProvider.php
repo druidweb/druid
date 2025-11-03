@@ -39,7 +39,7 @@ class TeamServiceProvider extends ServiceProvider
     Teams::deleteUsersUsing(DeleteUser::class);
 
     RedirectResponse::macro('banner', function ($message): RedirectResponse {
-      /** @var \Illuminate\Http\RedirectResponse $this */
+      /** @var RedirectResponse $this */
       return $this->with('flash', [
         'bannerStyle' => 'success',
         'banner' => $message,
@@ -47,7 +47,7 @@ class TeamServiceProvider extends ServiceProvider
     });
 
     RedirectResponse::macro('warningBanner', function ($message): RedirectResponse {
-      /** @var \Illuminate\Http\RedirectResponse $this */
+      /** @var RedirectResponse $this */
       return $this->with('flash', [
         'bannerStyle' => 'warning',
         'banner' => $message,
@@ -55,7 +55,7 @@ class TeamServiceProvider extends ServiceProvider
     });
 
     RedirectResponse::macro('dangerBanner', function ($message): RedirectResponse {
-      /** @var \Illuminate\Http\RedirectResponse $this */
+      /** @var RedirectResponse $this */
       return $this->with('flash', [
         'bannerStyle' => 'danger',
         'banner' => $message,
@@ -63,7 +63,7 @@ class TeamServiceProvider extends ServiceProvider
     });
 
     // Listen for password updates to track session hash for "logout other devices" feature
-    Event::listen(function (PasswordUpdatedViaController $event) {
+    Event::listen(function (PasswordUpdatedViaController $event): void {
       if (request()->hasSession()) {
         request()->session()->put(['password_hash_sanctum' => Auth::user()->getAuthPassword()]);
       }

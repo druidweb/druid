@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Models\User;
 use App\Teams\Features;
 
-it('can create api tokens', function () {
+it('can create api tokens', function (): void {
   if (! Features::hasApiFeatures()) {
     $this->markTestSkipped('API support is not enabled.');
   }

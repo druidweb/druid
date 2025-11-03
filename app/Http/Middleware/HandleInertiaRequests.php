@@ -52,7 +52,7 @@ class HandleInertiaRequests extends Middleware
       ...parent::share($request),
       'name' => config('app.name'),
       'quote' => ['message' => trim((string) $message), 'author' => trim((string) $author)],
-      'teams' => function () use ($request) {
+      'teams' => function () use ($request): array {
         $user = $request->user();
 
         return [
@@ -91,11 +91,7 @@ class HandleInertiaRequests extends Middleware
           ]);
         },
       ],
-      'errorBags' => function () {
-        return collect(optional(Session::get('errors'))->getBags() ?: [])->mapWithKeys(function ($bag, $key) {
-          return [$key => $bag->messages()];
-        })->all();
-      },
+      'errorBags' => fn () => collect(Session::get('errors')?->getBags() ?: [])->mapWithKeys(fn ($bag, $key): array => [$key => $bag->messages()])->all(),
       'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
     ]);
   }

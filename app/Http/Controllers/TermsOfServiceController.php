@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Inertia\Inertia\Response;
 
 class TermsOfServiceController extends Controller
 {
   /**
    * Show the terms of service for the application.
    *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Inertia\Response
+   * @return Response
    */
   public function show(Request $request)
   {

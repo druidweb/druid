@@ -10,6 +10,10 @@ use App\Contracts\DeletesUsers;
 use App\Contracts\InvitesTeamMembers;
 use App\Contracts\RemovesTeamMembers;
 use App\Contracts\UpdatesTeamNames;
+use App\Models\Membership;
+use App\Models\Team;
+use App\Models\TeamInvitation;
+use App\Models\User;
 use Illuminate\Support\Arr;
 
 class Teams
@@ -47,35 +51,33 @@ class Teams
    *
    * @var string
    */
-  public static $userModel = 'App\\Models\\User';
+  public static $userModel = User::class;
 
   /**
    * The team model that should be used by Teams.
    *
    * @var string
    */
-  public static $teamModel = 'App\\Models\\Team';
+  public static $teamModel = Team::class;
 
   /**
    * The membership model that should be used by Teams.
    *
    * @var string
    */
-  public static $membershipModel = 'App\\Models\\Membership';
+  public static $membershipModel = Membership::class;
 
   /**
    * The team invitation model that should be used by Teams.
    *
    * @var string
    */
-  public static $teamInvitationModel = 'App\\Models\\TeamInvitation';
+  public static $teamInvitationModel = TeamInvitation::class;
 
   /**
    * Determine if Teams has registered roles.
-   *
-   * @return bool
    */
-  public static function hasRoles()
+  public static function hasRoles(): bool
   {
     return count(static::$roles) > 0;
   }
@@ -83,8 +85,7 @@ class Teams
   /**
    * Find the role with the given key.
    *
-   * @param  string  $key
-   * @return \App\Teams\Role|null
+   * @return Role|null
    */
   public static function findRole(string $key)
   {
@@ -94,10 +95,7 @@ class Teams
   /**
    * Define a role.
    *
-   * @param  string  $key
-   * @param  string  $name
-   * @param  array  $permissions
-   * @return \App\Teams\Role
+   * @return Role
    */
   public static function role(string $key, string $name, array $permissions)
   {
@@ -107,28 +105,23 @@ class Teams
       ->values()
       ->all();
 
-    return tap(new Role($key, $name, $permissions), function ($role) use ($key) {
+    return tap(new Role($key, $name, $permissions), function ($role) use ($key): void {
       static::$roles[$key] = $role;
     });
   }
 
   /**
    * Determine if any permissions have been registered with Teams.
-   *
-   * @return bool
    */
-  public static function hasPermissions()
+  public static function hasPermissions(): bool
   {
     return count(static::$permissions) > 0;
   }
 
   /**
    * Define the available API token permissions.
-   *
-   * @param  array  $permissions
-   * @return static
    */
-  public static function permissions(array $permissions)
+  public static function permissions(array $permissions): static
   {
     static::$permissions = $permissions;
 
@@ -137,11 +130,8 @@ class Teams
 
   /**
    * Define the default permissions that should be available to new API tokens.
-   *
-   * @param  array  $permissions
-   * @return static
    */
-  public static function defaultApiTokenPermissions(array $permissions)
+  public static function defaultApiTokenPermissions(array $permissions): static
   {
     static::$defaultPermissions = $permissions;
 
@@ -150,11 +140,8 @@ class Teams
 
   /**
    * Return the permissions in the given list that are actually defined permissions for the application.
-   *
-   * @param  array  $permissions
-   * @return array
    */
-  public static function validPermissions(array $permissions)
+  public static function validPermissions(array $permissions): array
   {
     return array_values(array_intersect($permissions, static::$permissions));
   }
@@ -193,9 +180,8 @@ class Teams
    * Determine if a given user model utilizes the "HasTeams" trait.
    *
    * @param  \Illuminate\Database\Eloquent\Model
-   * @return bool
    */
-  public static function userHasTeamFeatures($user)
+  public static function userHasTeamFeatures($user): bool
   {
     return (array_key_exists(HasTeams::class, class_uses_recursive($user)) ||
             method_exists($user, 'currentTeam')) &&
@@ -236,7 +222,6 @@ class Teams
   /**
    * Find a user instance by the given email address or fail.
    *
-   * @param  string  $email
    * @return mixed
    */
   public static function findUserByEmailOrFail(string $email)
@@ -268,11 +253,8 @@ class Teams
 
   /**
    * Specify the user model that should be used by Teams.
-   *
-   * @param  string  $model
-   * @return static
    */
-  public static function useUserModel(string $model)
+  public static function useUserModel(string $model): static
   {
     static::$userModel = $model;
 
@@ -303,11 +285,8 @@ class Teams
 
   /**
    * Specify the team model that should be used by Teams.
-   *
-   * @param  string  $model
-   * @return static
    */
-  public static function useTeamModel(string $model)
+  public static function useTeamModel(string $model): static
   {
     static::$teamModel = $model;
 
@@ -326,11 +305,8 @@ class Teams
 
   /**
    * Specify the membership model that should be used by Teams.
-   *
-   * @param  string  $model
-   * @return static
    */
-  public static function useMembershipModel(string $model)
+  public static function useMembershipModel(string $model): static
   {
     static::$membershipModel = $model;
 
@@ -349,11 +325,8 @@ class Teams
 
   /**
    * Specify the team invitation model that should be used by Teams.
-   *
-   * @param  string  $model
-   * @return static
    */
-  public static function useTeamInvitationModel(string $model)
+  public static function useTeamInvitationModel(string $model): static
   {
     static::$teamInvitationModel = $model;
 
@@ -363,7 +336,6 @@ class Teams
   /**
    * Register a class / callback that should be used to create teams.
    *
-   * @param  string  $class
    * @return void
    */
   public static function createTeamsUsing(string $class)
@@ -374,7 +346,6 @@ class Teams
   /**
    * Register a class / callback that should be used to update team names.
    *
-   * @param  string  $class
    * @return void
    */
   public static function updateTeamNamesUsing(string $class)
@@ -385,7 +356,6 @@ class Teams
   /**
    * Register a class / callback that should be used to add team members.
    *
-   * @param  string  $class
    * @return void
    */
   public static function addTeamMembersUsing(string $class)
@@ -396,7 +366,6 @@ class Teams
   /**
    * Register a class / callback that should be used to add team members.
    *
-   * @param  string  $class
    * @return void
    */
   public static function inviteTeamMembersUsing(string $class)
@@ -407,7 +376,6 @@ class Teams
   /**
    * Register a class / callback that should be used to remove team members.
    *
-   * @param  string  $class
    * @return void
    */
   public static function removeTeamMembersUsing(string $class)
@@ -418,7 +386,6 @@ class Teams
   /**
    * Register a class / callback that should be used to delete teams.
    *
-   * @param  string  $class
    * @return void
    */
   public static function deleteTeamsUsing(string $class)
@@ -429,7 +396,6 @@ class Teams
   /**
    * Register a class / callback that should be used to delete users.
    *
-   * @param  string  $class
    * @return void
    */
   public static function deleteUsersUsing(string $class)
@@ -440,27 +406,22 @@ class Teams
   /**
    * Find the path to a localized Markdown resource.
    *
-   * @param  string  $name
    * @return string|null
    */
-  public static function localizedMarkdownPath($name)
+  public static function localizedMarkdownPath(string $name)
   {
     $localName = preg_replace('#(\.md)$#i', '.'.app()->getLocale().'$1', $name);
 
     return Arr::first([
       resource_path('markdown/'.$localName),
       resource_path('markdown/'.$name),
-    ], function ($path) {
-      return file_exists($path);
-    });
+    ], file_exists(...));
   }
 
   /**
    * Configure Teams to not register its routes.
-   *
-   * @return static
    */
-  public static function ignoreRoutes()
+  public static function ignoreRoutes(): static
   {
     static::$registersRoutes = false;
 

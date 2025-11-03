@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 
-it('can remove team members from teams', function () {
+it('can remove team members from teams', function (): void {
   $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
   $user->currentTeam->users()->attach(
@@ -16,7 +16,7 @@ it('can remove team members from teams', function () {
   $this->assertCount(0, $user->currentTeam->fresh()->users);
 });
 
-it('only allows team owner to remove team members', function () {
+it('only allows team owner to remove team members', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
 
   $user->currentTeam->users()->attach(

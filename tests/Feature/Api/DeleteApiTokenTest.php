@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Teams\Features;
 use Illuminate\Support\Str;
 
-it('can delete api tokens', function () {
+it('can delete api tokens', function (): void {
   if (! Features::hasApiFeatures()) {
     $this->markTestSkipped('API support is not enabled.');
   }

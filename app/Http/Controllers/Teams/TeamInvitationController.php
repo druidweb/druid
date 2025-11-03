@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teams;
 use App\Contracts\AddsTeamMembers;
 use App\Teams\Teams;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
@@ -14,9 +15,8 @@ class TeamInvitationController extends Controller
   /**
    * Accept a team invitation.
    *
-   * @param  \Illuminate\Http\Request  $request
    * @param  int  $invitationId
-   * @return \Illuminate\Http\RedirectResponse
+   * @return RedirectResponse
    */
   public function accept(Request $request, $invitationId)
   {
@@ -41,19 +41,15 @@ class TeamInvitationController extends Controller
   /**
    * Cancel the given team invitation.
    *
-   * @param  \Illuminate\Http\Request  $request
    * @param  int  $invitationId
-   * @return \Illuminate\Http\RedirectResponse
    */
-  public function destroy(Request $request, $invitationId)
+  public function destroy(Request $request, $invitationId): RedirectResponse
   {
     $model = Teams::teamInvitationModel();
 
     $invitation = $model::whereKey($invitationId)->firstOrFail();
 
-    if (! Gate::forUser($request->user())->check('removeTeamMember', $invitation->team)) {
-      throw new AuthorizationException;
-    }
+    throw_unless(Gate::forUser($request->user())->check('removeTeamMember', $invitation->team), AuthorizationException::class);
 
     $invitation->delete();
 

@@ -2,8 +2,11 @@
 
 namespace App\Contracts;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
+
 /**
- * @method \Illuminate\Database\Eloquent\Model create(\Illuminate\Foundation\Auth\User $user, array $input)
+ * @method Model create(User $user, array $input)
  */
 interface CreatesTeams
 {

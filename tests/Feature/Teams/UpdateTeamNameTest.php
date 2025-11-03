@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 
-it('can update team names', function () {
+it('can update team names', function (): void {
   $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
   $this->put('/teams/'.$user->currentTeam->id, [

@@ -2,7 +2,9 @@
 
 namespace App\Concerns;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 
 trait RedirectsActions
 {
@@ -10,9 +12,9 @@ trait RedirectsActions
    * Get the redirect response for the given action.
    *
    * @param  mixed  $action
-   * @return \Illuminate\Http\Response
+   * @return Response
    */
-  public function redirectPath($action)
+  public function redirectPath($action): Response|Redirector|RedirectResponse
   {
     if (method_exists($action, 'redirectTo')) {
       $response = $action->redirectTo();

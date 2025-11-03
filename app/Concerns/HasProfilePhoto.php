@@ -4,6 +4,7 @@ namespace App\Concerns;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Storage;
 
 trait HasProfilePhoto
@@ -11,13 +12,11 @@ trait HasProfilePhoto
   /**
    * Update the user's profile photo.
    *
-   * @param  \Illuminate\Http\UploadedFile  $photo
    * @param  string  $storagePath
-   * @return void
    */
-  public function updateProfilePhoto(UploadedFile $photo, $storagePath = 'profile-photos')
+  public function updateProfilePhoto(UploadedFile $photo, $storagePath = 'profile-photos'): void
   {
-    tap($this->profile_photo_path, function ($previous) use ($photo, $storagePath) {
+    tap($this->profile_photo_path, function ($previous) use ($photo, $storagePath): void {
       $this->forceFill([
         'profile_photo_path' => $photo->storePublicly(
           $storagePath, ['disk' => $this->profilePhotoDisk()]
@@ -32,10 +31,8 @@ trait HasProfilePhoto
 
   /**
    * Delete the user's profile photo.
-   *
-   * @return void
    */
-  public function deleteProfilePhoto()
+  public function deleteProfilePhoto(): void
   {
     if (! Features::managesProfilePhotos()) {
       return;
@@ -54,28 +51,20 @@ trait HasProfilePhoto
 
   /**
    * Get the URL to the user's profile photo.
-   *
-   * @return \Illuminate\Database\Eloquent\Casts\Attribute
    */
   protected function profilePhotoUrl(): Attribute
   {
-    return Attribute::get(function (): string {
-      return $this->profile_photo_path
-              ? Storage::disk($this->profilePhotoDisk())->url($this->profile_photo_path)
-              : $this->defaultProfilePhotoUrl();
-    });
+    return Attribute::get(fn (): string => $this->profile_photo_path
+            ? Storage::disk($this->profilePhotoDisk())->url($this->profile_photo_path)
+            : $this->defaultProfilePhotoUrl());
   }
 
   /**
    * Get the default profile photo URL if no profile photo has been uploaded.
-   *
-   * @return string
    */
-  protected function defaultProfilePhotoUrl()
+  protected function defaultProfilePhotoUrl(): string
   {
-    $name = trim(collect(explode(' ', $this->name))->map(function ($segment) {
-      return mb_substr($segment, 0, 1);
-    })->join(' '));
+    $name = trim(collect(explode(' ', $this->name))->map(fn ($segment): string => mb_substr($segment, 0, 1))->join(' '));
 
     return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=7F9CF5&background=EBF4FF';
   }
@@ -87,6 +76,6 @@ trait HasProfilePhoto
    */
   protected function profilePhotoDisk()
   {
-    return isset($_ENV['VAPOR_ARTIFACT_NAME']) ? 's3' : config('teams.profile_photo_disk', 'public');
+    return isset(Env::get('VAPOR_ARTIFACT_NAME')) ? 's3' : config('teams.profile_photo_disk', 'public');
   }
 }

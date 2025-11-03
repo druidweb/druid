@@ -30,15 +30,13 @@ class CreateNewUser implements CreatesNewUsers
       'terms' => Teams::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
     ])->validate();
 
-    return DB::transaction(function () use ($input) {
-      return tap(User::create([
-        'name' => $input['name'],
-        'email' => $input['email'],
-        'password' => Hash::make($input['password']),
-      ]), function (User $user) {
-        $this->createTeam($user);
-      });
-    });
+    return DB::transaction(fn () => tap(User::query()->create([
+      'name' => $input['name'],
+      'email' => $input['email'],
+      'password' => Hash::make($input['password']),
+    ]), function (User $user): void {
+      $this->createTeam($user);
+    }));
   }
 
   /**
@@ -46,7 +44,7 @@ class CreateNewUser implements CreatesNewUsers
    */
   protected function createTeam(User $user): void
   {
-    $user->ownedTeams()->save(Team::forceCreate([
+    $user->ownedTeams()->save(Team::query()->forceCreate([
       'user_id' => $user->id,
       'name' => explode(' ', $user->name, 2)[0]."'s Team",
       'personal_team' => true,

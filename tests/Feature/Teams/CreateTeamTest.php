@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 
-it('can create teams', function () {
+it('can create teams', function (): void {
   $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
   $this->post('/teams', [

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Membership extends Pivot
 {
+  use HasFactory;
+
   /**
    * Indicates if the IDs are auto-incrementing.
    *

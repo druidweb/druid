@@ -2,8 +2,10 @@
 
 namespace App\Contracts;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
- * @method void delete(\Illuminate\Database\Eloquent\Model $team)
+ * @method void delete(Model $team)
  */
 interface DeletesTeams
 {

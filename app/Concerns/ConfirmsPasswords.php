@@ -21,7 +21,7 @@ trait ConfirmsPasswords
    *
    * @var string|null
    */
-  public $confirmableId = null;
+  public $confirmableId;
 
   /**
    * The user's password.
@@ -33,7 +33,6 @@ trait ConfirmsPasswords
   /**
    * Start confirming the user's password.
    *
-   * @param  string  $confirmableId
    * @return void
    */
   public function startConfirmingPassword(string $confirmableId)
@@ -55,10 +54,8 @@ trait ConfirmsPasswords
 
   /**
    * Stop confirming the user's password.
-   *
-   * @return void
    */
-  public function stopConfirmingPassword()
+  public function stopConfirmingPassword(): void
   {
     $this->confirmingPassword = false;
     $this->confirmableId = null;
@@ -67,10 +64,8 @@ trait ConfirmsPasswords
 
   /**
    * Confirm the user's password.
-   *
-   * @return void
    */
-  public function confirmPassword()
+  public function confirmPassword(): void
   {
     if (! app(ConfirmPassword::class)(app(StatefulGuard::class), Auth::user(), $this->confirmablePassword)) {
       throw ValidationException::withMessages([
@@ -104,9 +99,8 @@ trait ConfirmsPasswords
    * Determine if the user's password has been recently confirmed.
    *
    * @param  int|null  $maximumSecondsSinceConfirmation
-   * @return bool
    */
-  protected function passwordIsConfirmed($maximumSecondsSinceConfirmation = null)
+  protected function passwordIsConfirmed($maximumSecondsSinceConfirmation = null): bool
   {
     $maximumSecondsSinceConfirmation = $maximumSecondsSinceConfirmation ?: config('auth.password_timeout', 900);
 

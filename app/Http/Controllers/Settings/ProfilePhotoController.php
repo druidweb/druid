@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -10,8 +11,7 @@ class ProfilePhotoController extends Controller
   /**
    * Delete the current user's profile photo.
    *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\RedirectResponse
+   * @return RedirectResponse
    */
   public function destroy(Request $request)
   {

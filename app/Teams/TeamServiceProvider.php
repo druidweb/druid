@@ -4,6 +4,7 @@ namespace App\Teams;
 
 use App\Http\Middleware\ShareInertiaData;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -13,27 +14,23 @@ class TeamServiceProvider extends ServiceProvider
 {
   /**
    * Register any application services.
-   *
-   * @return void
    */
-  public function register()
+  public function register(): void
   {
     $this->mergeConfigFrom(dirname(__DIR__).'/config/teams.php', 'teams');
   }
 
   /**
    * Bootstrap any application services.
-   *
-   * @return void
    */
-  public function boot()
+  public function boot(): void
   {
     if (! $this->app->runningInConsole()) {
       return;
     }
 
     RedirectResponse::macro('banner', function ($message): RedirectResponse {
-      /** @var \Illuminate\Http\RedirectResponse $this */
+      /** @var RedirectResponse $this */
       return $this->with('flash', [
         'bannerStyle' => 'success',
         'banner' => $message,
@@ -41,7 +38,7 @@ class TeamServiceProvider extends ServiceProvider
     });
 
     RedirectResponse::macro('warningBanner', function ($message): RedirectResponse {
-      /** @var \Illuminate\Http\RedirectResponse $this */
+      /** @var RedirectResponse $this */
       return $this->with('flash', [
         'bannerStyle' => 'warning',
         'banner' => $message,
@@ -49,7 +46,7 @@ class TeamServiceProvider extends ServiceProvider
     });
 
     RedirectResponse::macro('dangerBanner', function ($message): RedirectResponse {
-      /** @var \Illuminate\Http\RedirectResponse $this */
+      /** @var RedirectResponse $this */
       return $this->with('flash', [
         'bannerStyle' => 'danger',
         'banner' => $message,
@@ -57,13 +54,13 @@ class TeamServiceProvider extends ServiceProvider
     });
 
     // Register ShareInertiaData middleware to web group
-    $this->app->booted(function () {
-      $router = $this->app['router'];
+    $this->app->booted(function (): void {
+      $router = $this->app->make(Router::class);
       $router->pushMiddlewareToGroup('web', ShareInertiaData::class);
     });
 
     // Listen for password updates to track session hash for "logout other devices" feature
-    Event::listen(function (PasswordUpdatedViaController $event) {
+    Event::listen(function (PasswordUpdatedViaController $event): void {
       if (request()->hasSession()) {
         request()->session()->put(['password_hash_sanctum' => Auth::user()->getAuthPassword()]);
       }

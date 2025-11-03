@@ -62,11 +62,9 @@ class Agent extends MobileDetect
    */
   public function platform()
   {
-    return $this->retrieveUsingCacheOrResolve('teams.platform', function () {
-      return $this->findDetectionRulesAgainstUserAgent(
-        $this->mergeRules(MobileDetect::getOperatingSystems(), static::$additionalOperatingSystems)
-      );
-    });
+    return $this->retrieveUsingCacheOrResolve('teams.platform', fn () => $this->findDetectionRulesAgainstUserAgent(
+      $this->mergeRules(MobileDetect::getOperatingSystems(), static::$additionalOperatingSystems)
+    ));
   }
 
   /**
@@ -76,11 +74,9 @@ class Agent extends MobileDetect
    */
   public function browser()
   {
-    return $this->retrieveUsingCacheOrResolve('teams.browser', function () {
-      return $this->findDetectionRulesAgainstUserAgent(
-        $this->mergeRules(static::$additionalBrowsers, MobileDetect::getBrowsers())
-      );
-    });
+    return $this->retrieveUsingCacheOrResolve('teams.browser', fn () => $this->findDetectionRulesAgainstUserAgent(
+      $this->mergeRules(static::$additionalBrowsers, MobileDetect::getBrowsers())
+    ));
   }
 
   /**
@@ -90,7 +86,7 @@ class Agent extends MobileDetect
    */
   public function isDesktop()
   {
-    return $this->retrieveUsingCacheOrResolve('teams.desktop', function () {
+    return $this->retrieveUsingCacheOrResolve('teams.desktop', function (): bool {
       // Check specifically for cloudfront headers if the useragent === 'Amazon CloudFront'
       if (
         $this->getUserAgent() === static::$cloudFrontUA
@@ -128,8 +124,7 @@ class Agent extends MobileDetect
   /**
    * Retrieve from the given key from the cache or resolve the value.
    *
-   * @param  string  $key
-   * @param  \Closure():mixed  $callback
+   * @param  Closure  $callback
    * @return mixed
    */
   protected function retrieveUsingCacheOrResolve(string $key, Closure $callback)
@@ -140,7 +135,7 @@ class Agent extends MobileDetect
       return $cacheItem;
     }
 
-    return tap(call_user_func($callback), function ($result) use ($cacheKey) {
+    return tap(call_user_func($callback), function ($result) use ($cacheKey): void {
       $this->store[$cacheKey] = $result;
     });
   }
@@ -151,7 +146,7 @@ class Agent extends MobileDetect
    * @param  array  $all
    * @return array<string, string>
    */
-  protected function mergeRules(...$all)
+  protected function mergeRules(...$all): array
   {
     $merged = [];
 

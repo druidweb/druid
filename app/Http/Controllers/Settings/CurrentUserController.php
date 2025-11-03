@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Settings;
 use App\Contracts\DeletesUsers;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -15,9 +16,7 @@ class CurrentUserController extends Controller
   /**
    * Delete the current user.
    *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  \Illuminate\Contracts\Auth\StatefulGuard  $guard
-   * @return \Illuminate\Http\Response
+   * @return Response
    */
   public function destroy(Request $request, StatefulGuard $guard)
   {

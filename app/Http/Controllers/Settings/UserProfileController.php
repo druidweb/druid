@@ -5,17 +5,18 @@ namespace App\Http\Controllers\Settings;
 use App\Teams\Agent;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Inertia\Response;
 
 class UserProfileController extends Controller
 {
   /**
    * Show the general profile settings screen.
    *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Inertia\Response
+   * @return Response
    */
   public function show(Request $request)
   {
@@ -27,8 +28,7 @@ class UserProfileController extends Controller
   /**
    * Get the current sessions.
    *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Support\Collection
+   * @return Collection
    */
   public function sessions(Request $request)
   {
@@ -52,7 +52,7 @@ class UserProfileController extends Controller
         ],
         'ip_address' => $session->ip_address,
         'is_current_device' => $session->id === $request->session()->getId(),
-        'last_active' => Carbon::createFromTimestamp($session->last_activity)->diffForHumans(),
+        'last_active' => Date::createFromTimestamp($session->last_activity)->diffForHumans(),
       ];
     });
   }
@@ -61,10 +61,10 @@ class UserProfileController extends Controller
    * Create a new agent instance from the given session.
    *
    * @param  mixed  $session
-   * @return \App\Teams\Agent
+   * @return Agent
    */
   protected function createAgent($session)
   {
-    return tap(new Agent(), fn ($agent) => $agent->setUserAgent($session->user_agent));
+    return tap(new Agent, fn ($agent): string => $agent->setUserAgent($session->user_agent));
   }
 }

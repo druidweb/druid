@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Rules\Role;
 use App\Teams;
 use Closure;
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,13 +27,13 @@ class AddTeamMember implements AddsTeamMembers
 
     $newTeamMember = Teams::findUserByEmailOrFail($email);
 
-    AddingTeamMember::dispatch($team, $newTeamMember);
+    event(new AddingTeamMember($team, $newTeamMember));
 
     $team->users()->attach(
       $newTeamMember, ['role' => $role]
     );
 
-    TeamMemberAdded::dispatch($team, $newTeamMember);
+    event(new TeamMemberAdded($team, $newTeamMember));
   }
 
   /**
@@ -53,7 +54,7 @@ class AddTeamMember implements AddsTeamMembers
   /**
    * Get the validation rules for adding a team member.
    *
-   * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+   * @return array<string, Rule|array|string>
    */
   protected function rules(): array
   {
@@ -70,7 +71,7 @@ class AddTeamMember implements AddsTeamMembers
    */
   protected function ensureUserIsNotAlreadyOnTeam(Team $team, string $email): Closure
   {
-    return function ($validator) use ($team, $email) {
+    return function ($validator) use ($team, $email): void {
       $validator->errors()->addIf(
         $team->hasUserWithEmail($email),
         'email',

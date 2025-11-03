@@ -2,8 +2,10 @@
 
 namespace App\Contracts;
 
+use Illuminate\Foundation\Auth\User;
+
 /**
- * @method void delete(\Illuminate\Foundation\Auth\User $user)
+ * @method void delete(User $user)
  */
 interface DeletesUsers
 {

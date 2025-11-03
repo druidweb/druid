@@ -2,8 +2,11 @@
 
 namespace App\Contracts;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
+
 /**
- * @method void remove(\Illuminate\Foundation\Auth\User $user, \Illuminate\Database\Eloquent\Model $team, \Illuminate\Foundation\Auth\User $teamMember)
+ * @method void remove(User $user, Model $team, User $teamMember)
  */
 interface RemovesTeamMembers
 {

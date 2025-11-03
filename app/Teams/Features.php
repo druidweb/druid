@@ -6,23 +6,16 @@ class Features
 {
   /**
    * Determine if the given feature is enabled.
-   *
-   * @param  string  $feature
-   * @return bool
    */
-  public static function enabled(string $feature)
+  public static function enabled(string $feature): bool
   {
     return in_array($feature, config('teams.features', []));
   }
 
   /**
    * Determine if the feature is enabled and has a given option enabled.
-   *
-   * @param  string  $feature
-   * @param  string  $option
-   * @return bool
    */
-  public static function optionEnabled(string $feature, string $option)
+  public static function optionEnabled(string $feature, string $option): bool
   {
     return static::enabled($feature) &&
            config("teams-options.{$feature}.{$option}") === true;
@@ -90,33 +83,26 @@ class Features
 
   /**
    * Enable the profile photo upload feature.
-   *
-   * @return string
    */
-  public static function profilePhotos()
+  public static function profilePhotos(): string
   {
     return 'profile-photos';
   }
 
   /**
    * Enable the API feature.
-   *
-   * @return string
    */
-  public static function api()
+  public static function api(): string
   {
     return 'api';
   }
 
   /**
    * Enable the teams feature.
-   *
-   * @param  array  $options
-   * @return string
    */
-  public static function teams(array $options = [])
+  public static function teams(array $options = []): string
   {
-    if (! empty($options)) {
+    if ($options !== []) {
       config(['teams-options.teams' => $options]);
     }
 
@@ -125,20 +111,16 @@ class Features
 
   /**
    * Enable the terms of service and privacy policy feature.
-   *
-   * @return string
    */
-  public static function termsAndPrivacyPolicy()
+  public static function termsAndPrivacyPolicy(): string
   {
     return 'terms';
   }
 
   /**
    * Enable the account deletion feature.
-   *
-   * @return string
    */
-  public static function accountDeletion()
+  public static function accountDeletion(): string
   {
     return 'account-deletion';
   }
