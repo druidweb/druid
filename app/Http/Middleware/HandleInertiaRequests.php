@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Teams\Teams;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
+use Laravel\Fortify\Features;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -44,14 +48,55 @@ class HandleInertiaRequests extends Middleware
     $message = $quote[0] ?? '';
     $author = $quote[1] ?? '';
 
-    return [
+    return array_filter([
       ...parent::share($request),
       'name' => config('app.name'),
       'quote' => ['message' => trim((string) $message), 'author' => trim((string) $author)],
+      'teams' => function () use ($request) {
+        $user = $request->user();
+
+        return [
+          'canCreateTeams' => $user &&
+                              Teams::userHasTeamFeatures($user) &&
+                              Gate::forUser($user)->check('create', Teams::newTeamModel()),
+          'canManageTwoFactorAuthentication' => Features::canManageTwoFactorAuthentication(),
+          'canUpdatePassword' => Features::enabled(Features::updatePasswords()),
+          'canUpdateProfileInformation' => Features::canUpdateProfileInformation(),
+          'hasEmailVerification' => Features::enabled(Features::emailVerification()),
+          'flash' => $request->session()->get('flash', []),
+          'hasAccountDeletionFeatures' => Teams::hasAccountDeletionFeatures(),
+          'hasApiFeatures' => Teams::hasApiFeatures(),
+          'hasTeamFeatures' => Teams::hasTeamFeatures(),
+          'hasTermsAndPrivacyPolicyFeature' => Teams::hasTermsAndPrivacyPolicyFeature(),
+          'managesProfilePhotos' => Teams::managesProfilePhotos(),
+        ];
+      },
       'auth' => [
-        'user' => $request->user(),
+        'user' => function () use ($request) {
+          if (! $user = $request->user()) {
+            return;
+          }
+
+          $userHasTeamFeatures = Teams::userHasTeamFeatures($user);
+
+          if ($user && $userHasTeamFeatures) {
+            $user->currentTeam;
+          }
+
+          return array_merge($user->toArray(), array_filter([
+            'all_teams' => $userHasTeamFeatures ? $user->allTeams()->values() : null,
+          ]), [
+            'two_factor_enabled' => Features::enabled(Features::twoFactorAuthentication())
+                && ! is_null($user->two_factor_secret),
+          ]);
+        },
       ],
+      'errorBags' => function () {
+        return collect(optional(Session::get('errors'))->getBags() ?: [])->mapWithKeys(function ($bag, $key) {
+          return [$key => $bag->messages()];
+        })->all();
+      },
       'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-    ];
+    ]);
   }
 }

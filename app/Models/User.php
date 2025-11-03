@@ -5,16 +5,22 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
+use App\Concerns\HasProfilePhoto;
+use App\Concerns\HasTeams;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-  /** @use HasFactory<UserFactory> */
-  use HasFactory, Notifiable, TwoFactorAuthenticatable;
+  use HasApiTokens;
+  use HasFactory;
+  use HasProfilePhoto;
+  use HasTeams;
+  use Notifiable;
+  use TwoFactorAuthenticatable;
 
   /**
    * The attributes that are mass assignable.
@@ -37,6 +43,15 @@ class User extends Authenticatable
     'two_factor_secret',
     'two_factor_recovery_codes',
     'remember_token',
+  ];
+
+  /**
+   * The accessors to append to the model's array form.
+   *
+   * @var array<int, string>
+   */
+  protected $appends = [
+    'profile_photo_url',
   ];
 
   /**
