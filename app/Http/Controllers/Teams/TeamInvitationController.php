@@ -7,11 +7,31 @@ use App\Teams\Teams;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class TeamInvitationController extends Controller
+class TeamInvitationController implements HasMiddleware
 {
+  /**
+   * Get the middleware that should be assigned to the controller.
+   *
+   * @return array<int, Middleware|string>
+   */
+  public static function middleware(): array
+  {
+    return [
+      function (Request $request, callable $next): HttpResponse {
+        if (! Teams::hasTeamFeatures()) {
+          abort(HttpResponse::HTTP_FORBIDDEN);
+        }
+
+        return $next($request);
+      },
+    ];
+  }
+
   /**
    * Accept a team invitation.
    *

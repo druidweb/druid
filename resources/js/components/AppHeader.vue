@@ -2,14 +2,14 @@
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import TeamSwitcher from '@/components/TeamSwitcher.vue';
+import UserAvatar from '@/components/UserAvatar.vue';
+import UserMenuContent from '@/components/UserMenuContent.vue';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import UserMenuContent from '@/components/UserMenuContent.vue';
-import { getInitials } from '@/composables/useInitials';
 import { toUrl, urlIsActive } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem, NavItem } from '@/types';
@@ -26,7 +26,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const page = usePage();
-const auth = computed(() => page.props.auth);
 
 const isCurrentRoute = computed(() => (url: NonNullable<InertiaLinkProps['href']>) => urlIsActive(url, page.url));
 
@@ -109,7 +108,7 @@ const rightNavItems: NavItem[] = [
 
         <!-- Desktop Menu -->
         <div class="hidden h-full lg:flex lg:flex-1">
-          <NavigationMenu class="ml-10 flex h-full items-stretch">
+          <NavigationMenu class="ml-4 flex h-full items-stretch">
             <NavigationMenuList class="flex h-full items-stretch space-x-2">
               <NavigationMenuItem v-for="(item, index) in mainNavItems" :key="index" class="relative flex h-full items-center">
                 <Link :class="[navigationMenuTriggerStyle(), activeItemStyles(item.href), 'h-9 cursor-pointer px-3']" :href="item.href">
@@ -149,19 +148,16 @@ const rightNavItems: NavItem[] = [
             </div>
           </div>
 
+          <TeamSwitcher />
+
           <DropdownMenu>
             <DropdownMenuTrigger :as-child="true">
               <Button variant="ghost" size="icon" class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary">
-                <Avatar class="size-8 overflow-hidden rounded-full">
-                  <AvatarImage v-if="auth.user.avatar" :src="auth.user.avatar" :alt="auth.user.name" />
-                  <AvatarFallback class="rounded bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white">
-                    {{ getInitials(auth.user?.name) }}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" class="w-56">
-              <UserMenuContent :user="auth.user" />
+              <UserMenuContent />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

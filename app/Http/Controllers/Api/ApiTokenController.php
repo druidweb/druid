@@ -5,12 +5,32 @@ namespace App\Http\Controllers\Api;
 use App\Teams\Teams;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 use Inertia\Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class ApiTokenController extends Controller
+class ApiTokenController implements HasMiddleware
 {
+  /**
+   * Get the middleware that should be assigned to the controller.
+   *
+   * @return array<int, Middleware|string>
+   */
+  public static function middleware(): array
+  {
+    return [
+      function (Request $request, callable $next): HttpResponse {
+        if (! Teams::hasApiFeatures()) {
+          abort(HttpResponse::HTTP_FORBIDDEN);
+        }
+
+        return $next($request);
+      },
+    ];
+  }
+
   /**
    * Show the user API token screen.
    *
@@ -18,7 +38,7 @@ class ApiTokenController extends Controller
    */
   public function index(Request $request)
   {
-    return Inertia::render($request, 'API/Index', [
+    return Inertia::render('api/Index', [
       'tokens' => $request->user()->tokens->map(fn ($token): array => $token->toArray() + [
         'last_used_ago' => $token->last_used_at?->diffForHumans(),
       ]),

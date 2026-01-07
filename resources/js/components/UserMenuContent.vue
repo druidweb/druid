@@ -2,26 +2,22 @@
 import UserInfo from '@/components/UserInfo.vue';
 import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { logout } from '@/routes';
+import { index as apiTokensIndex } from '@/routes/api-tokens';
 import { edit } from '@/routes/profile';
-import type { User } from '@/types';
-import { Link, router } from '@inertiajs/vue3';
-import { LogOut, Settings } from 'lucide-vue-next';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { KeyRound, LogOut, Settings } from 'lucide-vue-next';
 
-interface Props {
-  user: User;
-}
+const page = usePage();
 
 const handleLogout = () => {
   router.flushAll();
 };
-
-defineProps<Props>();
 </script>
 
 <template>
   <DropdownMenuLabel class="p-0 font-normal">
     <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-      <UserInfo :user="user" :show-email="true" />
+      <UserInfo :show-email="true" />
     </div>
   </DropdownMenuLabel>
   <DropdownMenuSeparator />
@@ -30,6 +26,12 @@ defineProps<Props>();
       <Link class="block w-full" :href="edit()" prefetch as="button">
         <Settings class="mr-2 h-4 w-4" />
         Settings
+      </Link>
+    </DropdownMenuItem>
+    <DropdownMenuItem v-if="page.props.teams.hasApiFeatures" :as-child="true">
+      <Link class="block w-full" :href="apiTokensIndex()" prefetch as="button">
+        <KeyRound class="mr-2 h-4 w-4" />
+        API Tokens
       </Link>
     </DropdownMenuItem>
   </DropdownMenuGroup>

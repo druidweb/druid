@@ -12,7 +12,7 @@ return new class extends Migration
   public function up(): void
   {
     Schema::create('teams', function (Blueprint $table): void {
-      $table->id();
+      $table->unsignedBigInteger('id')->primary();
       $table->foreignId('user_id')->index();
       $table->string('name');
       $table->boolean('personal_team');

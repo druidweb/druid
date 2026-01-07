@@ -24,12 +24,23 @@ export type AppPageProps<T extends Record<string, unknown> = Record<string, unkn
   sidebarOpen: boolean;
 };
 
+export interface Team {
+  id: number;
+  name: string;
+  personal_team: boolean;
+  owner_id: number;
+}
+
 export interface User {
   id: number;
   name: string;
   email: string;
-  avatar?: string;
+  profile_photo_url: string;
+  profile_photo_path?: string;
   email_verified_at: string | null;
+  current_team_id?: number;
+  current_team?: Team;
+  all_teams?: Team[];
   created_at: string;
   updated_at: string;
 }

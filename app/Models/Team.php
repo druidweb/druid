@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Events\TeamCreated;
 use App\Events\TeamDeleted;
 use App\Events\TeamUpdated;
+use App\Teams\Teams;
 use Database\Factories\TeamFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,11 +13,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Zen\Snowflake\Concerns\HasSnowflakePrimary;
 
 class Team extends Model
 {
   /** @use HasFactory<TeamFactory> */
   use HasFactory;
+
+  use HasSnowflakePrimary;
+
+  /**
+   * Indicates if the IDs are auto-incrementing.
+   *
+   * @var bool
+   */
+  public $incrementing = false;
 
   /**
    * The attributes that are mass assignable.

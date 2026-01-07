@@ -2,7 +2,7 @@
 import { Head } from '@inertiajs/vue3';
 
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
-import HeadingSmall from '@/components/HeadingSmall.vue';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { type BreadcrumbItem } from '@/types';
 
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -22,10 +22,16 @@ const breadcrumbItems: BreadcrumbItem[] = [
     <Head title="Appearance settings" />
 
     <SettingsLayout>
-      <div class="space-y-6">
-        <HeadingSmall title="Appearance settings" description="Update your account's appearance settings" />
-        <AppearanceTabs />
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Appearance Settings</CardTitle>
+          <CardDescription>Update your account's appearance settings</CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <AppearanceTabs />
+        </CardContent>
+      </Card>
     </SettingsLayout>
   </AppLayout>
 </template>

@@ -1,9 +1,10 @@
-<script setup>
-import FormSection from '@/components/teams/FormSection.vue';
-import InputError from '@/components/teams/InputError.vue';
-import InputLabel from '@/components/teams/InputLabel.vue';
-import PrimaryButton from '@/components/teams/PrimaryButton.vue';
-import TextInput from '@/components/teams/TextInput.vue';
+<script setup lang="ts">
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { store } from '@/routes/teams';
 import { useForm } from '@inertiajs/vue3';
 
 const form = useForm({
@@ -11,7 +12,7 @@ const form = useForm({
 });
 
 const createTeam = () => {
-  form.post(route('teams.store'), {
+  form.post(store().url, {
     errorBag: 'createTeam',
     preserveScroll: true,
   });
@@ -19,36 +20,39 @@ const createTeam = () => {
 </script>
 
 <template>
-  <FormSection @submitted="createTeam">
-    <template #title> Team Details </template>
+  <Card>
+    <form @submit.prevent="createTeam">
+      <CardHeader>
+        <CardTitle>Team Details</CardTitle>
+        <CardDescription>Create a new team to collaborate with others on projects.</CardDescription>
+      </CardHeader>
 
-    <template #description> Create a new team to collaborate with others on projects. </template>
+      <CardContent class="space-y-6">
+        <div class="space-y-2">
+          <Label>Team Owner</Label>
 
-    <template #form>
-      <div class="col-span-6">
-        <InputLabel value="Team Owner" />
+          <div class="flex items-center">
+            <img class="size-12 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name" />
 
-        <div class="mt-2 flex items-center">
-          <img class="size-12 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name" />
-
-          <div class="ms-4 leading-tight">
-            <div class="text-gray-900 dark:text-white">{{ $page.props.auth.user.name }}</div>
-            <div class="text-sm text-gray-700 dark:text-gray-300">
-              {{ $page.props.auth.user.email }}
+            <div class="ms-4 leading-tight">
+              <div class="text-foreground">{{ $page.props.auth.user.name }}</div>
+              <div class="text-sm text-muted-foreground">
+                {{ $page.props.auth.user.email }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="name" value="Team Name" />
-        <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" autofocus />
-        <InputError :message="form.errors.name" class="mt-2" />
-      </div>
-    </template>
+        <div class="space-y-2">
+          <Label for="name">Team Name</Label>
+          <Input id="name" v-model="form.name" type="text" autofocus />
+          <InputError :message="form.errors.name" />
+        </div>
+      </CardContent>
 
-    <template #actions>
-      <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Create </PrimaryButton>
-    </template>
-  </FormSection>
+      <CardFooter class="flex items-center justify-end">
+        <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Create </Button>
+      </CardFooter>
+    </form>
+  </Card>
 </template>

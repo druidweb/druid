@@ -2,13 +2,21 @@
 import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
+import { show as privacyPolicyShow } from '@/routes/policy';
 import { store } from '@/routes/register';
-import { Form, Head } from '@inertiajs/vue3';
+import { show as termsShow } from '@/routes/terms';
+import { Form, Head, usePage } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
+
+const page = usePage();
+
+const termsUrl = termsShow.url();
+const privacyPolicyUrl = privacyPolicyShow.url();
 </script>
 
 <template>
@@ -48,7 +56,22 @@ import { LoaderCircle } from 'lucide-vue-next';
           <InputError :message="errors.password_confirmation" />
         </div>
 
-        <Button type="submit" class="mt-2 w-full" tabindex="5" :disabled="processing" data-test="register-user-button">
+        <div v-if="page.props.teams.hasTermsAndPrivacyPolicyFeature" class="flex items-start gap-2">
+          <Checkbox id="terms" name="terms" value="true" :tabindex="5" class="mt-0.5" />
+          <div class="grid gap-1.5 leading-none">
+            <label for="terms" class="cursor-pointer text-sm leading-normal font-normal text-muted-foreground">
+              I agree to the
+              <a :href="termsUrl" target="_blank" class="text-foreground underline underline-offset-2 hover:text-foreground/80">Terms of Service</a>
+              and
+              <a :href="privacyPolicyUrl" target="_blank" class="text-foreground underline underline-offset-2 hover:text-foreground/80"
+                >Privacy Policy</a
+              >
+            </label>
+            <InputError :message="errors.terms" />
+          </div>
+        </div>
+
+        <Button type="submit" class="mt-2 w-full" :tabindex="6" :disabled="processing" data-test="register-user-button">
           <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
           Create account
         </Button>
@@ -56,7 +79,7 @@ import { LoaderCircle } from 'lucide-vue-next';
 
       <div class="text-center text-sm text-muted-foreground">
         Already have an account?
-        <TextLink :href="login()" class="underline underline-offset-4" :tabindex="6">Log in</TextLink>
+        <TextLink :href="login()" class="underline underline-offset-4" :tabindex="7">Log in</TextLink>
       </div>
     </Form>
   </AuthBase>

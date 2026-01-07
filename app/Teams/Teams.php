@@ -415,7 +415,7 @@ class Teams
     return Arr::first([
       resource_path('markdown/'.$localName),
       resource_path('markdown/'.$name),
-    ], file_exists(...));
+    ], fn ($path) => file_exists($path));
   }
 
   /**

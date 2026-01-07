@@ -6,7 +6,7 @@ use App\Contracts\CreatesTeams;
 use App\Events\AddingTeam;
 use App\Models\Team;
 use App\Models\User;
-use App\Teams;
+use App\Teams\Teams;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 

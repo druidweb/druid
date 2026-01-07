@@ -121,13 +121,13 @@ watch(
           <AlertError v-if="errors?.length" :errors="errors" />
           <template v-else>
             <div class="relative mx-auto flex max-w-md items-center overflow-hidden">
-              <div class="relative mx-auto aspect-square w-64 overflow-hidden rounded border border-border">
+              <div class="relative mx-auto aspect-square w-40 overflow-hidden rounded border border-border">
                 <div
                   v-if="!qrCodeSvg"
                   class="absolute inset-0 z-10 flex aspect-square h-auto w-full animate-pulse items-center justify-center bg-background">
                   <Loader2 class="size-6 animate-spin" />
                 </div>
-                <div v-else class="relative z-10 overflow-hidden border p-5">
+                <div v-else class="relative z-10 overflow-hidden border p-2">
                   <div v-html="qrCodeSvg" class="flex aspect-square size-full items-center justify-center" />
                 </div>
               </div>

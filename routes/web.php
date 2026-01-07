@@ -3,16 +3,11 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Spatie\RouteDiscovery\Discovery\Discover;
 
-Route::get('settings/appearance',
-  fn () => Inertia::render('settings/Appearance'))
-  ->middleware('auth')
-  ->name('appearance.edit');
+Route::get('/', \App\Http\Controllers\IndexController::class)->name('home');
 
-Route::redirect('settings', '/settings/profile')
-  ->middleware('auth');
+Route::get('dashboard', \App\Http\Controllers\DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
-Discover::controllers()
-  ->in(app_path('Http/Controllers'));
+require __DIR__.'/settings.php';
+//require __DIR__.'/auth.php';
+require __DIR__.'/teams.php';

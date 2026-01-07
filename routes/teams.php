@@ -14,6 +14,11 @@ use App\Http\Controllers\TermsOfServiceController;
 use App\Teams\Teams;
 use Illuminate\Support\Facades\Route;
 
+// Only register routes if Teams route registration is enabled
+if (! Teams::$registersRoutes) {
+  return;
+}
+
 Route::group(['middleware' => config('teams.middleware', ['web'])], function (): void {
   if (Teams::hasTermsAndPrivacyPolicyFeature()) {
     Route::get('/terms-of-service', [TermsOfServiceController::class, 'show'])->name('terms.show');
@@ -36,8 +41,11 @@ Route::group(['middleware' => config('teams.middleware', ['web'])], function ():
     Route::delete('/user/other-browser-sessions', [OtherBrowserSessionsController::class, 'destroy'])
       ->name('other-browser-sessions.destroy');
 
-    Route::delete('/user/profile-photo', [ProfilePhotoController::class, 'destroy'])
-      ->name('current-user-photo.destroy');
+    // Profile photo management...
+    if (Teams::managesProfilePhotos()) {
+      Route::delete('/user/profile-photo', [ProfilePhotoController::class, 'destroy'])
+        ->name('current-user-photo.destroy');
+    }
 
     if (Teams::hasAccountDeletionFeatures()) {
       Route::delete('/user', [CurrentUserController::class, 'destroy'])

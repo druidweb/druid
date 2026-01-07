@@ -2,6 +2,7 @@
 
 namespace App\Concerns;
 
+use App\Teams\Features;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Env;
@@ -11,11 +12,11 @@ trait HasProfilePhoto
 {
   /**
    * Update the user's profile photo.
-   *
-   * @param  string  $storagePath
    */
-  public function updateProfilePhoto(UploadedFile $photo, $storagePath = 'profile-photos'): void
+  public function updateProfilePhoto(UploadedFile $photo): void
   {
+    $storagePath = $this->id.'/avatars';
+
     tap($this->profile_photo_path, function ($previous) use ($photo, $storagePath): void {
       $this->forceFill([
         'profile_photo_path' => $photo->storePublicly(
@@ -76,6 +77,6 @@ trait HasProfilePhoto
    */
   protected function profilePhotoDisk()
   {
-    return isset(Env::get('VAPOR_ARTIFACT_NAME')) ? 's3' : config('teams.profile_photo_disk', 'public');
+    return Env::get('VAPOR_ARTIFACT_NAME') !== null ? 's3' : config('teams.profile_photo_disk', 'public');
   }
 }

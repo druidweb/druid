@@ -36,7 +36,12 @@ class ProfileController
   {
     /** @var User $user */
     $user = $request->user();
-    $user->fill($request->validated());
+
+    if ($request->hasFile('photo')) {
+      $user->updateProfilePhoto($request->file('photo'));
+    }
+
+    $user->fill($request->safe()->only(['name', 'email']));
 
     if ($user->isDirty('email')) {
       $user->email_verified_at = null;

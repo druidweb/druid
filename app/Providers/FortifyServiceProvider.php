@@ -51,6 +51,7 @@ class FortifyServiceProvider extends ServiceProvider
   {
     Fortify::createUsersUsing(CreateNewUser::class);
     Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+    Fortify::updateUserPasswordsUsing(\App\Actions\Fortify\UpdateUserPassword::class);
     Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
   }
 

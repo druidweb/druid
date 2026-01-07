@@ -1,66 +1,100 @@
-<script setup>
-import ActionMessage from '@/components/teams/ActionMessage.vue';
-import ActionSection from '@/components/teams/ActionSection.vue';
-import ConfirmationModal from '@/components/teams/ConfirmationModal.vue';
-import DangerButton from '@/components/teams/DangerButton.vue';
-import DialogModal from '@/components/teams/DialogModal.vue';
-import FormSection from '@/components/teams/FormSection.vue';
-import InputError from '@/components/teams/InputError.vue';
-import InputLabel from '@/components/teams/InputLabel.vue';
-import PrimaryButton from '@/components/teams/PrimaryButton.vue';
-import SecondaryButton from '@/components/teams/SecondaryButton.vue';
-import SectionBorder from '@/components/teams/SectionBorder.vue';
-import TextInput from '@/components/teams/TextInput.vue';
+<script setup lang="ts">
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { destroy as destroyInvitation } from '@/routes/team-invitations';
+import { destroy as destroyMember, store as storeMember, update as updateMember } from '@/routes/team-members';
 import { router, useForm, usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { CheckCircle2 } from 'lucide-vue-next';
+import { ref, Transition } from 'vue';
 
-const props = defineProps({
-  team: Object,
-  availableRoles: Array,
-  userPermissions: Object,
-});
+interface Role {
+  key: string;
+  name: string;
+  description: string;
+  permissions: string[];
+}
+
+interface TeamMember {
+  id: number;
+  name: string;
+  email: string;
+  profile_photo_url: string;
+  membership: {
+    role: string;
+  };
+}
+
+interface TeamInvitation {
+  id: number;
+  email: string;
+}
+
+interface Team {
+  id: number;
+  name: string;
+  users: TeamMember[];
+  team_invitations: TeamInvitation[];
+  [key: string]: any;
+}
+
+interface UserPermissions {
+  canAddTeamMembers: boolean;
+  canUpdateTeamMembers: boolean;
+  canRemoveTeamMembers: boolean;
+  [key: string]: any;
+}
+
+const props = defineProps<{
+  team: Team;
+  availableRoles: Role[];
+  userPermissions: UserPermissions;
+}>();
 
 const page = usePage();
 
 const addTeamMemberForm = useForm({
   email: '',
-  role: null,
+  role: null as string | null,
 });
 
 const updateRoleForm = useForm({
-  role: null,
+  role: null as string | null,
 });
 
 const leaveTeamForm = useForm({});
 const removeTeamMemberForm = useForm({});
 
 const currentlyManagingRole = ref(false);
-const managingRoleFor = ref(null);
+const managingRoleFor = ref<TeamMember | null>(null);
 const confirmingLeavingTeam = ref(false);
-const teamMemberBeingRemoved = ref(null);
+const teamMemberBeingRemoved = ref<TeamMember | null>(null);
 
 const addTeamMember = () => {
-  addTeamMemberForm.post(route('team-members.store', props.team), {
+  addTeamMemberForm.post(storeMember(props.team.id).url, {
     errorBag: 'addTeamMember',
     preserveScroll: true,
     onSuccess: () => addTeamMemberForm.reset(),
   });
 };
 
-const cancelTeamInvitation = (invitation) => {
-  router.delete(route('team-invitations.destroy', invitation), {
+const cancelTeamInvitation = (invitation: TeamInvitation) => {
+  router.delete(destroyInvitation(invitation.id).url, {
     preserveScroll: true,
   });
 };
 
-const manageRole = (teamMember) => {
+const manageRole = (teamMember: TeamMember) => {
   managingRoleFor.value = teamMember;
   updateRoleForm.role = teamMember.membership.role;
   currentlyManagingRole.value = true;
 };
 
 const updateRole = () => {
-  updateRoleForm.put(route('team-members.update', [props.team, managingRoleFor.value]), {
+  updateRoleForm.put(updateMember({ team: props.team.id, user: managingRoleFor.value!.id }).url, {
     preserveScroll: true,
     onSuccess: () => (currentlyManagingRole.value = false),
   });
@@ -71,15 +105,15 @@ const confirmLeavingTeam = () => {
 };
 
 const leaveTeam = () => {
-  leaveTeamForm.delete(route('team-members.destroy', [props.team, page.props.auth.user]));
+  leaveTeamForm.delete(destroyMember({ team: props.team.id, user: page.props.auth.user.id }).url);
 };
 
-const confirmTeamMemberRemoval = (teamMember) => {
+const confirmTeamMemberRemoval = (teamMember: TeamMember) => {
   teamMemberBeingRemoved.value = teamMember;
 };
 
 const removeTeamMember = () => {
-  removeTeamMemberForm.delete(route('team-members.destroy', [props.team, teamMemberBeingRemoved.value]), {
+  removeTeamMemberForm.delete(destroyMember({ team: props.team.id, user: teamMemberBeingRemoved.value!.id }).url, {
     errorBag: 'removeTeamMember',
     preserveScroll: true,
     preserveState: true,
@@ -87,263 +121,251 @@ const removeTeamMember = () => {
   });
 };
 
-const displayableRole = (role) => {
-  return props.availableRoles.find((r) => r.key === role).name;
+const displayableRole = (role: string) => {
+  return props.availableRoles.find((r) => r.key === role)?.name;
 };
 </script>
 
 <template>
-  <div>
-    <div v-if="userPermissions.canAddTeamMembers">
-      <SectionBorder />
+  <div class="space-y-10">
+    <!-- Add Team Member -->
+    <Card v-if="userPermissions.canAddTeamMembers">
+      <form @submit.prevent="addTeamMember">
+        <CardHeader>
+          <CardTitle>Add Team Member</CardTitle>
+          <CardDescription>Add a new team member to your team, allowing them to collaborate with you.</CardDescription>
+        </CardHeader>
 
-      <!-- Add Team Member -->
-      <FormSection @submitted="addTeamMember">
-        <template #title> Add Team Member </template>
-
-        <template #description> Add a new team member to your team, allowing them to collaborate with you. </template>
-
-        <template #form>
-          <div class="col-span-6">
-            <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-              Please provide the email address of the person you would like to add to this team.
-            </div>
-          </div>
+        <CardContent class="space-y-6">
+          <div class="max-w-xl text-sm text-muted-foreground">Please provide the email address of the person you would like to add to this team.</div>
 
           <!-- Member Email -->
-          <div class="col-span-6 sm:col-span-4">
-            <InputLabel for="email" value="Email" />
-            <TextInput id="email" v-model="addTeamMemberForm.email" type="email" class="mt-1 block w-full" />
-            <InputError :message="addTeamMemberForm.errors.email" class="mt-2" />
+          <div class="space-y-2">
+            <Label for="email">Email</Label>
+            <Input id="email" v-model="addTeamMemberForm.email" type="email" />
+            <InputError :message="addTeamMemberForm.errors.email" />
           </div>
 
           <!-- Role -->
-          <div v-if="availableRoles.length > 0" class="col-span-6 lg:col-span-4">
-            <InputLabel for="roles" value="Role" />
-            <InputError :message="addTeamMemberForm.errors.role" class="mt-2" />
+          <div v-if="availableRoles.length > 0" class="space-y-2">
+            <Label for="roles">Role</Label>
+            <InputError :message="addTeamMemberForm.errors.role" />
 
-            <div class="relative z-0 mt-1 cursor-pointer rounded-lg border border-gray-200 dark:border-gray-700">
+            <div class="relative z-0 cursor-pointer rounded-lg border">
               <button
                 v-for="(role, i) in availableRoles"
                 :key="role.key"
                 type="button"
-                class="relative inline-flex w-full rounded-lg px-4 py-3 focus:z-10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:focus:border-indigo-600 dark:focus:ring-indigo-600"
+                class="relative inline-flex w-full rounded-lg px-4 py-3 focus:z-10 focus:ring-2 focus:ring-ring focus:outline-none"
                 :class="{
-                  'rounded-t-none border-t border-gray-200 focus:border-none dark:border-gray-700': i > 0,
+                  'rounded-t-none border-t': i > 0,
                   'rounded-b-none': i != Object.keys(availableRoles).length - 1,
                 }"
                 @click="addTeamMemberForm.role = role.key">
                 <div :class="{ 'opacity-50': addTeamMemberForm.role && addTeamMemberForm.role != role.key }">
                   <!-- Role Name -->
                   <div class="flex items-center">
-                    <div class="text-sm text-gray-600 dark:text-gray-400" :class="{ 'font-semibold': addTeamMemberForm.role == role.key }">
+                    <div class="text-sm text-muted-foreground" :class="{ 'font-semibold': addTeamMemberForm.role == role.key }">
                       {{ role.name }}
                     </div>
 
-                    <svg
-                      v-if="addTeamMemberForm.role == role.key"
-                      class="ms-2 size-5 text-green-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <CheckCircle2 v-if="addTeamMemberForm.role == role.key" class="ms-2 size-5 text-green-500" />
                   </div>
 
                   <!-- Role Description -->
-                  <div class="mt-2 text-start text-xs text-gray-600 dark:text-gray-400">
+                  <div class="mt-2 text-start text-xs text-muted-foreground">
                     {{ role.description }}
                   </div>
                 </div>
               </button>
             </div>
           </div>
-        </template>
+        </CardContent>
 
-        <template #actions>
-          <ActionMessage :on="addTeamMemberForm.recentlySuccessful" class="me-3"> Added. </ActionMessage>
+        <CardFooter class="flex items-center justify-end gap-3">
+          <Transition leave-active-class="transition ease-in duration-1000" leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-show="addTeamMemberForm.recentlySuccessful" class="text-sm text-muted-foreground">Added.</div>
+          </Transition>
 
-          <PrimaryButton :class="{ 'opacity-25': addTeamMemberForm.processing }" :disabled="addTeamMemberForm.processing"> Add </PrimaryButton>
-        </template>
-      </FormSection>
-    </div>
+          <Button :class="{ 'opacity-25': addTeamMemberForm.processing }" :disabled="addTeamMemberForm.processing"> Add </Button>
+        </CardFooter>
+      </form>
+    </Card>
 
-    <div v-if="team.team_invitations.length > 0 && userPermissions.canAddTeamMembers">
-      <SectionBorder />
-
-      <!-- Team Member Invitations -->
-      <ActionSection class="mt-10 sm:mt-0">
-        <template #title> Pending Team Invitations </template>
-
-        <template #description>
+    <!-- Team Member Invitations -->
+    <Card v-if="team.team_invitations.length > 0 && userPermissions.canAddTeamMembers">
+      <CardHeader>
+        <CardTitle>Pending Team Invitations</CardTitle>
+        <CardDescription>
           These people have been invited to your team and have been sent an invitation email. They may join the team by accepting the email
           invitation.
-        </template>
+        </CardDescription>
+      </CardHeader>
 
-        <!-- Pending Team Member Invitation List -->
-        <template #content>
-          <div class="space-y-6">
-            <div v-for="invitation in team.team_invitations" :key="invitation.id" class="flex items-center justify-between">
-              <div class="text-gray-600 dark:text-gray-400">
-                {{ invitation.email }}
-              </div>
+      <CardContent>
+        <div class="space-y-6">
+          <div v-for="invitation in team.team_invitations" :key="invitation.id" class="flex items-center justify-between">
+            <div class="text-muted-foreground">
+              {{ invitation.email }}
+            </div>
 
-              <div class="flex items-center">
-                <!-- Cancel Team Invitation -->
-                <button
-                  v-if="userPermissions.canRemoveTeamMembers"
-                  class="ms-6 cursor-pointer text-sm text-red-500 focus:outline-none"
-                  @click="cancelTeamInvitation(invitation)">
-                  Cancel
-                </button>
-              </div>
+            <div class="flex items-center">
+              <!-- Cancel Team Invitation -->
+              <Button
+                v-if="userPermissions.canRemoveTeamMembers"
+                variant="ghost"
+                size="sm"
+                class="text-destructive hover:text-destructive"
+                @click="cancelTeamInvitation(invitation)">
+                Cancel
+              </Button>
             </div>
           </div>
-        </template>
-      </ActionSection>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
 
-    <div v-if="team.users.length > 0">
-      <SectionBorder />
+    <!-- Manage Team Members -->
+    <Card v-if="team.users.length > 0">
+      <CardHeader>
+        <CardTitle>Team Members</CardTitle>
+        <CardDescription>All of the people that are part of this team.</CardDescription>
+      </CardHeader>
 
-      <!-- Manage Team Members -->
-      <ActionSection class="mt-10 sm:mt-0">
-        <template #title> Team Members </template>
-
-        <template #description> All of the people that are part of this team. </template>
-
-        <!-- Team Member List -->
-        <template #content>
-          <div class="space-y-6">
-            <div v-for="user in team.users" :key="user.id" class="flex items-center justify-between">
-              <div class="flex items-center">
-                <img class="size-8 rounded-full object-cover" :src="user.profile_photo_url" :alt="user.name" />
-                <div class="ms-4 dark:text-white">
-                  {{ user.name }}
-                </div>
-              </div>
-
-              <div class="flex items-center">
-                <!-- Manage Team Member Role -->
-                <button
-                  v-if="userPermissions.canUpdateTeamMembers && availableRoles.length"
-                  class="ms-2 text-sm text-gray-400 underline"
-                  @click="manageRole(user)">
-                  {{ displayableRole(user.membership.role) }}
-                </button>
-
-                <div v-else-if="availableRoles.length" class="ms-2 text-sm text-gray-400">
-                  {{ displayableRole(user.membership.role) }}
-                </div>
-
-                <!-- Leave Team -->
-                <button v-if="$page.props.auth.user.id === user.id" class="ms-6 cursor-pointer text-sm text-red-500" @click="confirmLeavingTeam">
-                  Leave
-                </button>
-
-                <!-- Remove Team Member -->
-                <button
-                  v-else-if="userPermissions.canRemoveTeamMembers"
-                  class="ms-6 cursor-pointer text-sm text-red-500"
-                  @click="confirmTeamMemberRemoval(user)">
-                  Remove
-                </button>
+      <CardContent>
+        <div class="space-y-6">
+          <div v-for="user in team.users" :key="user.id" class="flex items-center justify-between">
+            <div class="flex items-center">
+              <img class="size-8 rounded-full object-cover" :src="user.profile_photo_url" :alt="user.name" />
+              <div class="ms-4 text-foreground">
+                {{ user.name }}
               </div>
             </div>
+
+            <div class="flex items-center gap-2">
+              <!-- Manage Team Member Role -->
+              <Button
+                v-if="userPermissions.canUpdateTeamMembers && availableRoles.length"
+                variant="link"
+                size="sm"
+                class="text-muted-foreground"
+                @click="manageRole(user)">
+                {{ displayableRole(user.membership.role) }}
+              </Button>
+
+              <div v-else-if="availableRoles.length" class="text-sm text-muted-foreground">
+                {{ displayableRole(user.membership.role) }}
+              </div>
+
+              <!-- Leave Team -->
+              <Button
+                v-if="$page.props.auth.user.id === user.id"
+                variant="ghost"
+                size="sm"
+                class="text-destructive hover:text-destructive"
+                @click="confirmLeavingTeam">
+                Leave
+              </Button>
+
+              <!-- Remove Team Member -->
+              <Button
+                v-else-if="userPermissions.canRemoveTeamMembers"
+                variant="ghost"
+                size="sm"
+                class="text-destructive hover:text-destructive"
+                @click="confirmTeamMemberRemoval(user)">
+                Remove
+              </Button>
+            </div>
           </div>
-        </template>
-      </ActionSection>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
 
     <!-- Role Management Modal -->
-    <DialogModal :show="currentlyManagingRole" @close="currentlyManagingRole = false">
-      <template #title> Manage Role </template>
+    <Dialog :open="currentlyManagingRole" @update:open="currentlyManagingRole = $event">
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Manage Role</DialogTitle>
+        </DialogHeader>
 
-      <template #content>
         <div v-if="managingRoleFor">
-          <div class="relative z-0 mt-1 cursor-pointer rounded-lg border border-gray-200 dark:border-gray-700">
+          <div class="relative z-0 cursor-pointer rounded-lg border">
             <button
               v-for="(role, i) in availableRoles"
               :key="role.key"
               type="button"
-              class="relative inline-flex w-full rounded-lg px-4 py-3 focus:z-10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:focus:border-indigo-600 dark:focus:ring-indigo-600"
+              class="relative inline-flex w-full rounded-lg px-4 py-3 focus:z-10 focus:ring-2 focus:ring-ring focus:outline-none"
               :class="{
-                'rounded-t-none border-t border-gray-200 focus:border-none dark:border-gray-700': i > 0,
+                'rounded-t-none border-t': i > 0,
                 'rounded-b-none': i !== Object.keys(availableRoles).length - 1,
               }"
               @click="updateRoleForm.role = role.key">
               <div :class="{ 'opacity-50': updateRoleForm.role && updateRoleForm.role !== role.key }">
                 <!-- Role Name -->
                 <div class="flex items-center">
-                  <div class="text-sm text-gray-600 dark:text-gray-400" :class="{ 'font-semibold': updateRoleForm.role === role.key }">
+                  <div class="text-sm text-muted-foreground" :class="{ 'font-semibold': updateRoleForm.role === role.key }">
                     {{ role.name }}
                   </div>
 
-                  <svg
-                    v-if="updateRoleForm.role == role.key"
-                    class="ms-2 size-5 text-green-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <CheckCircle2 v-if="updateRoleForm.role == role.key" class="ms-2 size-5 text-green-500" />
                 </div>
 
                 <!-- Role Description -->
-                <div class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                <div class="mt-2 text-xs text-muted-foreground">
                   {{ role.description }}
                 </div>
               </div>
             </button>
           </div>
         </div>
-      </template>
 
-      <template #footer>
-        <SecondaryButton @click="currentlyManagingRole = false"> Cancel </SecondaryButton>
+        <DialogFooter>
+          <Button variant="outline" @click="currentlyManagingRole = false"> Cancel </Button>
 
-        <PrimaryButton class="ms-3" :class="{ 'opacity-25': updateRoleForm.processing }" :disabled="updateRoleForm.processing" @click="updateRole">
-          Save
-        </PrimaryButton>
-      </template>
-    </DialogModal>
+          <Button :class="{ 'opacity-25': updateRoleForm.processing }" :disabled="updateRoleForm.processing" @click="updateRole"> Save </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
 
     <!-- Leave Team Confirmation Modal -->
-    <ConfirmationModal :show="confirmingLeavingTeam" @close="confirmingLeavingTeam = false">
-      <template #title> Leave Team </template>
+    <Dialog :open="confirmingLeavingTeam" @update:open="confirmingLeavingTeam = $event">
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Leave Team</DialogTitle>
+          <DialogDescription>Are you sure you would like to leave this team?</DialogDescription>
+        </DialogHeader>
 
-      <template #content> Are you sure you would like to leave this team? </template>
+        <DialogFooter>
+          <Button variant="outline" @click="confirmingLeavingTeam = false"> Cancel </Button>
 
-      <template #footer>
-        <SecondaryButton @click="confirmingLeavingTeam = false"> Cancel </SecondaryButton>
-
-        <DangerButton class="ms-3" :class="{ 'opacity-25': leaveTeamForm.processing }" :disabled="leaveTeamForm.processing" @click="leaveTeam">
-          Leave
-        </DangerButton>
-      </template>
-    </ConfirmationModal>
+          <Button variant="destructive" :class="{ 'opacity-25': leaveTeamForm.processing }" :disabled="leaveTeamForm.processing" @click="leaveTeam">
+            Leave
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
 
     <!-- Remove Team Member Confirmation Modal -->
-    <ConfirmationModal :show="teamMemberBeingRemoved" @close="teamMemberBeingRemoved = null">
-      <template #title> Remove Team Member </template>
+    <Dialog :open="!!teamMemberBeingRemoved" @update:open="teamMemberBeingRemoved = $event ? teamMemberBeingRemoved : null">
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Remove Team Member</DialogTitle>
+          <DialogDescription>Are you sure you would like to remove this person from the team?</DialogDescription>
+        </DialogHeader>
 
-      <template #content> Are you sure you would like to remove this person from the team? </template>
+        <DialogFooter>
+          <Button variant="outline" @click="teamMemberBeingRemoved = null"> Cancel </Button>
 
-      <template #footer>
-        <SecondaryButton @click="teamMemberBeingRemoved = null"> Cancel </SecondaryButton>
-
-        <DangerButton
-          class="ms-3"
-          :class="{ 'opacity-25': removeTeamMemberForm.processing }"
-          :disabled="removeTeamMemberForm.processing"
-          @click="removeTeamMember">
-          Remove
-        </DangerButton>
-      </template>
-    </ConfirmationModal>
+          <Button
+            variant="destructive"
+            :class="{ 'opacity-25': removeTeamMemberForm.processing }"
+            :disabled="removeTeamMemberForm.processing"
+            @click="removeTeamMember">
+            Remove
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>

@@ -1,35 +1,45 @@
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue';
-import LogoutOtherBrowserSessionsForm from '@/Pages/Profile/Partials/LogoutOtherBrowserSessionsForm.vue';
-import SectionBorder from '@/Components/SectionBorder.vue';
-import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfileInformationForm.vue';
+<script setup lang="ts">
+import AppLayout from '@/layouts/AppLayout.vue';
+import DeleteUserForm from '@/pages/profile/Partials/DeleteUserForm.vue';
+import LogoutOtherBrowserSessionsForm from '@/pages/profile/Partials/LogoutOtherBrowserSessionsForm.vue';
+import UpdateProfileInformationForm from '@/pages/profile/Partials/UpdateProfileInformationForm.vue';
 
-defineProps({
-  sessions: Array,
-});
+interface Session {
+  agent: {
+    is_desktop: boolean;
+    platform: string;
+    browser: string;
+  };
+  ip_address: string;
+  is_current_device: boolean;
+  last_active: string;
+}
+
+defineProps<{
+  sessions: Session[];
+}>();
 </script>
 
 <template>
   <AppLayout title="Profile">
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Profile</h2>
+      <h2 class="text-xl leading-tight font-semibold text-gray-800 dark:text-gray-200">Profile</h2>
     </template>
 
     <div>
-      <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl space-y-10 py-10 sm:px-6 lg:px-8">
         <div v-if="$page.props.teams.canUpdateProfileInformation">
           <UpdateProfileInformationForm :user="$page.props.auth.user" />
-
-          <SectionBorder />
         </div>
 
-        <LogoutOtherBrowserSessionsForm :sessions="sessions" class="mt-10 sm:mt-0" />
+        <Separator v-if="$page.props.teams.canUpdateProfileInformation" />
+
+        <LogoutOtherBrowserSessionsForm :sessions="sessions" />
 
         <template v-if="$page.props.teams.hasAccountDeletionFeatures">
-          <SectionBorder />
+          <Separator />
 
-          <DeleteUserForm class="mt-10 sm:mt-0" />
+          <DeleteUserForm />
         </template>
       </div>
     </div>

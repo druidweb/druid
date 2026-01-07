@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Teams;
 
-use App\Actions\UpdateTeamMemberRole;
+use App\Actions\Teams\UpdateTeamMemberRole;
 use App\Contracts\AddsTeamMembers;
 use App\Contracts\InvitesTeamMembers;
 use App\Contracts\RemovesTeamMembers;
@@ -10,11 +10,31 @@ use App\Teams\Features;
 use App\Teams\Teams;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Redirector;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class TeamMemberController extends Controller
+class TeamMemberController implements HasMiddleware
 {
+  /**
+   * Get the middleware that should be assigned to the controller.
+   *
+   * @return array<int, Middleware|string>
+   */
+  public static function middleware(): array
+  {
+    return [
+      function (Request $request, callable $next): HttpResponse {
+        if (! Teams::hasTeamFeatures()) {
+          abort(HttpResponse::HTTP_FORBIDDEN);
+        }
+
+        return $next($request);
+      },
+    ];
+  }
+
   /**
    * Add a new team member to a team.
    *

@@ -1,23 +1,40 @@
-<script setup>
-import ActionMessage from '@/components/teams/ActionMessage.vue';
-import FormSection from '@/components/teams/FormSection.vue';
-import InputError from '@/components/teams/InputError.vue';
-import InputLabel from '@/components/teams/InputLabel.vue';
-import PrimaryButton from '@/components/teams/PrimaryButton.vue';
-import TextInput from '@/components/teams/TextInput.vue';
+<script setup lang="ts">
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { update } from '@/routes/teams';
 import { useForm } from '@inertiajs/vue3';
+import { Transition } from 'vue';
 
-const props = defineProps({
-  team: Object,
-  permissions: Object,
-});
+interface Team {
+  id: number;
+  name: string;
+  owner: {
+    name: string;
+    email: string;
+    profile_photo_url: string;
+  };
+  [key: string]: any;
+}
+
+interface Permissions {
+  canUpdateTeam: boolean;
+  [key: string]: any;
+}
+
+const props = defineProps<{
+  team: Team;
+  permissions: Permissions;
+}>();
 
 const form = useForm({
   name: props.team.name,
 });
 
 const updateTeamName = () => {
-  form.put(route('teams.update', props.team), {
+  form.put(update(props.team.id).url, {
     errorBag: 'updateTeamName',
     preserveScroll: true,
   });
@@ -25,42 +42,47 @@ const updateTeamName = () => {
 </script>
 
 <template>
-  <FormSection @submitted="updateTeamName">
-    <template #title> Team Name </template>
+  <Card>
+    <form @submit.prevent="updateTeamName">
+      <CardHeader>
+        <CardTitle>Team Name</CardTitle>
+        <CardDescription>The team's name and owner information.</CardDescription>
+      </CardHeader>
 
-    <template #description> The team's name and owner information. </template>
+      <CardContent class="space-y-6">
+        <!-- Team Owner Information -->
+        <div class="space-y-2">
+          <Label>Team Owner</Label>
 
-    <template #form>
-      <!-- Team Owner Information -->
-      <div class="col-span-6">
-        <InputLabel value="Team Owner" />
+          <div class="flex items-center">
+            <img class="size-12 rounded-full object-cover" :src="team.owner.profile_photo_url" :alt="team.owner.name" />
 
-        <div class="mt-2 flex items-center">
-          <img class="size-12 rounded-full object-cover" :src="team.owner.profile_photo_url" :alt="team.owner.name" />
-
-          <div class="ms-4 leading-tight">
-            <div class="text-gray-900 dark:text-white">{{ team.owner.name }}</div>
-            <div class="text-sm text-gray-700 dark:text-gray-300">
-              {{ team.owner.email }}
+            <div class="ms-4 leading-tight">
+              <div class="text-foreground">{{ team.owner.name }}</div>
+              <div class="text-sm text-muted-foreground">
+                {{ team.owner.email }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Team Name -->
-      <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="name" value="Team Name" />
+        <!-- Team Name -->
+        <div class="space-y-2">
+          <Label for="name">Team Name</Label>
 
-        <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" :disabled="!permissions.canUpdateTeam" />
+          <Input id="name" v-model="form.name" type="text" :disabled="!permissions.canUpdateTeam" />
 
-        <InputError :message="form.errors.name" class="mt-2" />
-      </div>
-    </template>
+          <InputError :message="form.errors.name" />
+        </div>
+      </CardContent>
 
-    <template v-if="permissions.canUpdateTeam" #actions>
-      <ActionMessage :on="form.recentlySuccessful" class="me-3"> Saved. </ActionMessage>
+      <CardFooter v-if="permissions.canUpdateTeam" class="flex items-center justify-end gap-3">
+        <Transition leave-active-class="transition ease-in duration-1000" leave-from-class="opacity-100" leave-to-class="opacity-0">
+          <div v-show="form.recentlySuccessful" class="text-sm text-muted-foreground">Saved.</div>
+        </Transition>
 
-      <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Save </PrimaryButton>
-    </template>
-  </FormSection>
+        <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Save </Button>
+      </CardFooter>
+    </form>
+  </Card>
 </template>

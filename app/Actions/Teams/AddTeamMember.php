@@ -8,7 +8,7 @@ use App\Events\TeamMemberAdded;
 use App\Models\Team;
 use App\Models\User;
 use App\Rules\Role;
-use App\Teams;
+use App\Teams\Teams;
 use Closure;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Gate;

@@ -73,13 +73,13 @@ class HandleInertiaRequests extends Middleware
       },
       'auth' => [
         'user' => function () use ($request) {
-          if (! $user = $request->user()) {
+          if (! $user = $request->user()?->fresh()) {
             return;
           }
 
           $userHasTeamFeatures = Teams::userHasTeamFeatures($user);
 
-          if ($user && $userHasTeamFeatures) {
+          if ($userHasTeamFeatures) {
             $user->currentTeam;
           }
 

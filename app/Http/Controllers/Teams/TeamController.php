@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Teams;
 
-use App\Actions\ValidateTeamDeletion;
+use App\Actions\Teams\ValidateTeamDeletion;
 use App\Concerns\RedirectsActions;
 use App\Contracts\CreatesTeams;
 use App\Contracts\DeletesTeams;
@@ -11,14 +11,34 @@ use App\Teams\Teams;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class TeamController extends Controller
+class TeamController implements HasMiddleware
 {
   use RedirectsActions;
+
+  /**
+   * Get the middleware that should be assigned to the controller.
+   *
+   * @return array<int, Middleware|string>
+   */
+  public static function middleware(): array
+  {
+    return [
+      function (Request $request, callable $next): HttpResponse {
+        if (! Teams::hasTeamFeatures()) {
+          abort(HttpResponse::HTTP_FORBIDDEN);
+        }
+
+        return $next($request);
+      },
+    ];
+  }
 
   /**
    * Show the team management screen.
@@ -32,7 +52,7 @@ class TeamController extends Controller
 
     Gate::authorize('view', $team);
 
-    return Inertia::render($request, 'Teams/Show', [
+    return Inertia::render('teams/Show', [
       'team' => $team->load('owner', 'users', 'teamInvitations'),
       'availableRoles' => array_values(Teams::$roles),
       'availablePermissions' => Teams::$permissions,
@@ -56,7 +76,7 @@ class TeamController extends Controller
   {
     Gate::authorize('create', Teams::newTeamModel());
 
-    return Inertia::render($request, 'Teams/Create');
+    return Inertia::render('teams/Create');
   }
 
   /**

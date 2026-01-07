@@ -2,6 +2,7 @@
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
+import TeamSwitcher from '@/components/TeamSwitcher.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
@@ -33,7 +34,7 @@ const footerNavItems: NavItem[] = [
 
 <template>
   <Sidebar collapsible="icon" variant="inset">
-    <SidebarHeader>
+    <SidebarHeader class="pb-0">
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" as-child>
@@ -45,12 +46,13 @@ const footerNavItems: NavItem[] = [
       </SidebarMenu>
     </SidebarHeader>
 
-    <SidebarContent>
+    <SidebarContent class="pt-0">
       <NavMain :items="mainNavItems" />
     </SidebarContent>
 
     <SidebarFooter>
       <NavFooter :items="footerNavItems" />
+      <TeamSwitcher />
       <NavUser />
     </SidebarFooter>
   </Sidebar>

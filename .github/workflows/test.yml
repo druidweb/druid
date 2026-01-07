@@ -50,7 +50,7 @@ jobs:
         run: php artisan wayfinder:generate && php artisan zorah:generate
 
       - name: Build Assets
-        run: bun run prod
+        run: bun run build:ssr
 
       - name: Run Static Analysis
         run: composer test:static

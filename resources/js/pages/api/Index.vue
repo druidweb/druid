@@ -1,30 +1,40 @@
-<script setup>
-import ApiTokenManager from '@/Pages/API/Partials/ApiTokenManager.vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
+<script setup lang="ts">
+import AppLayout from '@/layouts/AppLayout.vue';
+import SectionLayout from '@/layouts/SectionLayout.vue';
+import ApiTokenManager from '@/pages/api/Partials/ApiTokenManager.vue';
+import { index } from '@/routes/api-tokens';
+import type { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/vue3';
 
-defineProps({
-    tokens: Array,
-    availablePermissions: Array,
-    defaultPermissions: Array,
-});
+interface ApiToken {
+  id: number;
+  name: string;
+  abilities: string[];
+  last_used_ago: string | null;
+  created_at: string;
+  [key: string]: any;
+}
+
+defineProps<{
+  tokens: ApiToken[];
+  availablePermissions: string[];
+  defaultPermissions: string[];
+}>();
+
+const breadcrumbItems: BreadcrumbItem[] = [
+  {
+    title: 'API Tokens',
+    href: index().url,
+  },
+];
 </script>
 
 <template>
-    <AppLayout title="API Tokens">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                API Tokens
-            </h2>
-        </template>
+  <AppLayout :breadcrumbs="breadcrumbItems">
+    <Head title="API Tokens" />
 
-        <div>
-            <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <ApiTokenManager
-                    :tokens="tokens"
-                    :available-permissions="availablePermissions"
-                    :default-permissions="defaultPermissions"
-                />
-            </div>
-        </div>
-    </AppLayout>
+    <SectionLayout title="API Tokens" description="Manage your API tokens for third-party access">
+      <ApiTokenManager :tokens="tokens" :available-permissions="availablePermissions" :default-permissions="defaultPermissions" />
+    </SectionLayout>
+  </AppLayout>
 </template>
