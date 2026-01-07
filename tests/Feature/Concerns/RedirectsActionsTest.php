@@ -46,9 +46,7 @@ it('uses fortify home config when no redirectTo', function (): void {
   {
     use RedirectsActions;
   };
-  $action = new class
-  {
-  };
+  $action = new class {};
 
   $result = $trait->redirectPath($action);
 
