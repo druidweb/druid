@@ -1,5 +1,25 @@
 # Changelog
 
+# [1.4.0](https://github.com/druidweb/druid/compare/v1.3.0...v1.4.0) (2026-01-07)
+
+
+### Features
+
+* adding teams/api/avatar support ([685a340](https://github.com/druidweb/druid/commit/685a34002cbd6d4e66b35f232e86fe209fe3c06d))
+
+
+### Maintenance
+
+* finish testing all new features ([94c3d11](https://github.com/druidweb/druid/commit/94c3d1110431d574cc918325723c9cc9fb782b03))
+* styles ([9f0d28b](https://github.com/druidweb/druid/commit/9f0d28be239cf6ccffa9f7daa0412fdf87daa85c))
+* update readme ([db9d283](https://github.com/druidweb/druid/commit/db9d283652e000f232817ab1afcdde0e07086d52))
+
+
+### Work in Progress
+
+* added teams implementation ([ea5c5b9](https://github.com/druidweb/druid/commit/ea5c5b9685b46e5083d20aff88425f82f15fc954))
+* just updates for ci ([41e8209](https://github.com/druidweb/druid/commit/41e8209b3851e88110e435df6adcfa629d14d711))
+
 # [1.3.0](https://github.com/druidweb/druid/compare/v1.2.9...v1.3.0) (2025-11-01)
 
 
