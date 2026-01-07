@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.1](https://github.com/druidweb/druid/compare/v1.4.0...v1.4.1) (2026-01-07)
+
+
+### Code Refactoring
+
+* update test workflow, deps and readme ([62bdea0](https://github.com/druidweb/druid/commit/62bdea0e8a77e4df75bfcc781e4f170953656a76))
+
+
+### Maintenance
+
+* style update ([8c443c7](https://github.com/druidweb/druid/commit/8c443c75c36260c3e8e9e012b6e9a3773947aee5))
+
 # [1.4.0](https://github.com/druidweb/druid/compare/v1.3.0...v1.4.0) (2026-01-07)
 
 
