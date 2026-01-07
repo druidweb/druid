@@ -6,32 +6,18 @@ use App\Concerns\RedirectsActions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
-class TestRedirectsActions
-{
-  use RedirectsActions;
-}
-
-class ActionWithRedirectToMethod
-{
-  public function redirectTo(): string
-  {
-    return '/custom-path';
-  }
-}
-
-class ActionWithRedirectToProperty
-{
-  public ?string $redirectTo = '/property-path';
-}
-
-class ActionWithoutRedirect
-{
-  // No redirectTo method or property
-}
-
 it('uses redirectTo method when available', function (): void {
-  $trait = new TestRedirectsActions;
-  $action = new ActionWithRedirectToMethod;
+  $trait = new class
+  {
+    use RedirectsActions;
+  };
+  $action = new class
+  {
+    public function redirectTo(): string
+    {
+      return '/custom-path';
+    }
+  };
 
   $result = $trait->redirectPath($action);
 
@@ -40,8 +26,14 @@ it('uses redirectTo method when available', function (): void {
 });
 
 it('uses redirectTo property when method not available', function (): void {
-  $trait = new TestRedirectsActions;
-  $action = new ActionWithRedirectToProperty;
+  $trait = new class
+  {
+    use RedirectsActions;
+  };
+  $action = new class
+  {
+    public ?string $redirectTo = '/property-path';
+  };
 
   $result = $trait->redirectPath($action);
 
@@ -50,8 +42,13 @@ it('uses redirectTo property when method not available', function (): void {
 });
 
 it('uses fortify home config when no redirectTo', function (): void {
-  $trait = new TestRedirectsActions;
-  $action = new ActionWithoutRedirect;
+  $trait = new class
+  {
+    use RedirectsActions;
+  };
+  $action = new class
+  {
+  };
 
   $result = $trait->redirectPath($action);
 
@@ -59,7 +56,10 @@ it('uses fortify home config when no redirectTo', function (): void {
 });
 
 it('returns response directly when redirectTo returns Response', function (): void {
-  $trait = new TestRedirectsActions;
+  $trait = new class
+  {
+    use RedirectsActions;
+  };
   $action = new class
   {
     public function redirectTo(): Response
