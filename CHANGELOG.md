@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/druidweb/druid/compare/v1.4.1...v1.4.2) (2026-01-07)
+
+
+### Code Refactoring
+
+* remove locks from open source ([57cce87](https://github.com/druidweb/druid/commit/57cce87a92e2db28332d4eb83ad7aac5bd17bee0))
+
 ## [1.4.1](https://github.com/druidweb/druid/compare/v1.4.0...v1.4.1) (2026-01-07)
 
 
