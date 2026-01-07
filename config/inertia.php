@@ -14,7 +14,7 @@ return [
    * See: https://inertiajs.com/server-side-rendering
    */
   'ssr' => [
-    'enabled' => true,
+    'enabled' => env('INERTIA_SSR_ENABLED', true),
     'url' => 'http://127.0.0.1:13714',
     // 'bundle' => base_path('bootstrap/ssr/ssr.mjs'),
   ],

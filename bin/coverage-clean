@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+
+$file = $argv[1] ?? 'coverage.xml';
+
+file_exists($file) || exit("Coverage file not found: {$file}\n");
+
+file_put_contents($file, str_replace(
+  [getcwd().'/app/', 'app/'],
+  ['', ''],
+  file_get_contents($file)
+));
+
+echo "✓ Cleaned paths in {$file}\n";

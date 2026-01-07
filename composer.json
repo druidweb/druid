@@ -78,7 +78,7 @@
       "bun run format:check"
     ],
     "test:feat": "./vendor/bin/pest --parallel",
-    "test:coverage": "./vendor/bin/pest --parallel --coverage --min=100.0",
+    "test:coverage": "./vendor/bin/pest --parallel --coverage --coverage-clover=coverage.xml --min=100.0; php bin/coverage-clean",
     "test:static": "./vendor/bin/phpstan analyze",
     "test": [
       "@test:types",
