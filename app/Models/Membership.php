@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Membership extends Pivot
 {
+  /** @phpstan-ignore missingType.generics */
   use HasFactory;
 
   /**

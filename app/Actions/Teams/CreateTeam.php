@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Teams;
 
 use App\Contracts\CreatesTeams;
@@ -27,10 +29,13 @@ class CreateTeam implements CreatesTeams
 
     event(new AddingTeam($user));
 
-    $user->switchTeam($team = $user->ownedTeams()->create([
+    /** @var Team $team */
+    $team = $user->ownedTeams()->create([
       'name' => $input['name'],
       'personal_team' => false,
-    ]));
+    ]);
+
+    $user->switchTeam($team);
 
     return $team;
   }

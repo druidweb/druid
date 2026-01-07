@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { destroy, store, update } from '@/routes/api-tokens';
 import { useForm } from '@inertiajs/vue3';
 import { Check, Copy } from 'lucide-vue-next';
-import { onMounted, ref, Transition, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const copied = ref(false);
 

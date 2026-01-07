@@ -10,12 +10,13 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Fortify\Features;
-use Spatie\RouteDiscovery\Attributes\Route;
 
 final class TwoFactorAuthenticationController implements HasMiddleware
 {
   /**
    * Get the middleware that should be assigned to the controller.
+   *
+   * @return array<int, mixed>
    */
   public static function middleware(): array
   {
@@ -25,7 +26,6 @@ final class TwoFactorAuthenticationController implements HasMiddleware
   /**
    * Show the user's two-factor authentication settings page.
    */
-  #[Route('settings/two-factor', name: 'two-factor.show', middleware: ['auth'])]
   public function show(TwoFactorAuthenticationRequest $request): Response
   {
     $request->ensureStateIsValid();

@@ -15,7 +15,7 @@ class Agent extends MobileDetect
    *
    * @var array<string, string>
    */
-  protected static $additionalOperatingSystems = [
+  protected static array $additionalOperatingSystems = [
     'Windows' => 'Windows',
     'Windows NT' => 'Windows NT',
     'OS X' => 'Mac OS X',
@@ -32,7 +32,7 @@ class Agent extends MobileDetect
    *
    * @var array<string, string>
    */
-  protected static $additionalBrowsers = [
+  protected static array $additionalBrowsers = [
     'Opera Mini' => 'Opera Mini',
     'Opera' => 'Opera|OPR',
     'Edge' => 'Edge|Edg',
@@ -53,40 +53,51 @@ class Agent extends MobileDetect
    *
    * @var array<string, mixed>
    */
-  protected $store = [];
+  protected array $store = [];
 
   /**
    * Get the platform name from the User Agent.
-   *
-   * @return string|null
    */
-  public function platform()
+  public function platform(): ?string
   {
-    return $this->retrieveUsingCacheOrResolve('teams.platform', fn () => $this->findDetectionRulesAgainstUserAgent(
-      $this->mergeRules(MobileDetect::getOperatingSystems(), static::$additionalOperatingSystems)
-    ));
+    /** @var string|null $result */
+    $result = $this->retrieveUsingCacheOrResolve('teams.platform', function (): ?string {
+      /** @var array<string, string> $os */
+      $os = MobileDetect::getOperatingSystems();
+
+      return $this->findDetectionRulesAgainstUserAgent(
+        array_merge($os, static::$additionalOperatingSystems)
+      );
+    });
+
+    return $result;
   }
 
   /**
    * Get the browser name from the User Agent.
-   *
-   * @return string|null
    */
-  public function browser()
+  public function browser(): ?string
   {
-    return $this->retrieveUsingCacheOrResolve('teams.browser', fn () => $this->findDetectionRulesAgainstUserAgent(
-      $this->mergeRules(static::$additionalBrowsers, MobileDetect::getBrowsers())
-    ));
+    /** @var string|null $result */
+    $result = $this->retrieveUsingCacheOrResolve('teams.browser', function (): ?string {
+      /** @var array<string, string> $browsers */
+      $browsers = MobileDetect::getBrowsers();
+
+      return $this->findDetectionRulesAgainstUserAgent(
+        array_merge(static::$additionalBrowsers, $browsers)
+      );
+    });
+
+    return $result;
   }
 
   /**
    * Determine if the device is a desktop computer.
-   *
-   * @return bool
    */
-  public function isDesktop()
+  public function isDesktop(): bool
   {
-    return $this->retrieveUsingCacheOrResolve('teams.desktop', function (): bool {
+    /** @var bool $result */
+    $result = $this->retrieveUsingCacheOrResolve('teams.desktop', function (): bool {
       // Check specifically for cloudfront headers if the useragent === 'Amazon CloudFront'
       if (
         $this->getUserAgent() === static::$cloudFrontUA
@@ -97,14 +108,16 @@ class Agent extends MobileDetect
 
       return ! $this->isMobile() && ! $this->isTablet();
     });
+
+    return $result;
   }
 
   /**
    * Match a detection rule and return the matched key.
    *
-   * @return string|null
+   * @param  array<string, string>  $rules
    */
-  protected function findDetectionRulesAgainstUserAgent(array $rules)
+  protected function findDetectionRulesAgainstUserAgent(array $rules): ?string
   {
     $userAgent = $this->getUserAgent();
 
@@ -113,8 +126,14 @@ class Agent extends MobileDetect
         continue;
       }
 
-      if ($this->match($regex, $userAgent)) {
-        return $key ?: reset($this->matchesArray);
+      if ($this->match($regex, $userAgent ?? '')) {
+        if ($key !== '') {
+          return $key;
+        }
+        /** @var string|false $match */
+        $match = reset($this->matchesArray);
+
+        return $match !== false ? $match : null;
       }
     }
 
@@ -123,11 +142,8 @@ class Agent extends MobileDetect
 
   /**
    * Retrieve from the given key from the cache or resolve the value.
-   *
-   * @param  Closure  $callback
-   * @return mixed
    */
-  protected function retrieveUsingCacheOrResolve(string $key, Closure $callback)
+  protected function retrieveUsingCacheOrResolve(string $key, Closure $callback): mixed
   {
     $cacheKey = $this->createCacheKey($key);
 
@@ -135,7 +151,7 @@ class Agent extends MobileDetect
       return $cacheItem;
     }
 
-    return tap(call_user_func($callback), function ($result) use ($cacheKey): void {
+    return tap(call_user_func($callback), function (mixed $result) use ($cacheKey): void {
       $this->store[$cacheKey] = $result;
     });
   }
@@ -143,19 +159,18 @@ class Agent extends MobileDetect
   /**
    * Merge multiple rules into one array.
    *
-   * @param  array  $all
+   * @param  array<string, string>  ...$all
    * @return array<string, string>
    */
   protected function mergeRules(...$all): array
   {
+    /** @var array<string, string> $merged */
     $merged = [];
 
     foreach ($all as $rules) {
       foreach ($rules as $key => $value) {
         if (empty($merged[$key])) {
           $merged[$key] = $value;
-        } elseif (is_array($merged[$key])) {
-          $merged[$key][] = $value;
         } else {
           $merged[$key] .= '|'.$value;
         }

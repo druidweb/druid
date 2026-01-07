@@ -32,7 +32,7 @@ class Team extends Model
   /**
    * The attributes that are mass assignable.
    *
-   * @var array<int, string>
+   * @var list<string>
    */
   protected $fillable = [
     'name',
@@ -65,88 +65,101 @@ class Team extends Model
   /**
    * Get the owner of the team.
    *
-   * @return BelongsTo
+   * @return BelongsTo<User, $this>
    */
-  public function owner()
+  public function owner(): BelongsTo
   {
-    return $this->belongsTo(Teams::userModel(), 'user_id');
+    /** @var class-string<User> $userModel */
+    $userModel = Teams::userModel();
+
+    /** @var BelongsTo<User, $this> */
+    return $this->belongsTo($userModel, 'user_id');
   }
 
   /**
    * Get all of the team's users including its owner.
    *
-   * @return Collection
+   * @return Collection<int, User>
    */
-  public function allUsers()
+  public function allUsers(): Collection
   {
-    return $this->users->merge([$this->owner]);
+    /** @var User|null $owner */
+    $owner = $this->owner;
+
+    return $this->users->merge($owner ? [$owner] : []);
   }
 
   /**
    * Get all of the users that belong to the team.
    *
-   * @return BelongsToMany
+   * @return BelongsToMany<User, $this>
    */
-  public function users()
+  public function users(): BelongsToMany
   {
-    return $this->belongsToMany(Teams::userModel(), Teams::membershipModel())
+    /** @var class-string<User> $userModel */
+    $userModel = Teams::userModel();
+
+    /** @var BelongsToMany<User, $this> $relation */
+    $relation = $this->belongsToMany($userModel, Teams::membershipModel())
       ->withPivot('role')
       ->withTimestamps()
       ->as('membership');
+
+    return $relation;
   }
 
   /**
    * Determine if the given user belongs to the team.
-   *
-   * @param  User  $user
    */
-  public function hasUser($user): bool
+  public function hasUser(mixed $user): bool
   {
-    if ($this->users->contains($user)) {
+    if ($user instanceof User && $this->users->contains('id', $user->id)) {
       return true;
     }
 
+    /** @var User $user */
     return $user->ownsTeam($this);
   }
 
   /**
    * Determine if the given email address belongs to a user on the team.
-   *
-   * @return bool
    */
-  public function hasUserWithEmail(string $email)
+  public function hasUserWithEmail(string $email): bool
   {
-    return $this->allUsers()->contains(fn ($user): bool => $user->email === $email);
+    return $this->allUsers()->contains(fn (mixed $user): bool => $user->email === $email);
   }
 
   /**
    * Determine if the given user has the given permission on the team.
-   *
-   * @param  User  $user
-   * @return bool
    */
-  public function userHasPermission($user, string $permission)
+  public function userHasPermission(mixed $user, string $permission): bool
   {
+    /** @var User $user */
     return $user->hasTeamPermission($this, $permission);
   }
 
   /**
    * Get all of the pending user invitations for the team.
    *
-   * @return HasMany
+   * @return HasMany<TeamInvitation, $this>
    */
-  public function teamInvitations()
+  public function teamInvitations(): HasMany
   {
-    return $this->hasMany(Teams::teamInvitationModel());
+    /** @var class-string<TeamInvitation> $model */
+    $model = Teams::teamInvitationModel();
+
+    /** @var HasMany<TeamInvitation, $this> $relation */
+    $relation = $this->hasMany($model);
+
+    return $relation;
   }
 
   /**
    * Remove the given user from the team.
-   *
-   * @param  User  $user
    */
-  public function removeUser($user): void
+  public function removeUser(mixed $user): void
   {
+    /** @var User $user */
     if ($user->current_team_id === $this->id) {
       $user->forceFill([
         'current_team_id' => null,

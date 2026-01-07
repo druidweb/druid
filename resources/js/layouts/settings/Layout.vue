@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SectionLayout from '@/layouts/SectionLayout.vue';
 import { edit as editAppearance } from '@/routes/appearance';
+import { index as browserSessions } from '@/routes/other-browser-sessions';
 import { edit as editPassword } from '@/routes/password';
 import { edit as editProfile } from '@/routes/profile';
 import { show } from '@/routes/two-factor';
@@ -18,6 +19,10 @@ const navItems: NavItem[] = [
   {
     title: 'Two-Factor Auth',
     href: show(),
+  },
+  {
+    title: 'Browser Sessions',
+    href: browserSessions(),
   },
   {
     title: 'Appearance',

@@ -1,24 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Settings;
 
+use Illuminate\Auth\SessionGuard;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
+use Inertia\Response;
 use Laravel\Fortify\Actions\ConfirmPassword;
 
-class OtherBrowserSessionsController extends Controller
+class OtherBrowserSessionsController
 {
+  /**
+   * Show the browser sessions page.
+   */
+  public function index(): Response
+  {
+    return Inertia::render('settings/Sessions');
+  }
+
   /**
    * Log out from other browser sessions.
    */
   public function destroy(Request $request, StatefulGuard $guard): RedirectResponse
   {
-    $confirmed = app(ConfirmPassword::class)(
-      $guard, $request->user(), $request->password
+    /** @var ConfirmPassword $confirmPassword */
+    $confirmPassword = resolve(ConfirmPassword::class);
+
+    /** @var string|null $password */
+    $password = $request->password;
+
+    $confirmed = $confirmPassword(
+      $guard, $request->user(), $password
     );
 
     if (! $confirmed) {
@@ -27,27 +44,9 @@ class OtherBrowserSessionsController extends Controller
       ]);
     }
 
-    $guard->logoutOtherDevices($request->password);
-
-    $this->deleteOtherSessionRecords($request);
+    /** @var SessionGuard $guard */
+    $guard->logoutOtherDevices((string) $password);
 
     return back(303);
-  }
-
-  /**
-   * Delete the other browser session records from storage.
-   *
-   * @return void
-   */
-  protected function deleteOtherSessionRecords(Request $request)
-  {
-    if (config('session.driver') !== 'database') {
-      return;
-    }
-
-    DB::connection(config('session.connection'))->table(config('session.table', 'sessions'))
-      ->where('user_id', $request->user()->getAuthIdentifier())
-      ->where('id', '!=', $request->session()->getId())
-      ->delete();
   }
 }

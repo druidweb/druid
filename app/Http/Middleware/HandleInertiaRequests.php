@@ -9,6 +9,8 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\ViewErrorBag;
 use Inertia\Middleware;
 use Laravel\Fortify\Features;
 
@@ -80,7 +82,8 @@ class HandleInertiaRequests extends Middleware
           $userHasTeamFeatures = Teams::userHasTeamFeatures($user);
 
           if ($userHasTeamFeatures) {
-            $user->currentTeam;
+            // Load the current team relationship
+            $user->load('currentTeam');
           }
 
           return array_merge($user->toArray(), array_filter([
@@ -91,7 +94,19 @@ class HandleInertiaRequests extends Middleware
           ]);
         },
       ],
-      'errorBags' => fn () => collect(Session::get('errors')?->getBags() ?: [])->mapWithKeys(fn ($bag, $key): array => [$key => $bag->messages()])->all(),
+      'errorBags' => function () {
+        /** @var ViewErrorBag|null $errors */
+        $errors = Session::get('errors');
+        $bags = $errors?->getBags() ?? [];
+
+        /** @var array<string, array<string, array<string>>> $result */
+        $result = collect($bags)->mapWithKeys(
+          /** @phpstan-ignore argument.type */
+          fn (MessageBag $bag, string $key): array => [$key => $bag->messages()]
+        )->all();
+
+        return $result;
+      },
       'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
     ]);
   }

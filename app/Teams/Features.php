@@ -9,7 +9,10 @@ class Features
    */
   public static function enabled(string $feature): bool
   {
-    return in_array($feature, config('teams.features', []));
+    /** @var array<int, string> $features */
+    $features = config('teams.features', []);
+
+    return in_array($feature, $features);
   }
 
   /**
@@ -23,60 +26,48 @@ class Features
 
   /**
    * Determine if the application is allowing profile photo uploads.
-   *
-   * @return bool
    */
-  public static function managesProfilePhotos()
+  public static function managesProfilePhotos(): bool
   {
     return static::enabled(static::profilePhotos());
   }
 
   /**
    * Determine if the application is using any API features.
-   *
-   * @return bool
    */
-  public static function hasApiFeatures()
+  public static function hasApiFeatures(): bool
   {
     return static::enabled(static::api());
   }
 
   /**
    * Determine if the application is using any team features.
-   *
-   * @return bool
    */
-  public static function hasTeamFeatures()
+  public static function hasTeamFeatures(): bool
   {
     return static::enabled(static::teams());
   }
 
   /**
    * Determine if invitations are sent to team members.
-   *
-   * @return bool
    */
-  public static function sendsTeamInvitations()
+  public static function sendsTeamInvitations(): bool
   {
     return static::optionEnabled(static::teams(), 'invitations');
   }
 
   /**
    * Determine if the application has terms of service / privacy policy confirmation enabled.
-   *
-   * @return bool
    */
-  public static function hasTermsAndPrivacyPolicyFeature()
+  public static function hasTermsAndPrivacyPolicyFeature(): bool
   {
     return static::enabled(static::termsAndPrivacyPolicy());
   }
 
   /**
    * Determine if the application is using any account deletion features.
-   *
-   * @return bool
    */
-  public static function hasAccountDeletionFeatures()
+  public static function hasAccountDeletionFeatures(): bool
   {
     return static::enabled(static::accountDeletion());
   }
@@ -99,6 +90,8 @@ class Features
 
   /**
    * Enable the teams feature.
+   *
+   * @param  array<string, mixed>  $options
    */
   public static function teams(array $options = []): string
   {

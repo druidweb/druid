@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;
 
 /**
- * @method Model create(User $user, array $input)
+ * @method Model create(User $user, array<string, mixed> $input)
  */
 interface CreatesTeams
 {

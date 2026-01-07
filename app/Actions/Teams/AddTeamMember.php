@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Teams;
 
 use App\Contracts\AddsTeamMembers;
@@ -54,7 +56,7 @@ class AddTeamMember implements AddsTeamMembers
   /**
    * Get the validation rules for adding a team member.
    *
-   * @return array<string, Rule|array|string>
+   * @return array<string, Rule|array<int, mixed>|string>
    */
   protected function rules(): array
   {
@@ -71,7 +73,8 @@ class AddTeamMember implements AddsTeamMembers
    */
   protected function ensureUserIsNotAlreadyOnTeam(Team $team, string $email): Closure
   {
-    return function ($validator) use ($team, $email): void {
+    return function (mixed $validator) use ($team, $email): void {
+      /** @var \Illuminate\Validation\Validator $validator */
       $validator->errors()->addIf(
         $team->hasUserWithEmail($email),
         'email',

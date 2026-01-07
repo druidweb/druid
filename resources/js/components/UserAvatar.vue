@@ -37,4 +37,3 @@ const sizeClasses = computed(() => {
     </AvatarFallback>
   </Avatar>
 </template>
-

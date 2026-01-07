@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Teams;
 
 use App\Contracts\AddsTeamMembers;
+use App\Models\Team;
+use App\Models\TeamInvitation;
+use App\Models\User;
 use App\Teams\Teams;
+use Closure;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,59 +21,77 @@ class TeamInvitationController implements HasMiddleware
   /**
    * Get the middleware that should be assigned to the controller.
    *
-   * @return array<int, Middleware|string>
+   * @return array<int, Middleware|Closure|string>
    */
   public static function middleware(): array
   {
     return [
-      function (Request $request, callable $next): HttpResponse {
-        if (! Teams::hasTeamFeatures()) {
-          abort(HttpResponse::HTTP_FORBIDDEN);
-        }
+      static function (Request $request, callable $next): HttpResponse {
+        abort_unless(Teams::hasTeamFeatures(), HttpResponse::HTTP_FORBIDDEN);
 
-        return $next($request);
+        /** @var HttpResponse $response */
+        $response = $next($request);
+
+        return $response;
       },
     ];
   }
 
   /**
    * Accept a team invitation.
-   *
-   * @param  int  $invitationId
-   * @return RedirectResponse
    */
-  public function accept(Request $request, $invitationId)
+  public function accept(Request $request, int $invitationId): RedirectResponse
   {
+    /** @var class-string<TeamInvitation> $model */
     $model = Teams::teamInvitationModel();
 
-    $invitation = $model::whereKey($invitationId)->firstOrFail();
+    /** @var TeamInvitation $invitation */
+    $invitation = $model::query()->whereKey($invitationId)->firstOrFail();
 
-    app(AddsTeamMembers::class)->add(
-      $invitation->team->owner,
-      $invitation->team,
+    /** @var AddsTeamMembers $adder */
+    $adder = resolve(AddsTeamMembers::class);
+
+    /** @var Team $team */
+    $team = $invitation->team;
+
+    /** @var User $owner */
+    $owner = $team->owner;
+
+    $adder->add(
+      $owner,
+      $team,
       $invitation->email,
       $invitation->role
     );
 
     $invitation->delete();
 
-    return redirect(config('fortify.home'))->banner(
-      __('Great! You have accepted the invitation to join the :team team.', ['team' => $invitation->team->name]),
-    );
+    /** @var string $home */
+    $home = config('fortify.home', '/');
+
+    $request->session()->flash('flash.banner', __('Great! You have accepted the invitation to join the :team team.', ['team' => $team->name]));
+
+    return redirect()->to($home);
   }
 
   /**
    * Cancel the given team invitation.
-   *
-   * @param  int  $invitationId
    */
-  public function destroy(Request $request, $invitationId): RedirectResponse
+  public function destroy(Request $request, int $invitationId): RedirectResponse
   {
+    /** @var class-string<TeamInvitation> $model */
     $model = Teams::teamInvitationModel();
 
-    $invitation = $model::whereKey($invitationId)->firstOrFail();
+    /** @var TeamInvitation $invitation */
+    $invitation = $model::query()->whereKey($invitationId)->firstOrFail();
 
-    throw_unless(Gate::forUser($request->user())->check('removeTeamMember', $invitation->team), AuthorizationException::class);
+    /** @var User $user */
+    $user = $request->user();
+
+    /** @var Team $team */
+    $team = $invitation->team;
+
+    throw_unless(Gate::forUser($user)->check('removeTeamMember', $team), AuthorizationException::class);
 
     $invitation->delete();
 

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Concerns\HasProfilePhoto;
 use App\Concerns\HasTeams;
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +19,10 @@ use Zen\Snowflake\Concerns\HasSnowflakePrimary;
 class User extends Authenticatable implements MustVerifyEmail
 {
   use HasApiTokens;
+
+  /** @use HasFactory<UserFactory> */
   use HasFactory;
+
   use HasProfilePhoto;
   use HasSnowflakePrimary;
   use HasTeams;
@@ -59,7 +63,7 @@ class User extends Authenticatable implements MustVerifyEmail
   /**
    * The accessors to append to the model's array form.
    *
-   * @var array<int, string>
+   * @var list<string>
    */
   protected $appends = [
     'profile_photo_url',

@@ -13,28 +13,21 @@ class TeamInvitation extends Mailable
   use Queueable, SerializesModels;
 
   /**
-   * The team invitation instance.
-   *
-   * @var \App\Models\TeamInvitation
-   */
-  public $invitation;
-
-  /**
    * Create a new message instance.
    *
    * @return void
    */
-  public function __construct(TeamInvitationModel $invitation)
-  {
-    $this->invitation = $invitation;
-  }
+  public function __construct(
+    /**
+     * The team invitation instance.
+     */
+    public TeamInvitationModel $invitation
+  ) {}
 
   /**
    * Build the message.
-   *
-   * @return $this
    */
-  public function build()
+  public function build(): static
   {
     return $this->markdown('emails.team-invitation', ['acceptUrl' => URL::signedRoute('team-invitations.accept', [
       'invitation' => $this->invitation,

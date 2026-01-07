@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { update } from '@/routes/teams';
 import { useForm } from '@inertiajs/vue3';
-import { Transition } from 'vue';
 
 interface Team {
   id: number;

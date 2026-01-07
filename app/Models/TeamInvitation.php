@@ -10,7 +10,9 @@ use Zen\Snowflake\Concerns\HasSnowflakePrimary;
 
 class TeamInvitation extends Model
 {
+  /** @phpstan-ignore missingType.generics */
   use HasFactory;
+
   use HasSnowflakePrimary;
 
   /**
@@ -23,7 +25,7 @@ class TeamInvitation extends Model
   /**
    * The attributes that are mass assignable.
    *
-   * @var array
+   * @var list<string>
    */
   protected $fillable = [
     'email',
@@ -33,10 +35,14 @@ class TeamInvitation extends Model
   /**
    * Get the team that the invitation belongs to.
    *
-   * @return BelongsTo
+   * @return BelongsTo<Team, $this>
    */
-  public function team()
+  public function team(): BelongsTo
   {
-    return $this->belongsTo(Teams::teamModel());
+    /** @var class-string<Team> $teamModel */
+    $teamModel = Teams::teamModel();
+
+    /** @var BelongsTo<Team, $this> */
+    return $this->belongsTo($teamModel);
   }
 }

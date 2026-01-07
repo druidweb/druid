@@ -7,7 +7,10 @@ use App\Concerns\RedirectsActions;
 use App\Contracts\CreatesTeams;
 use App\Contracts\DeletesTeams;
 use App\Contracts\UpdatesTeamNames;
+use App\Models\Team;
+use App\Models\User;
 use App\Teams\Teams;
+use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -25,29 +28,28 @@ class TeamController implements HasMiddleware
   /**
    * Get the middleware that should be assigned to the controller.
    *
-   * @return array<int, Middleware|string>
+   * @return array<int, Middleware|Closure|string>
    */
   public static function middleware(): array
   {
     return [
-      function (Request $request, callable $next): HttpResponse {
-        if (! Teams::hasTeamFeatures()) {
-          abort(HttpResponse::HTTP_FORBIDDEN);
-        }
+      static function (Request $request, callable $next): HttpResponse {
+        abort_unless(Teams::hasTeamFeatures(), HttpResponse::HTTP_FORBIDDEN);
 
-        return $next($request);
+        /** @var HttpResponse $response */
+        $response = $next($request);
+
+        return $response;
       },
     ];
   }
 
   /**
    * Show the team management screen.
-   *
-   * @param  int  $teamId
-   * @return \Inertia\Response
    */
-  public function show(Request $request, $teamId)
+  public function show(Request $request, int $teamId): \Inertia\Response
   {
+    /** @var Team $team */
     $team = Teams::newTeamModel()->findOrFail($teamId);
 
     Gate::authorize('view', $team);
@@ -69,10 +71,8 @@ class TeamController implements HasMiddleware
 
   /**
    * Show the team creation screen.
-   *
-   * @return \Inertia\Response
    */
-  public function create(Request $request)
+  public function create(Request $request): \Inertia\Response
   {
     Gate::authorize('create', Teams::newTeamModel());
 
@@ -81,45 +81,60 @@ class TeamController implements HasMiddleware
 
   /**
    * Create a new team.
-   *
-   * @return RedirectResponse
    */
   public function store(Request $request): Response|Redirector|RedirectResponse
   {
-    $creator = app(CreatesTeams::class);
+    /** @var CreatesTeams $creator */
+    $creator = resolve(CreatesTeams::class);
 
-    $creator->create($request->user(), $request->all());
+    /** @var User $user */
+    $user = $request->user();
+
+    /** @var array<string, mixed> $input */
+    $input = $request->all();
+    $creator->create($user, $input);
 
     return $this->redirectPath($creator);
   }
 
   /**
    * Update the given team's name.
-   *
-   * @param  int  $teamId
    */
-  public function update(Request $request, $teamId): RedirectResponse
+  public function update(Request $request, int $teamId): RedirectResponse
   {
+    /** @var Team $team */
     $team = Teams::newTeamModel()->findOrFail($teamId);
 
-    app(UpdatesTeamNames::class)->update($request->user(), $team, $request->all());
+    /** @var User $user */
+    $user = $request->user();
+
+    /** @var UpdatesTeamNames $updater */
+    $updater = resolve(UpdatesTeamNames::class);
+
+    /** @var array<string, mixed> $input */
+    $input = $request->all();
+    $updater->update($user, $team, $input);
 
     return back(303);
   }
 
   /**
    * Delete the given team.
-   *
-   * @param  int  $teamId
-   * @return RedirectResponse
    */
-  public function destroy(Request $request, $teamId): Response|Redirector|RedirectResponse
+  public function destroy(Request $request, int $teamId): Response|Redirector|RedirectResponse
   {
+    /** @var Team $team */
     $team = Teams::newTeamModel()->findOrFail($teamId);
 
-    app(ValidateTeamDeletion::class)->validate($request->user(), $team);
+    /** @var User $user */
+    $user = $request->user();
 
-    $deleter = app(DeletesTeams::class);
+    /** @var ValidateTeamDeletion $validator */
+    $validator = resolve(ValidateTeamDeletion::class);
+    $validator->validate($user, $team);
+
+    /** @var DeletesTeams $deleter */
+    $deleter = resolve(DeletesTeams::class);
 
     $deleter->delete($team);
 

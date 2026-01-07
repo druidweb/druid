@@ -9,7 +9,7 @@ import { destroy as destroyInvitation } from '@/routes/team-invitations';
 import { destroy as destroyMember, store as storeMember, update as updateMember } from '@/routes/team-members';
 import { router, useForm, usePage } from '@inertiajs/vue3';
 import { CheckCircle2 } from 'lucide-vue-next';
-import { ref, Transition } from 'vue';
+import { ref } from 'vue';
 
 interface Role {
   key: string;

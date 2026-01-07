@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Teams;
 
 use App\Contracts\InvitesTeamMembers;
@@ -29,6 +31,7 @@ class InviteTeamMember implements InvitesTeamMembers
 
     event(new InvitingTeamMember($team, $email, $role));
 
+    /** @var \App\Models\TeamInvitation $invitation */
     $invitation = $team->teamInvitations()->create([
       'email' => $email,
       'role' => $role,
@@ -55,7 +58,7 @@ class InviteTeamMember implements InvitesTeamMembers
   /**
    * Get the validation rules for inviting a team member.
    *
-   * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+   * @return array<string, \Illuminate\Contracts\Validation\Rule|array<int, mixed>|string>
    */
   protected function rules(Team $team): array
   {
@@ -77,7 +80,8 @@ class InviteTeamMember implements InvitesTeamMembers
    */
   protected function ensureUserIsNotAlreadyOnTeam(Team $team, string $email): Closure
   {
-    return function ($validator) use ($team, $email): void {
+    return function (mixed $validator) use ($team, $email): void {
+      /** @var \Illuminate\Validation\Validator $validator */
       $validator->errors()->addIf(
         $team->hasUserWithEmail($email),
         'email',

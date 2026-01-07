@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Teams;
 
 use App\Contracts\RemovesTeamMembers;
@@ -32,7 +34,7 @@ class RemoveTeamMember implements RemovesTeamMembers
   protected function authorize(User $user, Team $team, User $teamMember): void
   {
     throw_if(! Gate::forUser($user)->check('removeTeamMember', $team) &&
-        $user->id !== $teamMember->id, AuthorizationException::class);
+        (string) $user->id !== (string) $teamMember->id, AuthorizationException::class);
   }
 
   /**
@@ -40,7 +42,9 @@ class RemoveTeamMember implements RemovesTeamMembers
    */
   protected function ensureUserDoesNotOwnTeam(User $teamMember, Team $team): void
   {
-    if ($teamMember->id === $team->owner->id) {
+    /** @var User|null $owner */
+    $owner = $team->owner;
+    if ($owner && (string) $teamMember->id === (string) $owner->id) {
       throw ValidationException::withMessages([
         'team' => [__('You may not leave a team that you created.')],
       ])->errorBag('removeTeamMember');

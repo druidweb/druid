@@ -6,8 +6,11 @@ use App\Actions\Teams\UpdateTeamMemberRole;
 use App\Contracts\AddsTeamMembers;
 use App\Contracts\InvitesTeamMembers;
 use App\Contracts\RemovesTeamMembers;
+use App\Models\Team;
+use App\Models\User;
 use App\Teams\Features;
 use App\Teams\Teams;
+use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -20,43 +23,56 @@ class TeamMemberController implements HasMiddleware
   /**
    * Get the middleware that should be assigned to the controller.
    *
-   * @return array<int, Middleware|string>
+   * @return array<int, Middleware|Closure|string>
    */
   public static function middleware(): array
   {
     return [
-      function (Request $request, callable $next): HttpResponse {
-        if (! Teams::hasTeamFeatures()) {
-          abort(HttpResponse::HTTP_FORBIDDEN);
-        }
+      static function (Request $request, callable $next): HttpResponse {
+        abort_unless(Teams::hasTeamFeatures(), HttpResponse::HTTP_FORBIDDEN);
 
-        return $next($request);
+        /** @var HttpResponse $response */
+        $response = $next($request);
+
+        return $response;
       },
     ];
   }
 
   /**
    * Add a new team member to a team.
-   *
-   * @param  int  $teamId
    */
-  public function store(Request $request, $teamId): RedirectResponse
+  public function store(Request $request, int $teamId): RedirectResponse
   {
+    /** @var Team $team */
     $team = Teams::newTeamModel()->findOrFail($teamId);
 
+    /** @var User $user */
+    $user = $request->user();
+
+    /** @var string $email */
+    $email = $request->email ?: '';
+
+    /** @var string|null $role */
+    $role = $request->role;
+
     if (Features::sendsTeamInvitations()) {
-      app(InvitesTeamMembers::class)->invite(
-        $request->user(),
+      /** @var InvitesTeamMembers $inviter */
+      $inviter = resolve(InvitesTeamMembers::class);
+      $inviter->invite(
+        $user,
         $team,
-        $request->email ?: '',
-        $request->role
+        $email,
+        $role
       );
     } else {
-      app(AddsTeamMembers::class)->add(
-        $request->user(),
+      /** @var AddsTeamMembers $adder */
+      $adder = resolve(AddsTeamMembers::class);
+      $adder->add(
+        $user,
         $team,
-        $request->email ?: '',
-        $request->role
+        $email,
+        $role
       );
     }
 
@@ -65,17 +81,26 @@ class TeamMemberController implements HasMiddleware
 
   /**
    * Update the given team member's role.
-   *
-   * @param  int  $teamId
-   * @param  int  $userId
    */
-  public function update(Request $request, $teamId, $userId): RedirectResponse
+  public function update(Request $request, int $teamId, int $userId): RedirectResponse
   {
-    app(UpdateTeamMemberRole::class)->update(
-      $request->user(),
-      Teams::newTeamModel()->findOrFail($teamId),
+    /** @var User $user */
+    $user = $request->user();
+
+    /** @var Team $team */
+    $team = Teams::newTeamModel()->findOrFail($teamId);
+
+    /** @var UpdateTeamMemberRole $updater */
+    $updater = resolve(UpdateTeamMemberRole::class);
+
+    /** @var string $role */
+    $role = $request->role;
+
+    $updater->update(
+      $user,
+      $team,
       $userId,
-      $request->role
+      $role
     );
 
     return back(303);
@@ -83,23 +108,31 @@ class TeamMemberController implements HasMiddleware
 
   /**
    * Remove the given user from the given team.
-   *
-   * @param  int  $teamId
-   * @param  int  $userId
-   * @return RedirectResponse
    */
-  public function destroy(Request $request, $teamId, $userId): Redirector|RedirectResponse
+  public function destroy(Request $request, int $teamId, int $userId): Redirector|RedirectResponse
   {
+    /** @var Team $team */
     $team = Teams::newTeamModel()->findOrFail($teamId);
 
-    app(RemovesTeamMembers::class)->remove(
-      $request->user(),
+    /** @var User $currentUser */
+    $currentUser = $request->user();
+
+    /** @var User $user */
+    $user = Teams::findUserByIdOrFail($userId);
+
+    /** @var RemovesTeamMembers $remover */
+    $remover = resolve(RemovesTeamMembers::class);
+    $remover->remove(
+      $currentUser,
       $team,
-      $user = Teams::findUserByIdOrFail($userId)
+      $user
     );
 
-    if ($request->user()->id === $user->id) {
-      return redirect(config('fortify.home'));
+    if ((int) $currentUser->id === (int) $user->id) {
+      /** @var string|null $home */
+      $home = config('fortify.home');
+
+      return redirect($home);
     }
 
     return back(303);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Models\User;
 use App\Teams\Teams;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,16 +13,14 @@ class ProfilePhotoController extends Controller
 {
   /**
    * Delete the current user's profile photo.
-   *
-   * @return RedirectResponse
    */
-  public function destroy(Request $request)
+  public function destroy(Request $request): RedirectResponse
   {
-    if (! Teams::managesProfilePhotos()) {
-      abort(Response::HTTP_FORBIDDEN);
-    }
+    abort_unless(Teams::managesProfilePhotos(), Response::HTTP_FORBIDDEN);
 
-    $request->user()->deleteProfilePhoto();
+    /** @var User $user */
+    $user = $request->user();
+    $user->deleteProfilePhoto();
 
     return back(303)->with('status', 'profile-photo-deleted');
   }

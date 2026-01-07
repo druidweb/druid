@@ -14,65 +14,64 @@ use App\Models\Membership;
 use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 
 class Teams
 {
   /**
    * Indicates if Teams routes will be registered.
-   *
-   * @var bool
    */
-  public static $registersRoutes = true;
+  public static bool $registersRoutes = true;
 
   /**
    * The roles that are available to assign to users.
    *
-   * @var array
+   * @var array<string, Role>
    */
-  public static $roles = [];
+  public static array $roles = [];
 
   /**
    * The permissions that exist within the application.
    *
-   * @var array
+   * @var array<int, string>
    */
-  public static $permissions = [];
+  public static array $permissions = [];
 
   /**
    * The default permissions that should be available to new entities.
    *
-   * @var array
+   * @var array<int, string>
    */
-  public static $defaultPermissions = [];
+  public static array $defaultPermissions = [];
 
   /**
    * The user model that should be used by Teams.
    *
-   * @var string
+   * @var class-string
    */
-  public static $userModel = User::class;
+  public static string $userModel = User::class;
 
   /**
    * The team model that should be used by Teams.
    *
-   * @var string
+   * @var class-string
    */
-  public static $teamModel = Team::class;
+  public static string $teamModel = Team::class;
 
   /**
    * The membership model that should be used by Teams.
    *
-   * @var string
+   * @var class-string
    */
-  public static $membershipModel = Membership::class;
+  public static string $membershipModel = Membership::class;
 
   /**
    * The team invitation model that should be used by Teams.
    *
-   * @var string
+   * @var class-string
    */
-  public static $teamInvitationModel = TeamInvitation::class;
+  public static string $teamInvitationModel = TeamInvitation::class;
 
   /**
    * Determine if Teams has registered roles.
@@ -84,10 +83,8 @@ class Teams
 
   /**
    * Find the role with the given key.
-   *
-   * @return Role|null
    */
-  public static function findRole(string $key)
+  public static function findRole(string $key): ?Role
   {
     return static::$roles[$key] ?? null;
   }
@@ -95,17 +92,20 @@ class Teams
   /**
    * Define a role.
    *
-   * @return Role
+   * @param  array<int, string>  $permissions
    */
-  public static function role(string $key, string $name, array $permissions)
+  public static function role(string $key, string $name, array $permissions): Role
   {
-    static::$permissions = collect(array_merge(static::$permissions, $permissions))
+    /** @var array<int, string> $mergedPermissions */
+    $mergedPermissions = collect(array_merge(static::$permissions, $permissions))
       ->unique()
       ->sort()
       ->values()
       ->all();
 
-    return tap(new Role($key, $name, $permissions), function ($role) use ($key): void {
+    static::$permissions = $mergedPermissions;
+
+    return tap(new Role($key, $name, $permissions), function (Role $role) use ($key): void {
       static::$roles[$key] = $role;
     });
   }
@@ -120,69 +120,79 @@ class Teams
 
   /**
    * Define the available API token permissions.
+   *
+   * @param  array<int, string>  $permissions
    */
   public static function permissions(array $permissions): static
   {
+    /** @var array<int, string> $permissions */
     static::$permissions = $permissions;
 
+    /** @phpstan-ignore new.static */
     return new static;
   }
 
   /**
    * Define the default permissions that should be available to new API tokens.
+   *
+   * @param  array<int, string>  $permissions
    */
   public static function defaultApiTokenPermissions(array $permissions): static
   {
+    /** @var array<int, string> $permissions */
     static::$defaultPermissions = $permissions;
 
+    /** @phpstan-ignore new.static */
     return new static;
   }
 
   /**
    * Return the permissions in the given list that are actually defined permissions for the application.
+   *
+   * @param  array<int|string, mixed>  $permissions
+   * @return array<int, string>
    */
   public static function validPermissions(array $permissions): array
   {
-    return array_values(array_intersect($permissions, static::$permissions));
+    /** @var array<int, string> $result */
+    $result = array_values(array_intersect($permissions, static::$permissions));
+
+    return $result;
   }
 
   /**
    * Determine if Teams is managing profile photos.
-   *
-   * @return bool
    */
-  public static function managesProfilePhotos()
+  public static function managesProfilePhotos(): bool
   {
     return Features::managesProfilePhotos();
   }
 
   /**
    * Determine if Teams is supporting API features.
-   *
-   * @return bool
    */
-  public static function hasApiFeatures()
+  public static function hasApiFeatures(): bool
   {
     return Features::hasApiFeatures();
   }
 
   /**
    * Determine if Teams is supporting team features.
-   *
-   * @return bool
    */
-  public static function hasTeamFeatures()
+  public static function hasTeamFeatures(): bool
   {
     return Features::hasTeamFeatures();
   }
 
   /**
    * Determine if a given user model utilizes the "HasTeams" trait.
-   *
-   * @param  \Illuminate\Database\Eloquent\Model
    */
-  public static function userHasTeamFeatures($user): bool
+  public static function userHasTeamFeatures(mixed $user): bool
   {
+    if (! is_object($user) && ! is_string($user)) {
+      return false;
+    }
+
     return (array_key_exists(HasTeams::class, class_uses_recursive($user)) ||
             method_exists($user, 'currentTeam')) &&
             static::hasTeamFeatures();
@@ -190,20 +200,16 @@ class Teams
 
   /**
    * Determine if the application is using the terms confirmation feature.
-   *
-   * @return bool
    */
-  public static function hasTermsAndPrivacyPolicyFeature()
+  public static function hasTermsAndPrivacyPolicyFeature(): bool
   {
     return Features::hasTermsAndPrivacyPolicyFeature();
   }
 
   /**
    * Determine if the application is using any account deletion features.
-   *
-   * @return bool
    */
-  public static function hasAccountDeletionFeatures()
+  public static function hasAccountDeletionFeatures(): bool
   {
     return Features::hasAccountDeletionFeatures();
   }
@@ -211,40 +217,47 @@ class Teams
   /**
    * Find a user instance by the given ID.
    *
-   * @param  int  $id
-   * @return mixed
+   * @return User
    */
-  public static function findUserByIdOrFail($id)
+  public static function findUserByIdOrFail(mixed $id): mixed
   {
-    return static::newUserModel()->where('id', $id)->firstOrFail();
+    /** @var User $model */
+    $model = static::newUserModel();
+
+    /** @var Builder<User> $query */
+    $query = $model->where('id', $id);
+
+    return $query->firstOrFail();
   }
 
   /**
    * Find a user instance by the given email address or fail.
    *
-   * @return mixed
+   * @return User
    */
-  public static function findUserByEmailOrFail(string $email)
+  public static function findUserByEmailOrFail(string $email): mixed
   {
-    return static::newUserModel()->where('email', $email)->firstOrFail();
+    /** @var User $model */
+    $model = static::newUserModel();
+
+    /** @var Builder<User> $query */
+    $query = $model->where('email', $email);
+
+    return $query->firstOrFail();
   }
 
   /**
    * Get the name of the user model used by the application.
-   *
-   * @return string
    */
-  public static function userModel()
+  public static function userModel(): string
   {
     return static::$userModel;
   }
 
   /**
    * Get a new instance of the user model.
-   *
-   * @return mixed
    */
-  public static function newUserModel()
+  public static function newUserModel(): mixed
   {
     $model = static::userModel();
 
@@ -253,20 +266,24 @@ class Teams
 
   /**
    * Specify the user model that should be used by Teams.
+   *
+   * @param  class-string  $model
    */
   public static function useUserModel(string $model): static
   {
+    /** @var class-string $model */
     static::$userModel = $model;
 
+    /** @phpstan-ignore new.static */
     return new static;
   }
 
   /**
    * Get the name of the team model used by the application.
    *
-   * @return string
+   * @return class-string
    */
-  public static function teamModel()
+  public static function teamModel(): string
   {
     return static::$teamModel;
   }
@@ -274,10 +291,11 @@ class Teams
   /**
    * Get a new instance of the team model.
    *
-   * @return mixed
+   * @return Team
    */
-  public static function newTeamModel()
+  public static function newTeamModel(): mixed
   {
+    /** @var class-string<Team> $model */
     $model = static::teamModel();
 
     return new $model;
@@ -285,137 +303,131 @@ class Teams
 
   /**
    * Specify the team model that should be used by Teams.
+   *
+   * @param  class-string  $model
    */
   public static function useTeamModel(string $model): static
   {
+    /** @var class-string $model */
     static::$teamModel = $model;
 
+    /** @phpstan-ignore new.static */
     return new static;
   }
 
   /**
    * Get the name of the membership model used by the application.
-   *
-   * @return string
    */
-  public static function membershipModel()
+  public static function membershipModel(): string
   {
     return static::$membershipModel;
   }
 
   /**
    * Specify the membership model that should be used by Teams.
+   *
+   * @param  class-string  $model
    */
   public static function useMembershipModel(string $model): static
   {
+    /** @var class-string $model */
     static::$membershipModel = $model;
 
+    /** @phpstan-ignore new.static */
     return new static;
   }
 
   /**
    * Get the name of the team invitation model used by the application.
    *
-   * @return string
+   * @return class-string
    */
-  public static function teamInvitationModel()
+  public static function teamInvitationModel(): string
   {
     return static::$teamInvitationModel;
   }
 
   /**
    * Specify the team invitation model that should be used by Teams.
+   *
+   * @param  class-string  $model
    */
   public static function useTeamInvitationModel(string $model): static
   {
+    /** @var class-string $model */
     static::$teamInvitationModel = $model;
 
+    /** @phpstan-ignore new.static */
     return new static;
   }
 
   /**
    * Register a class / callback that should be used to create teams.
-   *
-   * @return void
    */
-  public static function createTeamsUsing(string $class)
+  public static function createTeamsUsing(string $class): void
   {
-    return app()->singleton(CreatesTeams::class, $class);
+    app()->singleton(CreatesTeams::class, $class);
   }
 
   /**
    * Register a class / callback that should be used to update team names.
-   *
-   * @return void
    */
-  public static function updateTeamNamesUsing(string $class)
+  public static function updateTeamNamesUsing(string $class): void
   {
-    return app()->singleton(UpdatesTeamNames::class, $class);
+    app()->singleton(UpdatesTeamNames::class, $class);
   }
 
   /**
    * Register a class / callback that should be used to add team members.
-   *
-   * @return void
    */
-  public static function addTeamMembersUsing(string $class)
+  public static function addTeamMembersUsing(string $class): void
   {
-    return app()->singleton(AddsTeamMembers::class, $class);
+    app()->singleton(AddsTeamMembers::class, $class);
   }
 
   /**
    * Register a class / callback that should be used to add team members.
-   *
-   * @return void
    */
-  public static function inviteTeamMembersUsing(string $class)
+  public static function inviteTeamMembersUsing(string $class): void
   {
-    return app()->singleton(InvitesTeamMembers::class, $class);
+    app()->singleton(InvitesTeamMembers::class, $class);
   }
 
   /**
    * Register a class / callback that should be used to remove team members.
-   *
-   * @return void
    */
-  public static function removeTeamMembersUsing(string $class)
+  public static function removeTeamMembersUsing(string $class): void
   {
-    return app()->singleton(RemovesTeamMembers::class, $class);
+    app()->singleton(RemovesTeamMembers::class, $class);
   }
 
   /**
    * Register a class / callback that should be used to delete teams.
-   *
-   * @return void
    */
-  public static function deleteTeamsUsing(string $class)
+  public static function deleteTeamsUsing(string $class): void
   {
-    return app()->singleton(DeletesTeams::class, $class);
+    app()->singleton(DeletesTeams::class, $class);
   }
 
   /**
    * Register a class / callback that should be used to delete users.
-   *
-   * @return void
    */
-  public static function deleteUsersUsing(string $class)
+  public static function deleteUsersUsing(string $class): void
   {
-    return app()->singleton(DeletesUsers::class, $class);
+    app()->singleton(DeletesUsers::class, $class);
   }
 
   /**
    * Find the path to a localized Markdown resource.
-   *
-   * @return string|null
    */
-  public static function localizedMarkdownPath(string $name)
+  public static function localizedMarkdownPath(string $name): ?string
   {
     $localName = preg_replace('#(\.md)$#i', '.'.app()->getLocale().'$1', $name);
 
     return Arr::first([
       resource_path('markdown/'.$localName),
       resource_path('markdown/'.$name),
-    ], fn ($path) => file_exists($path));
+    ], fn (string $path): bool => file_exists($path));
   }
 
   /**
@@ -425,6 +437,7 @@ class Teams
   {
     static::$registersRoutes = false;
 
+    /** @phpstan-ignore new.static */
     return new static;
   }
 }

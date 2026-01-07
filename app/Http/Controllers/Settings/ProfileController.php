@@ -4,22 +4,26 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Settings;
 
+use App\Contracts\DeletesUsers;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use App\Models\User;
+use App\Teams\Teams;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
-use Spatie\RouteDiscovery\Attributes\Route;
+use Laravel\Fortify\Actions\ConfirmPassword;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ProfileController
 {
   /**
    * Show the user's profile settings page.
    */
-  #[Route('settings/profile', name: 'profile.edit', middleware: ['auth'])]
   public function edit(Request $request): Response
   {
     return Inertia::render('settings/Profile', [
@@ -31,17 +35,19 @@ class ProfileController
   /**
    * Update the user's profile information.
    */
-  #[Route('settings/profile', name: 'profile.update', middleware: ['auth'])]
   public function update(ProfileUpdateRequest $request): RedirectResponse
   {
     /** @var User $user */
     $user = $request->user();
 
-    if ($request->hasFile('photo')) {
-      $user->updateProfilePhoto($request->file('photo'));
+    $photo = $request->file('photo');
+    if ($photo instanceof UploadedFile) {
+      $user->updateProfilePhoto($photo);
     }
 
-    $user->fill($request->safe()->only(['name', 'email']));
+    /** @var array<string, mixed> $safeData */
+    $safeData = $request->safe()->only(['name', 'email']);
+    $user->fill($safeData);
 
     if ($user->isDirty('email')) {
       $user->email_verified_at = null;
@@ -55,23 +61,42 @@ class ProfileController
   /**
    * Delete the user's profile.
    */
-  #[Route('settings/profile', name: 'profile.destroy', middleware: ['auth'])]
-  public function destroy(Request $request): RedirectResponse
+  public function destroy(Request $request, StatefulGuard $guard): HttpResponse
   {
-    $request->validate([
-      'password' => ['required', 'current_password'],
-    ]);
+    // Check if account deletion is allowed
+    abort_unless(Teams::hasAccountDeletionFeatures(), HttpResponse::HTTP_FORBIDDEN);
 
     /** @var User $user */
     $user = $request->user();
 
-    Auth::logout();
+    /** @var ConfirmPassword $confirmPassword */
+    $confirmPassword = resolve(ConfirmPassword::class);
 
-    $user->delete();
+    /** @var string|null $password */
+    $password = $request->password;
+
+    $confirmed = $confirmPassword(
+      $guard, $user, $password
+    );
+
+    if (! $confirmed) {
+      throw ValidationException::withMessages([
+        'password' => __('The password is incorrect.'),
+      ]);
+    }
+
+    /** @var User $freshUser */
+    $freshUser = $user->fresh();
+
+    /** @var DeletesUsers $deleter */
+    $deleter = resolve(DeletesUsers::class);
+    $deleter->delete($freshUser);
+
+    $guard->logout();
 
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    return redirect('/');
+    return Inertia::location(url('/'));
   }
 }

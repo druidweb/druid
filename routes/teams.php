@@ -2,10 +2,8 @@
 
 use App\Http\Controllers\Api\ApiTokenController;
 use App\Http\Controllers\PrivacyPolicyController;
-use App\Http\Controllers\Settings\CurrentUserController;
 use App\Http\Controllers\Settings\OtherBrowserSessionsController;
 use App\Http\Controllers\Settings\ProfilePhotoController;
-use App\Http\Controllers\Settings\UserProfileController;
 use App\Http\Controllers\Teams\CurrentTeamController;
 use App\Http\Controllers\Teams\TeamController;
 use App\Http\Controllers\Teams\TeamInvitationController;
@@ -25,32 +23,35 @@ Route::group(['middleware' => config('teams.middleware', ['web'])], function ():
     Route::get('/privacy-policy', [PrivacyPolicyController::class, 'show'])->name('policy.show');
   }
 
-  $authMiddleware = config('teams.guard')
-      ? 'auth:'.config('teams.guard')
+  /** @var string|null $guard */
+  $guard = config('teams.guard');
+
+  $authMiddleware = $guard
+      ? 'auth:'.$guard
       : 'auth';
 
-  $authSessionMiddleware = config('teams.auth_session', false)
-      ? config('teams.auth_session')
+  /** @var string|false $authSession */
+  $authSession = config('teams.auth_session', false);
+
+  $authSessionMiddleware = $authSession !== false
+      ? $authSession
       : null;
 
-  Route::group(['middleware' => array_values(array_filter([$authMiddleware, $authSessionMiddleware]))], function (): void {
-    // User & Profile...
-    Route::get('/user/profile', [UserProfileController::class, 'show'])
-      ->name('profile.show');
+  /** @var array<int, string> $middleware */
+  $middleware = array_filter([$authMiddleware, $authSessionMiddleware]);
 
-    Route::delete('/user/other-browser-sessions', [OtherBrowserSessionsController::class, 'destroy'])
-      ->name('other-browser-sessions.destroy');
-
+  Route::group(['middleware' => $middleware], function (): void {
     // Profile photo management...
     if (Teams::managesProfilePhotos()) {
       Route::delete('/user/profile-photo', [ProfilePhotoController::class, 'destroy'])
         ->name('current-user-photo.destroy');
     }
 
-    if (Teams::hasAccountDeletionFeatures()) {
-      Route::delete('/user', [CurrentUserController::class, 'destroy'])
-        ->name('current-user.destroy');
-    }
+    // Browser sessions management...
+    Route::get('/user/other-browser-sessions', [OtherBrowserSessionsController::class, 'index'])
+      ->name('other-browser-sessions.index');
+    Route::delete('/user/other-browser-sessions', [OtherBrowserSessionsController::class, 'destroy'])
+      ->name('other-browser-sessions.destroy');
 
     Route::group(['middleware' => 'verified'], function (): void {
       // API...

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Actions\Teams\AddTeamMember;
@@ -9,6 +11,7 @@ use App\Actions\Teams\DeleteUser;
 use App\Actions\Teams\InviteTeamMember;
 use App\Actions\Teams\RemoveTeamMember;
 use App\Actions\Teams\UpdateTeamName;
+use App\Models\User;
 use App\Teams\Teams;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +19,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Events\PasswordUpdatedViaController;
 
-class TeamServiceProvider extends ServiceProvider
+final class TeamServiceProvider extends ServiceProvider
 {
   /**
    * Register any application services.
@@ -38,7 +41,7 @@ class TeamServiceProvider extends ServiceProvider
     Teams::deleteTeamsUsing(DeleteTeam::class);
     Teams::deleteUsersUsing(DeleteUser::class);
 
-    RedirectResponse::macro('banner', function ($message): RedirectResponse {
+    RedirectResponse::macro('banner', function (string $message): RedirectResponse {
       /** @var RedirectResponse $this */
       return $this->with('flash', [
         'bannerStyle' => 'success',
@@ -46,7 +49,7 @@ class TeamServiceProvider extends ServiceProvider
       ]);
     });
 
-    RedirectResponse::macro('warningBanner', function ($message): RedirectResponse {
+    RedirectResponse::macro('warningBanner', function (string $message): RedirectResponse {
       /** @var RedirectResponse $this */
       return $this->with('flash', [
         'bannerStyle' => 'warning',
@@ -54,7 +57,7 @@ class TeamServiceProvider extends ServiceProvider
       ]);
     });
 
-    RedirectResponse::macro('dangerBanner', function ($message): RedirectResponse {
+    RedirectResponse::macro('dangerBanner', function (string $message): RedirectResponse {
       /** @var RedirectResponse $this */
       return $this->with('flash', [
         'bannerStyle' => 'danger',
@@ -65,7 +68,11 @@ class TeamServiceProvider extends ServiceProvider
     // Listen for password updates to track session hash for "logout other devices" feature
     Event::listen(function (PasswordUpdatedViaController $event): void {
       if (request()->hasSession()) {
-        request()->session()->put(['password_hash_sanctum' => Auth::user()->getAuthPassword()]);
+        /** @var User|null $user */
+        $user = Auth::user();
+        if ($user) {
+          request()->session()->put(['password_hash_sanctum' => $user->getAuthPassword()]);
+        }
       }
     });
   }
@@ -73,7 +80,7 @@ class TeamServiceProvider extends ServiceProvider
   /**
    * Configure the roles and permissions that are available within the application.
    */
-  protected function configurePermissions(): void
+  private function configurePermissions(): void
   {
     Teams::defaultApiTokenPermissions(['read']);
 

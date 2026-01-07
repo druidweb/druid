@@ -10,7 +10,7 @@ use Laravel\Fortify\Fortify;
 
 test('two factor rate limiter is configured', function (): void {
   $request = Request::create('/two-factor-challenge', 'POST');
-  $session = app(Session::class);
+  $session = resolve(Session::class);
   $session->put('login.id', 'test-login-id');
   $request->setLaravelSession($session);
 

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Teams\Teams;
+use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
-use Inertia\Inertia\Response;
+use Inertia\Response;
+use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ApiTokenController implements HasMiddleware
@@ -16,30 +19,32 @@ class ApiTokenController implements HasMiddleware
   /**
    * Get the middleware that should be assigned to the controller.
    *
-   * @return array<int, Middleware|string>
+   * @return array<int, Middleware|Closure|string>
    */
   public static function middleware(): array
   {
     return [
-      function (Request $request, callable $next): HttpResponse {
-        if (! Teams::hasApiFeatures()) {
-          abort(HttpResponse::HTTP_FORBIDDEN);
-        }
+      static function (Request $request, callable $next): HttpResponse {
+        abort_unless(Teams::hasApiFeatures(), HttpResponse::HTTP_FORBIDDEN);
 
-        return $next($request);
+        /** @var HttpResponse $response */
+        $response = $next($request);
+
+        return $response;
       },
     ];
   }
 
   /**
    * Show the user API token screen.
-   *
-   * @return Response
    */
-  public function index(Request $request)
+  public function index(Request $request): Response
   {
+    /** @var User $user */
+    $user = $request->user();
+
     return Inertia::render('api/Index', [
-      'tokens' => $request->user()->tokens->map(fn ($token): array => $token->toArray() + [
+      'tokens' => $user->tokens->map(fn (mixed $token): array => $token->toArray() + [
         'last_used_ago' => $token->last_used_at?->diffForHumans(),
       ]),
       'availablePermissions' => Teams::$permissions,
@@ -49,18 +54,25 @@ class ApiTokenController implements HasMiddleware
 
   /**
    * Create a new API token.
-   *
-   * @return RedirectResponse
    */
-  public function store(Request $request)
+  public function store(Request $request): RedirectResponse
   {
     $request->validate([
       'name' => ['required', 'string', 'max:255'],
     ]);
 
-    $token = $request->user()->createToken(
-      $request->name,
-      Teams::validPermissions($request->input('permissions', []))
+    /** @var User $user */
+    $user = $request->user();
+
+    /** @var array<int|string, mixed> $permissions */
+    $permissions = $request->input('permissions', []);
+
+    /** @var string $name */
+    $name = $request->name;
+
+    $token = $user->createToken(
+      $name,
+      Teams::validPermissions($permissions)
     );
 
     return back()->with('flash', [
@@ -70,20 +82,25 @@ class ApiTokenController implements HasMiddleware
 
   /**
    * Update the given API token's permissions.
-   *
-   * @param  string  $tokenId
    */
-  public function update(Request $request, $tokenId): RedirectResponse
+  public function update(Request $request, string $tokenId): RedirectResponse
   {
     $request->validate([
       'permissions' => ['array'],
       'permissions.*' => ['string'],
     ]);
 
-    $token = $request->user()->tokens()->where('id', $tokenId)->firstOrFail();
+    /** @var User $user */
+    $user = $request->user();
+
+    /** @var PersonalAccessToken $token */
+    $token = $user->tokens()->where('id', $tokenId)->firstOrFail();
+
+    /** @var array<int|string, mixed> $permissions */
+    $permissions = $request->input('permissions', []);
 
     $token->forceFill([
-      'abilities' => Teams::validPermissions($request->input('permissions', [])),
+      'abilities' => Teams::validPermissions($permissions),
     ])->save();
 
     return back(303);
@@ -91,12 +108,16 @@ class ApiTokenController implements HasMiddleware
 
   /**
    * Delete the given API token.
-   *
-   * @param  string  $tokenId
    */
-  public function destroy(Request $request, $tokenId): RedirectResponse
+  public function destroy(Request $request, string $tokenId): RedirectResponse
   {
-    $request->user()->tokens()->where('id', $tokenId)->first()->delete();
+    /** @var User $user */
+    $user = $request->user();
+
+    /** @var PersonalAccessToken|null $token */
+    $token = $user->tokens()->where('id', $tokenId)->first();
+
+    $token?->delete();
 
     return back(303);
   }

@@ -2,4 +2,15 @@
 
 namespace App\Rules;
 
-class OwnerRole extends Role {}
+use App\Teams\Role;
+
+class OwnerRole extends Role
+{
+  /**
+   * Create a new owner role instance.
+   */
+  public function __construct()
+  {
+    parent::__construct('owner', 'Owner', ['*']);
+  }
+}

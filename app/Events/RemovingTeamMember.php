@@ -10,19 +10,15 @@ class RemovingTeamMember
 
   /**
    * Create a new event instance.
-   *
-   * @param  mixed  $team
-   * @param  mixed  $user
-   * @return void
    */
   public function __construct(
     /**
      * The team instance.
      */
-    public $team,
+    public mixed $team,
     /**
      * The team member being removed.
      */
-    public $user
+    public mixed $user
   ) {}
 }

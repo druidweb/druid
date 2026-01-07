@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Concerns;
 
 use Illuminate\Http\RedirectResponse;
@@ -10,20 +12,21 @@ trait RedirectsActions
 {
   /**
    * Get the redirect response for the given action.
-   *
-   * @param  mixed  $action
-   * @return Response
    */
-  public function redirectPath($action): Response|Redirector|RedirectResponse
+  public function redirectPath(object $action): Response|Redirector|RedirectResponse
   {
     if (method_exists($action, 'redirectTo')) {
       $response = $action->redirectTo();
+    } elseif (property_exists($action, 'redirectTo')) {
+      /** @var object{redirectTo: string|null} $action */
+      $response = $action->redirectTo;
     } else {
-      $response = property_exists($action, 'redirectTo')
-                          ? $action->redirectTo
-                          : config('fortify.home');
+      $response = config('fortify.home');
     }
 
-    return $response instanceof Response ? $response : redirect($response);
+    /** @var string|null $redirectPath */
+    $redirectPath = $response;
+
+    return $response instanceof Response ? $response : redirect($redirectPath);
   }
 }

@@ -57,12 +57,12 @@
     ],
     "dev": [
       "Composer\\Config::disableProcessTimeout",
-      "bunx concurrently -c \"#c4b5fd,#fb7185,#fdba74\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"bun run dev\" --names=queue,logs,vite --kill-others"
+      "bunx concurrently -c \"#c4b5fd,#fdba74\" \"php artisan queue:listen --tries=1\" \"bun run dev\" --names=queue,vite --kill-others"
     ],
     "dev:ssr": [
       "bun run build:ssr",
       "Composer\\Config::disableProcessTimeout",
-      "bunx concurrently -c \"#c4b5fd,#fb7185,#fdba74\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"php artisan inertia:start-ssr\" --names=queue,logs,ssr --kill-others"
+      "bunx concurrently -c \"#c4b5fd,#fdba74\" \"php artisan queue:listen --tries=1\" \"php artisan inertia:start-ssr\" --names=queue,ssr --kill-others"
     ],
     "lint": [
       "./vendor/bin/rector",
@@ -84,7 +84,6 @@
       "@test:types",
       "@test:static",
       "@test:lint",
-      "@test:types",
       "@test:feat"
     ],
     "post-autoload-dump": [

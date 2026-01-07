@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Teams;
 
 use App\Events\TeamMemberUpdated;
+use App\Models\Team;
 use App\Rules\Role;
 use App\Teams\Teams;
 use Illuminate\Support\Facades\Gate;
@@ -12,12 +15,8 @@ class UpdateTeamMemberRole
 {
   /**
    * Update the role for the given team member.
-   *
-   * @param  mixed  $user
-   * @param  mixed  $team
-   * @param  int  $teamMemberId
    */
-  public function update($user, $team, $teamMemberId, string $role): void
+  public function update(mixed $user, mixed $team, int $teamMemberId, string $role): void
   {
     Gate::forUser($user)->authorize('updateTeamMember', $team);
 
@@ -27,10 +26,13 @@ class UpdateTeamMemberRole
       'role' => ['required', 'string', new Role],
     ])->validate();
 
+    /** @var Team $team */
     $team->users()->updateExistingPivot($teamMemberId, [
       'role' => $role,
     ]);
 
-    event(new TeamMemberUpdated($team->fresh(), Teams::findUserByIdOrFail($teamMemberId)));
+    /** @var Team $freshTeam */
+    $freshTeam = $team->fresh();
+    event(new TeamMemberUpdated($freshTeam, Teams::findUserByIdOrFail($teamMemberId)));
   }
 }

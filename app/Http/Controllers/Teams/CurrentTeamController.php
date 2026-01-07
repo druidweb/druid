@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Teams;
 
+use App\Models\Team;
+use App\Models\User;
 use App\Teams\Teams;
+use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -15,32 +18,38 @@ class CurrentTeamController implements HasMiddleware
   /**
    * Get the middleware that should be assigned to the controller.
    *
-   * @return array<int, Middleware|string>
+   * @return array<int, Middleware|Closure|string>
    */
   public static function middleware(): array
   {
     return [
-      function (Request $request, callable $next): HttpResponse {
-        if (! Teams::hasTeamFeatures()) {
-          abort(HttpResponse::HTTP_FORBIDDEN);
-        }
+      static function (Request $request, callable $next): HttpResponse {
+        abort_unless(Teams::hasTeamFeatures(), HttpResponse::HTTP_FORBIDDEN);
 
-        return $next($request);
+        /** @var HttpResponse $response */
+        $response = $next($request);
+
+        return $response;
       },
     ];
   }
 
   /**
    * Update the authenticated user's current team.
-   *
-   * @return RedirectResponse
    */
   public function update(Request $request): Redirector|RedirectResponse
   {
+    /** @var Team $team */
     $team = Teams::newTeamModel()->findOrFail($request->team_id);
 
-    abort_unless($request->user()->switchTeam($team), 403);
+    /** @var User $user */
+    $user = $request->user();
 
-    return redirect(config('fortify.home'), 303);
+    abort_unless($user->switchTeam($team), 403);
+
+    /** @var string|null $home */
+    $home = config('fortify.home');
+
+    return redirect($home, 303);
   }
 }

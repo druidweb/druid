@@ -13,14 +13,11 @@ abstract class TeamEvent
 
   /**
    * Create a new event instance.
-   *
-   * @param  Team  $team
-   * @return void
    */
   public function __construct(
     /**
      * The team instance.
      */
-    public $team
+    public Team $team
   ) {}
 }
