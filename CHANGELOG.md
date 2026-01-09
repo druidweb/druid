@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.3](https://github.com/druidweb/druid/compare/v1.4.2...v1.4.3) (2026-01-09)
+
+
+### Code Refactoring
+
+* add final classes and strict types ([5244e85](https://github.com/druidweb/druid/commit/5244e853ba6bd97ab3f3590d84848a80b0803fd5))
+
+
+### Work in Progress
+
+* continue updates for style ([d200e10](https://github.com/druidweb/druid/commit/d200e10354d316bd064cf14443110d081fd1da6f))
+
 ## [1.4.2](https://github.com/druidweb/druid/compare/v1.4.1...v1.4.2) (2026-01-07)
 
 
