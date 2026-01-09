@@ -12,7 +12,7 @@ use App\Teams\Teams;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
-class CreateTeam implements CreatesTeams
+final class CreateTeam implements CreatesTeams
 {
   /**
    * Validate and create a new team for the given user.

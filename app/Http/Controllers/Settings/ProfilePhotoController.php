@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Settings;
 
 use App\Models\User;
@@ -9,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProfilePhotoController extends Controller
+final class ProfilePhotoController extends Controller
 {
   /**
    * Delete the current user's profile photo.

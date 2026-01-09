@@ -19,7 +19,7 @@ use Inertia\Response;
 use Laravel\Fortify\Actions\ConfirmPassword;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class ProfileController
+final class ProfileController
 {
   /**
    * Show the user's profile settings page.

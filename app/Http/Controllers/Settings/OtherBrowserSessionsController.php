@@ -13,7 +13,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Fortify\Actions\ConfirmPassword;
 
-class OtherBrowserSessionsController
+final class OtherBrowserSessionsController
 {
   /**
    * Show the browser sessions page.

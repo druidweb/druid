@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Teams\Teams;
@@ -12,7 +14,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class TermsOfServiceController implements HasMiddleware
+final class TermsOfServiceController implements HasMiddleware
 {
   /**
    * Get the middleware that should be assigned to the controller.

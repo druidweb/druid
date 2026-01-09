@@ -47,8 +47,8 @@ describe('DeleteUser', () => {
         },
       },
     });
-    expect(wrapper.text()).toContain('Warning');
-    expect(wrapper.text()).toContain('Please proceed with caution, this cannot be undone.');
+    expect(wrapper.text()).toContain('Delete Account');
+    expect(wrapper.text()).toContain('Delete your account and all of its resources');
   });
 
   it('renders delete account button', () => {
@@ -76,7 +76,7 @@ describe('DeleteUser', () => {
         },
       },
     });
-    expect(wrapper.text()).toContain('Delete account');
+    expect(wrapper.text()).toContain('Delete Account');
   });
 
   it('renders dialog content', () => {

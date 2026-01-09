@@ -1,24 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 
-class TeamMemberUpdated
+final class TeamMemberUpdated
 {
   use Dispatchable;
 
   /**
    * Create a new event instance.
    */
-  public function __construct(
-    /**
-     * The team instance.
-     */
-    public mixed $team,
-    /**
-     * The team member that was updated.
-     */
-    public mixed $user
-  ) {}
+  public function __construct(public mixed $team, public mixed $user) {}
 }

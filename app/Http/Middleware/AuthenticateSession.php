@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use Illuminate\Contracts\Auth\Factory;
@@ -7,7 +9,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Session\Middleware\AuthenticateSession as BaseAuthenticateSession;
 
-class AuthenticateSession extends BaseAuthenticateSession
+final class AuthenticateSession extends BaseAuthenticateSession
 {
   /**
    * Get the guard instance that should be used by the middleware.

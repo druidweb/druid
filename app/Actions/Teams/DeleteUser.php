@@ -7,7 +7,7 @@ namespace App\Actions\Teams;
 use App\Contracts\DeletesUsers;
 use App\Models\User;
 
-class DeleteUser implements DeletesUsers
+final class DeleteUser implements DeletesUsers
 {
   /**
    * Delete the given user.

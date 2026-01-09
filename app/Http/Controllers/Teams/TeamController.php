@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Teams;
 
 use App\Actions\Teams\ValidateTeamDeletion;
@@ -21,7 +23,7 @@ use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class TeamController implements HasMiddleware
+final class TeamController implements HasMiddleware
 {
   use RedirectsActions;
 

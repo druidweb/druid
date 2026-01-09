@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Events;
 
 use App\Models\Team;
@@ -14,10 +16,5 @@ abstract class TeamEvent
   /**
    * Create a new event instance.
    */
-  public function __construct(
-    /**
-     * The team instance.
-     */
-    public Team $team
-  ) {}
+  public function __construct(public Team $team) {}
 }

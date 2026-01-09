@@ -1,6 +1,15 @@
 import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
 import { mount } from '@vue/test-utils';
 
+vi.mock('@inertiajs/vue3', () => ({
+  usePage: () => ({
+    props: {
+      auth: { user: { id: 1, name: 'Test' } },
+      teams: { hasTeamFeatures: false },
+    },
+  }),
+}));
+
 describe('AppSidebarLayout', () => {
   it('renders component', () => {
     const wrapper = mount(AppSidebarLayout, {
@@ -10,6 +19,9 @@ describe('AppSidebarLayout', () => {
           AppSidebar: true,
           AppContent: true,
           AppSidebarHeader: true,
+          TeamIndicatorBanner: true,
+          SidebarProvider: true,
+          SidebarInset: true,
         },
       },
     });
@@ -31,6 +43,9 @@ describe('AppSidebarLayout', () => {
             template: '<div></div>',
             props: ['breadcrumbs'],
           },
+          TeamIndicatorBanner: { template: '<div></div>' },
+          SidebarProvider: { template: '<div><slot /></div>' },
+          SidebarInset: { template: '<div><slot /></div>' },
         },
       },
     });
@@ -48,10 +63,12 @@ describe('AppSidebarLayout', () => {
           AppSidebar: { template: '<div></div>' },
           AppContent: { template: '<div><slot /></div>' },
           AppSidebarHeader: { template: '<div></div>' },
+          TeamIndicatorBanner: { template: '<div></div>' },
+          SidebarProvider: { template: '<div><slot /></div>' },
+          SidebarInset: { template: '<div><slot /></div>' },
         },
       },
     });
     expect(wrapper.html()).toContain('Dashboard Content');
   });
 });
-

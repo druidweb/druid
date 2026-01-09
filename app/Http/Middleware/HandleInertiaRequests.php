@@ -14,7 +14,7 @@ use Illuminate\Support\ViewErrorBag;
 use Inertia\Middleware;
 use Laravel\Fortify\Features;
 
-class HandleInertiaRequests extends Middleware
+final class HandleInertiaRequests extends Middleware
 {
   /**
    * The root template that's loaded on the first page visit.

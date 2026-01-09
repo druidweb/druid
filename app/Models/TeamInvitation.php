@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Teams\Teams;
@@ -8,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Zen\Snowflake\Concerns\HasSnowflakePrimary;
 
-class TeamInvitation extends Model
+final class TeamInvitation extends Model
 {
   /** @phpstan-ignore missingType.generics */
   use HasFactory;

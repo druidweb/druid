@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Teams;
 
 use App\Contracts\AddsTeamMembers;
@@ -16,7 +18,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class TeamInvitationController implements HasMiddleware
+final class TeamInvitationController implements HasMiddleware
 {
   /**
    * Get the middleware that should be assigned to the controller.

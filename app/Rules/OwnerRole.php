@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Rules;
 
 use App\Teams\Role;
 
-class OwnerRole extends Role
+final class OwnerRole extends Role
 {
   /**
    * Create a new owner role instance.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Events\TeamCreated;
@@ -15,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Zen\Snowflake\Concerns\HasSnowflakePrimary;
 
-class Team extends Model
+final class Team extends Model
 {
   /** @use HasFactory<TeamFactory> */
   use HasFactory;

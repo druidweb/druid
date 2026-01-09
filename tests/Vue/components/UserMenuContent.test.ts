@@ -1,22 +1,33 @@
 import UserMenuContent from '@/components/UserMenuContent.vue';
-import type { User } from '@/types';
 import { mount } from '@vue/test-utils';
 
-const mockUser: User = {
-  id: 1,
-  name: 'Test User',
-  email: 'test@example.com',
-  email_verified_at: '2024-01-01',
-  created_at: '2024-01-01',
-  updated_at: '2024-01-01',
-};
+vi.mock('@inertiajs/vue3', () => ({
+  Link: {
+    name: 'Link',
+    template: '<a><slot /></a>',
+  },
+  usePage: () => ({
+    props: {
+      auth: {
+        user: {
+          id: 1,
+          name: 'Test User',
+          email: 'test@example.com',
+        },
+      },
+      teams: {
+        hasTeamFeatures: false,
+        hasApiFeatures: false,
+        canCreateTeams: false,
+        managesProfilePhotos: false,
+      },
+    },
+  }),
+}));
 
 describe('UserMenuContent', () => {
   it('renders component', () => {
     const wrapper = mount(UserMenuContent, {
-      props: {
-        user: mockUser,
-      },
       global: {
         stubs: {
           UserInfo: true,
@@ -27,6 +38,7 @@ describe('UserMenuContent', () => {
           Link: true,
           Settings: true,
           LogOut: true,
+          KeyRound: true,
         },
       },
     });
@@ -35,9 +47,6 @@ describe('UserMenuContent', () => {
 
   it('displays settings option', () => {
     const wrapper = mount(UserMenuContent, {
-      props: {
-        user: mockUser,
-      },
       global: {
         stubs: {
           UserInfo: true,
@@ -48,6 +57,7 @@ describe('UserMenuContent', () => {
           Link: { template: '<a><slot /></a>' },
           Settings: { template: '<span>Settings Icon</span>' },
           LogOut: { template: '<span>Logout Icon</span>' },
+          KeyRound: { template: '<span>Key Icon</span>' },
         },
       },
     });
@@ -56,9 +66,6 @@ describe('UserMenuContent', () => {
 
   it('displays logout option', () => {
     const wrapper = mount(UserMenuContent, {
-      props: {
-        user: mockUser,
-      },
       global: {
         stubs: {
           UserInfo: true,
@@ -69,6 +76,7 @@ describe('UserMenuContent', () => {
           Link: { template: '<a :data-test="$attrs[\'data-test\']"><slot /></a>' },
           Settings: { template: '<span>Settings Icon</span>' },
           LogOut: { template: '<span>Logout Icon</span>' },
+          KeyRound: { template: '<span>Key Icon</span>' },
         },
       },
     });
@@ -77,4 +85,3 @@ describe('UserMenuContent', () => {
     expect(logoutButton.exists()).toBe(true);
   });
 });
-

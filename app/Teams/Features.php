@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Teams;
 
-class Features
+final class Features
 {
   /**
    * Determine if the given feature is enabled.
@@ -20,7 +22,7 @@ class Features
    */
   public static function optionEnabled(string $feature, string $option): bool
   {
-    return static::enabled($feature) &&
+    return self::enabled($feature) &&
            config("teams-options.{$feature}.{$option}") === true;
   }
 
@@ -29,7 +31,7 @@ class Features
    */
   public static function managesProfilePhotos(): bool
   {
-    return static::enabled(static::profilePhotos());
+    return self::enabled(self::profilePhotos());
   }
 
   /**
@@ -37,7 +39,7 @@ class Features
    */
   public static function hasApiFeatures(): bool
   {
-    return static::enabled(static::api());
+    return self::enabled(self::api());
   }
 
   /**
@@ -45,7 +47,7 @@ class Features
    */
   public static function hasTeamFeatures(): bool
   {
-    return static::enabled(static::teams());
+    return self::enabled(self::teams());
   }
 
   /**
@@ -53,7 +55,7 @@ class Features
    */
   public static function sendsTeamInvitations(): bool
   {
-    return static::optionEnabled(static::teams(), 'invitations');
+    return self::optionEnabled(self::teams(), 'invitations');
   }
 
   /**
@@ -61,7 +63,7 @@ class Features
    */
   public static function hasTermsAndPrivacyPolicyFeature(): bool
   {
-    return static::enabled(static::termsAndPrivacyPolicy());
+    return self::enabled(self::termsAndPrivacyPolicy());
   }
 
   /**
@@ -69,7 +71,7 @@ class Features
    */
   public static function hasAccountDeletionFeatures(): bool
   {
-    return static::enabled(static::accountDeletion());
+    return self::enabled(self::accountDeletion());
   }
 
   /**

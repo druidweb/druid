@@ -11,7 +11,7 @@ use App\Teams\Teams;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
-class UpdateTeamMemberRole
+final class UpdateTeamMemberRole
 {
   /**
    * Update the role for the given team member.

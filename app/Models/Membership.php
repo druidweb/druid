@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Membership extends Pivot
+final class Membership extends Pivot
 {
   /** @phpstan-ignore missingType.generics */
   use HasFactory;

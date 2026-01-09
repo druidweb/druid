@@ -1,6 +1,15 @@
 import AppHeaderLayout from '@/layouts/app/AppHeaderLayout.vue';
 import { mount } from '@vue/test-utils';
 
+vi.mock('@inertiajs/vue3', () => ({
+  usePage: () => ({
+    props: {
+      auth: { user: { id: 1, name: 'Test' } },
+      teams: { hasTeamFeatures: false },
+    },
+  }),
+}));
+
 describe('AppHeaderLayout', () => {
   it('renders component', () => {
     const wrapper = mount(AppHeaderLayout, {
@@ -9,6 +18,7 @@ describe('AppHeaderLayout', () => {
           AppShell: true,
           AppHeader: true,
           AppContent: true,
+          TeamIndicatorBanner: true,
         },
       },
     });
@@ -29,6 +39,7 @@ describe('AppHeaderLayout', () => {
             props: ['breadcrumbs'],
           },
           AppContent: { template: '<div><slot /></div>' },
+          TeamIndicatorBanner: { template: '<div></div>' },
         },
       },
     });
@@ -45,10 +56,10 @@ describe('AppHeaderLayout', () => {
           AppShell: { template: '<div><slot /></div>' },
           AppHeader: { template: '<div></div>' },
           AppContent: { template: '<div><slot /></div>' },
+          TeamIndicatorBanner: { template: '<div></div>' },
         },
       },
     });
     expect(wrapper.html()).toContain('Page Content');
   });
 });
-

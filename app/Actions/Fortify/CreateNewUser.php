@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
-class CreateNewUser implements CreatesNewUsers
+final class CreateNewUser implements CreatesNewUsers
 {
   use PasswordValidationRules;
 
@@ -42,7 +42,7 @@ class CreateNewUser implements CreatesNewUsers
   /**
    * Create a personal team for the user.
    */
-  protected function createTeam(User $user): void
+  private function createTeam(User $user): void
   {
     $team = Team::query()->forceCreate([
       'user_id' => $user->id,

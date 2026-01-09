@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 
-class InvitingTeamMember
+final class InvitingTeamMember
 {
   use Dispatchable;
 
@@ -12,17 +14,8 @@ class InvitingTeamMember
    * Create a new event instance.
    */
   public function __construct(
-    /**
-     * The team instance.
-     */
     public mixed $team,
-    /**
-     * The email address of the invitee.
-     */
     public mixed $email,
-    /**
-     * The role of the invitee.
-     */
     public mixed $role
   ) {}
 }

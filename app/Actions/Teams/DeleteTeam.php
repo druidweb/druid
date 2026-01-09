@@ -7,7 +7,7 @@ namespace App\Actions\Teams;
 use App\Contracts\DeletesTeams;
 use App\Models\Team;
 
-class DeleteTeam implements DeletesTeams
+final class DeleteTeam implements DeletesTeams
 {
   /**
    * Delete the given team.

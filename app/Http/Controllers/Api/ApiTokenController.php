@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
@@ -14,7 +16,7 @@ use Inertia\Response;
 use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class ApiTokenController implements HasMiddleware
+final class ApiTokenController implements HasMiddleware
 {
   /**
    * Get the middleware that should be assigned to the controller.

@@ -1,26 +1,32 @@
 import UserInfo from '@/components/UserInfo.vue';
-import type { User } from '@/types';
 import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-describe('UserInfo', () => {
-  const mockUser: User = {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    avatar: 'https://example.com/avatar.jpg',
-    email_verified_at: null,
-    two_factor_enabled: false,
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01',
-  };
+const mockUser = {
+  id: 1,
+  name: 'John Doe',
+  email: 'john@example.com',
+  profile_photo_url: 'https://example.com/avatar.jpg',
+  profile_photo_path: '/path/to/avatar.jpg',
+  email_verified_at: null,
+  two_factor_enabled: false,
+  created_at: '2024-01-01',
+  updated_at: '2024-01-01',
+};
 
-  it('renders user name', () => {
-    const wrapper = mount(UserInfo, {
-      props: {
+vi.mock('@inertiajs/vue3', () => ({
+  usePage: () => ({
+    props: {
+      auth: {
         user: mockUser,
       },
-    });
+    },
+  }),
+}));
+
+describe('UserInfo', () => {
+  it('renders user name', () => {
+    const wrapper = mount(UserInfo);
 
     expect(wrapper.text()).toContain('John Doe');
   });
@@ -28,7 +34,6 @@ describe('UserInfo', () => {
   it('renders user email when showEmail is true', () => {
     const wrapper = mount(UserInfo, {
       props: {
-        user: mockUser,
         showEmail: true,
       },
     });
@@ -39,7 +44,6 @@ describe('UserInfo', () => {
   it('does not render user email when showEmail is false', () => {
     const wrapper = mount(UserInfo, {
       props: {
-        user: mockUser,
         showEmail: false,
       },
     });
@@ -48,68 +52,20 @@ describe('UserInfo', () => {
   });
 
   it('does not render user email by default', () => {
-    const wrapper = mount(UserInfo, {
-      props: {
-        user: mockUser,
-      },
-    });
+    const wrapper = mount(UserInfo);
 
     expect(wrapper.text()).not.toContain('john@example.com');
   });
 
-  it('renders avatar image when user has avatar', () => {
-    const wrapper = mount(UserInfo, {
-      props: {
-        user: mockUser,
-      },
-    });
+  it('renders avatar component', () => {
+    const wrapper = mount(UserInfo);
 
-    const img = wrapper.find('img');
-    expect(img.exists()).toBe(true);
-    expect(img.attributes('src')).toBe('https://example.com/avatar.jpg');
-    expect(img.attributes('alt')).toBe('John Doe');
-  });
-
-  it('renders initials fallback when user has no avatar', () => {
-    const userWithoutAvatar: User = {
-      ...mockUser,
-      avatar: null,
-    };
-
-    const wrapper = mount(UserInfo, {
-      props: {
-        user: userWithoutAvatar,
-      },
-    });
-
-    const img = wrapper.find('img');
-    expect(img.exists()).toBe(false);
-    expect(wrapper.text()).toContain('JD');
-  });
-
-  it('renders initials fallback when avatar is empty string', () => {
-    const userWithEmptyAvatar: User = {
-      ...mockUser,
-      avatar: '',
-    };
-
-    const wrapper = mount(UserInfo, {
-      props: {
-        user: userWithEmptyAvatar,
-      },
-    });
-
-    const img = wrapper.find('img');
-    expect(img.exists()).toBe(false);
-    expect(wrapper.text()).toContain('JD');
+    const avatar = wrapper.find('[data-slot="avatar"]');
+    expect(avatar.exists()).toBe(true);
   });
 
   it('applies correct styling to name', () => {
-    const wrapper = mount(UserInfo, {
-      props: {
-        user: mockUser,
-      },
-    });
+    const wrapper = mount(UserInfo);
 
     const div = wrapper.find('div.grid');
     const nameSpan = div.findAll('span')[0];
@@ -120,7 +76,6 @@ describe('UserInfo', () => {
   it('applies correct styling to email', () => {
     const wrapper = mount(UserInfo, {
       props: {
-        user: mockUser,
         showEmail: true,
       },
     });

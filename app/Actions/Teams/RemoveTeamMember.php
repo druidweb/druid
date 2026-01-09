@@ -12,7 +12,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 
-class RemoveTeamMember implements RemovesTeamMembers
+final class RemoveTeamMember implements RemovesTeamMembers
 {
   /**
    * Remove the team member from the given team.
@@ -31,7 +31,7 @@ class RemoveTeamMember implements RemovesTeamMembers
   /**
    * Authorize that the user can remove the team member.
    */
-  protected function authorize(User $user, Team $team, User $teamMember): void
+  private function authorize(User $user, Team $team, User $teamMember): void
   {
     throw_if(! Gate::forUser($user)->check('removeTeamMember', $team) &&
         (string) $user->id !== (string) $teamMember->id, AuthorizationException::class);
@@ -40,7 +40,7 @@ class RemoveTeamMember implements RemovesTeamMembers
   /**
    * Ensure that the currently authenticated user does not own the team.
    */
-  protected function ensureUserDoesNotOwnTeam(User $teamMember, Team $team): void
+  private function ensureUserDoesNotOwnTeam(User $teamMember, Team $team): void
   {
     /** @var User|null $owner */
     $owner = $team->owner;

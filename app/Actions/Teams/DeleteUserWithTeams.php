@@ -10,12 +10,12 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-class DeleteUserWithTeams implements DeletesUsers
+final readonly class DeleteUserWithTeams implements DeletesUsers
 {
   /**
    * Create a new action instance.
    */
-  public function __construct(protected DeletesTeams $deletesTeams) {}
+  public function __construct(private DeletesTeams $deletesTeams) {}
 
   /**
    * Delete the given user.
@@ -33,7 +33,7 @@ class DeleteUserWithTeams implements DeletesUsers
   /**
    * Delete the teams and team associations attached to the user.
    */
-  protected function deleteTeams(User $user): void
+  private function deleteTeams(User $user): void
   {
     $user->teams()->detach();
 

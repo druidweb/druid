@@ -8,7 +8,7 @@ use App\Models\Team;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 
-class ValidateTeamDeletion
+final class ValidateTeamDeletion
 {
   /**
    * Validate that the team can be deleted by the given user.

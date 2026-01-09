@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Teams;
 
 use App\Models\Team;
@@ -13,7 +15,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Redirector;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class CurrentTeamController implements HasMiddleware
+final class CurrentTeamController implements HasMiddleware
 {
   /**
    * Get the middleware that should be assigned to the controller.

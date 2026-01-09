@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Teams;
 
 use App\Concerns\HasTeams;
@@ -17,7 +19,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 
-class Teams
+final class Teams
 {
   /**
    * Indicates if Teams routes will be registered.
@@ -78,7 +80,7 @@ class Teams
    */
   public static function hasRoles(): bool
   {
-    return count(static::$roles) > 0;
+    return count(self::$roles) > 0;
   }
 
   /**
@@ -86,7 +88,7 @@ class Teams
    */
   public static function findRole(string $key): ?Role
   {
-    return static::$roles[$key] ?? null;
+    return self::$roles[$key] ?? null;
   }
 
   /**
@@ -97,16 +99,16 @@ class Teams
   public static function role(string $key, string $name, array $permissions): Role
   {
     /** @var array<int, string> $mergedPermissions */
-    $mergedPermissions = collect(array_merge(static::$permissions, $permissions))
+    $mergedPermissions = collect(array_merge(self::$permissions, $permissions))
       ->unique()
       ->sort()
       ->values()
       ->all();
 
-    static::$permissions = $mergedPermissions;
+    self::$permissions = $mergedPermissions;
 
     return tap(new Role($key, $name, $permissions), function (Role $role) use ($key): void {
-      static::$roles[$key] = $role;
+      self::$roles[$key] = $role;
     });
   }
 
@@ -115,7 +117,7 @@ class Teams
    */
   public static function hasPermissions(): bool
   {
-    return count(static::$permissions) > 0;
+    return count(self::$permissions) > 0;
   }
 
   /**
@@ -126,10 +128,9 @@ class Teams
   public static function permissions(array $permissions): static
   {
     /** @var array<int, string> $permissions */
-    static::$permissions = $permissions;
+    self::$permissions = $permissions;
 
-    /** @phpstan-ignore new.static */
-    return new static;
+    return new self;
   }
 
   /**
@@ -140,10 +141,9 @@ class Teams
   public static function defaultApiTokenPermissions(array $permissions): static
   {
     /** @var array<int, string> $permissions */
-    static::$defaultPermissions = $permissions;
+    self::$defaultPermissions = $permissions;
 
-    /** @phpstan-ignore new.static */
-    return new static;
+    return new self;
   }
 
   /**
@@ -155,7 +155,7 @@ class Teams
   public static function validPermissions(array $permissions): array
   {
     /** @var array<int, string> $result */
-    $result = array_values(array_intersect($permissions, static::$permissions));
+    $result = array_values(array_intersect($permissions, self::$permissions));
 
     return $result;
   }
@@ -195,7 +195,7 @@ class Teams
 
     return (array_key_exists(HasTeams::class, class_uses_recursive($user)) ||
             method_exists($user, 'currentTeam')) &&
-            static::hasTeamFeatures();
+            self::hasTeamFeatures();
   }
 
   /**
@@ -222,7 +222,7 @@ class Teams
   public static function findUserByIdOrFail(mixed $id): mixed
   {
     /** @var User $model */
-    $model = static::newUserModel();
+    $model = self::newUserModel();
 
     /** @var Builder<User> $query */
     $query = $model->where('id', $id);
@@ -238,7 +238,7 @@ class Teams
   public static function findUserByEmailOrFail(string $email): mixed
   {
     /** @var User $model */
-    $model = static::newUserModel();
+    $model = self::newUserModel();
 
     /** @var Builder<User> $query */
     $query = $model->where('email', $email);
@@ -251,7 +251,7 @@ class Teams
    */
   public static function userModel(): string
   {
-    return static::$userModel;
+    return self::$userModel;
   }
 
   /**
@@ -259,7 +259,7 @@ class Teams
    */
   public static function newUserModel(): mixed
   {
-    $model = static::userModel();
+    $model = self::userModel();
 
     return new $model;
   }
@@ -272,10 +272,9 @@ class Teams
   public static function useUserModel(string $model): static
   {
     /** @var class-string $model */
-    static::$userModel = $model;
+    self::$userModel = $model;
 
-    /** @phpstan-ignore new.static */
-    return new static;
+    return new self;
   }
 
   /**
@@ -285,7 +284,7 @@ class Teams
    */
   public static function teamModel(): string
   {
-    return static::$teamModel;
+    return self::$teamModel;
   }
 
   /**
@@ -296,7 +295,7 @@ class Teams
   public static function newTeamModel(): mixed
   {
     /** @var class-string<Team> $model */
-    $model = static::teamModel();
+    $model = self::teamModel();
 
     return new $model;
   }
@@ -309,10 +308,9 @@ class Teams
   public static function useTeamModel(string $model): static
   {
     /** @var class-string $model */
-    static::$teamModel = $model;
+    self::$teamModel = $model;
 
-    /** @phpstan-ignore new.static */
-    return new static;
+    return new self;
   }
 
   /**
@@ -320,7 +318,7 @@ class Teams
    */
   public static function membershipModel(): string
   {
-    return static::$membershipModel;
+    return self::$membershipModel;
   }
 
   /**
@@ -331,10 +329,9 @@ class Teams
   public static function useMembershipModel(string $model): static
   {
     /** @var class-string $model */
-    static::$membershipModel = $model;
+    self::$membershipModel = $model;
 
-    /** @phpstan-ignore new.static */
-    return new static;
+    return new self;
   }
 
   /**
@@ -344,7 +341,7 @@ class Teams
    */
   public static function teamInvitationModel(): string
   {
-    return static::$teamInvitationModel;
+    return self::$teamInvitationModel;
   }
 
   /**
@@ -355,10 +352,9 @@ class Teams
   public static function useTeamInvitationModel(string $model): static
   {
     /** @var class-string $model */
-    static::$teamInvitationModel = $model;
+    self::$teamInvitationModel = $model;
 
-    /** @phpstan-ignore new.static */
-    return new static;
+    return new self;
   }
 
   /**
@@ -435,9 +431,8 @@ class Teams
    */
   public static function ignoreRoutes(): static
   {
-    static::$registersRoutes = false;
+    self::$registersRoutes = false;
 
-    /** @phpstan-ignore new.static */
-    return new static;
+    return new self;
   }
 }

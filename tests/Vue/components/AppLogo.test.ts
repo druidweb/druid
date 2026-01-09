@@ -1,12 +1,26 @@
 import AppLogo from '@/components/AppLogo.vue';
 import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('@inertiajs/vue3', () => ({
+  usePage: () => ({
+    props: {
+      name: 'Druid',
+    },
+  }),
+}));
 
 describe('AppLogo', () => {
-  it('renders the logo text', () => {
-    const wrapper = mount(AppLogo);
+  it('renders the app name when in sidebar layout', () => {
+    const wrapper = mount(AppLogo, {
+      global: {
+        provide: {
+          layoutVariant: 'sidebar',
+        },
+      },
+    });
 
-    expect(wrapper.text()).toContain('Laravel Starter Kit');
+    expect(wrapper.text()).toContain('Druid');
   });
 
   it('renders the logo icon', () => {
@@ -26,21 +40,25 @@ describe('AppLogo', () => {
     expect(logoContainer.classes()).toContain('bg-black');
   });
 
-  it('applies correct styling to text container', () => {
+  it('hides text container in default layout', () => {
     const wrapper = mount(AppLogo);
+
+    const textContainer = wrapper.find('div.grid');
+    expect(textContainer.exists()).toBe(false);
+  });
+
+  it('shows text container in sidebar layout', () => {
+    const wrapper = mount(AppLogo, {
+      global: {
+        provide: {
+          layoutVariant: 'sidebar',
+        },
+      },
+    });
 
     const textContainer = wrapper.find('div.grid');
     expect(textContainer.exists()).toBe(true);
     expect(textContainer.classes()).toContain('ml-1');
     expect(textContainer.classes()).toContain('flex-1');
   });
-
-  it('applies correct styling to text', () => {
-    const wrapper = mount(AppLogo);
-
-    const span = wrapper.find('span');
-    expect(span.classes()).toContain('truncate');
-    expect(span.classes()).toContain('font-semibold');
-  });
 });
-

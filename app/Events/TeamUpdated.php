@@ -1,8 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Events;
 
-class TeamUpdated extends TeamEvent
-{
-  //
-}
+final class TeamUpdated extends TeamEvent {}

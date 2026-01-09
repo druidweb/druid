@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail;
 
 use App\Models\TeamInvitation as TeamInvitationModel;
@@ -8,7 +10,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\URL;
 
-class TeamInvitation extends Mailable
+final class TeamInvitation extends Mailable
 {
   use Queueable, SerializesModels;
 

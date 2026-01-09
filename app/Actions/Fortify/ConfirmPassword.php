@@ -7,7 +7,7 @@ namespace App\Actions\Fortify;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Auth;
 
-class ConfirmPassword
+final class ConfirmPassword
 {
   /**
    * Confirm that the given password is valid for the given user.
