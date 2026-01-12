@@ -32,7 +32,7 @@
     "pestphp/pest-plugin-type-coverage": "^4.0.3",
     "rector/rector": "^2.3.0",
     "zenphp/fixr": "^1.0.4",
-    "zenphp/zorah": "^1.0.7"
+    "zenphp/zorah": "^2.1.1"
   },
   "autoload": {
     "psr-4": {
