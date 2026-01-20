@@ -91,7 +91,7 @@ composer global require laravel/installer
 Then create a new Laravel application using this starter kit:
 
 ```bash
-laravel new --using=druidweb/druid
+laravel new my_app --using=druidweb/druid
 ```
 
 For more information about Laravel starter kits, please refer to the [Laravel documentation](https://laravel.com/docs/12.x/starter-kits).
