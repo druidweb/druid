@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.4](https://github.com/druidweb/druid/compare/v1.4.3...v1.4.4) (2026-01-20)
+
+
+### Code Refactoring
+
+* remove dependabot update tests.yml ([8858ab2](https://github.com/druidweb/druid/commit/8858ab2d9b33af11bf9d0b1b97c56ab54faf77db))
+
 ## [1.4.3](https://github.com/druidweb/druid/compare/v1.4.2...v1.4.3) (2026-01-09)
 
 
