@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.6](https://github.com/druidweb/druid/compare/v1.4.5...v1.4.6) (2026-01-26)
+
+
+### Bug Fixes
+
+* add env for locale, add missing translation ([840e80b](https://github.com/druidweb/druid/commit/840e80b48702d064042ea0bff7a21cbfc29bd911))
+
 ## [1.4.5](https://github.com/druidweb/druid/compare/v1.4.4...v1.4.5) (2026-01-26)
 
 
