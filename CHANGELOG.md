@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.5](https://github.com/druidweb/druid/compare/v1.4.4...v1.4.5) (2026-01-26)
+
+
+### Code Refactoring
+
+* extract strings to translations ([3b2d6f6](https://github.com/druidweb/druid/commit/3b2d6f69786cdb942067b4414e454d9a2f256c4a))
+
+
+### Maintenance
+
+* change from ssr build to standard in ci ([af1d0a3](https://github.com/druidweb/druid/commit/af1d0a3fcf0286b0b6d65dc26b5eaaa6ef6980ad))
+* fix missing domain from env.example ([132686f](https://github.com/druidweb/druid/commit/132686f00ae2b44e548dcd5fc4b01d9941c5b754))
+* update readme ([070fd7c](https://github.com/druidweb/druid/commit/070fd7c8cedd49c009d7a680d637f626885e469a))
+* updates to dependencies ([70fb48f](https://github.com/druidweb/druid/commit/70fb48f7acfc64039a80f244d37631a4d02d805b))
+
 ## [1.4.4](https://github.com/druidweb/druid/compare/v1.4.3...v1.4.4) (2026-01-20)
 
 
