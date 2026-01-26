@@ -2,12 +2,9 @@
 
 return [
 
-  /*
-  |--------------------------------------------------------------------------
-  | Common Actions
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * COMMON ACTIONS
+   */
   'actions' => [
     'add' => 'Add',
     'cancel' => 'Cancel',
@@ -23,12 +20,9 @@ return [
     'save' => 'Save',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Status Messages
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * STATUS MESSAGES
+   */
   'status' => [
     'added' => 'Added.',
     'copied' => 'Copied!',
@@ -40,12 +34,9 @@ return [
     'last_used' => 'Last used',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Navigation
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * NAVIGATION
+   */
   'nav' => [
     'dashboard' => 'Dashboard',
     'settings' => 'Settings',
@@ -63,12 +54,9 @@ return [
     'appearance' => 'Appearance',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Welcome Page
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * WELCOME PAGE
+   */
   'welcome' => [
     'title' => 'Welcome',
     'get_started' => "Let's get started",
@@ -79,12 +67,9 @@ return [
     'deploy_now' => 'Deploy now',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Authentication
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * AUTHENTICATION
+   */
   'auth' => [
     'log_in' => 'Log in',
     'log_in_to_account' => 'Log in to your account',
@@ -107,12 +92,9 @@ return [
     'lets_get_started' => "Let's get started",
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Email Verification
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * EMAIL VERIFICATION
+   */
   'verification' => [
     'title' => 'Email verification',
     'verify_email' => 'Verify email',
@@ -120,12 +102,9 @@ return [
     'check_email' => 'Please verify your email address by clicking on the link we just emailed to you.',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Two-Factor Authentication
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * TWO-FACTOR AUTHENTICATION
+   */
   'two_factor' => [
     'title' => 'Two-Factor Authentication',
     'description' => 'Manage your two-factor authentication settings',
@@ -150,12 +129,9 @@ return [
     'or_you_can' => 'or you can',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Profile & Account
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * PROFILE & ACCOUNT
+   */
   'profile' => [
     'title' => 'Profile Information',
     'settings' => 'Profile settings',
@@ -166,12 +142,9 @@ return [
     'remove_photo' => 'Remove Photo',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Password
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * PASSWORD
+   */
   'password' => [
     'title' => 'Update Password',
     'settings' => 'Password settings',
@@ -180,12 +153,9 @@ return [
     'new' => 'New password',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Sessions
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * SESSIONS
+   */
   'sessions' => [
     'title' => 'Browser Sessions',
     'description' => 'Manage and log out your active sessions on other browsers and devices',
@@ -197,23 +167,17 @@ return [
     'current_session' => 'Your current browser session',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Appearance
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * APPEARANCE
+   */
   'appearance' => [
     'title' => 'Appearance settings',
     'description' => "Update your account's appearance settings",
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Delete Account
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * DELETE ACCOUNT
+   */
   'delete_account' => [
     'title' => 'Delete Account',
     'description' => 'Delete your account and all of its resources',
@@ -223,12 +187,9 @@ return [
     'warning' => 'Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Teams
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * TEAMS
+   */
   'teams' => [
     'title' => 'Team Settings',
     'description' => "Manage your team's settings and members",
@@ -260,14 +221,13 @@ return [
     'create_description_long' => 'Create a new team to collaborate with others on projects.',
     'delete' => 'Delete Team',
     'delete_description' => 'Permanently delete this team.',
+    'delete_warning' => 'Once a team is deleted, all of its resources and data will be permanently deleted. Before deleting this team, please download any data or information that you wish to retain.',
+    'delete_confirm' => 'Are you sure you want to delete this team? This action is irreversible.',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | API Tokens
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * API TOKENS
+   */
   'api_tokens' => [
     'title' => 'API Tokens',
     'description' => 'API tokens allow third-party services to authenticate with our application on your behalf.',
@@ -282,12 +242,9 @@ return [
     'delete_existing' => 'You may delete any of your existing tokens if they are no longer needed.',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Form Fields
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * FORM FIELDS
+   */
   'fields' => [
     'name' => 'Name',
     'full_name' => 'Full name',
@@ -300,15 +257,11 @@ return [
     'platform' => 'Platform',
   ],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Legal
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * LEGAL
+   */
   'legal' => [
     'terms' => 'Terms of Service',
     'privacy' => 'Privacy Policy',
   ],
-
 ];
