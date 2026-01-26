@@ -8,11 +8,12 @@ import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { __ } from 'zorah-js';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
   {
-    title: 'Dashboard',
+    title: __('base.nav.dashboard'),
     href: dashboard(),
     icon: LayoutGrid,
   },
@@ -20,12 +21,12 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
   {
-    title: 'Github Repo',
+    title: __('base.nav.github_repo'),
     href: 'https://github.com/druidweb/druid',
     icon: Folder,
   },
   {
-    title: 'Documentation',
+    title: __('base.nav.documentation'),
     href: 'https://laravel.com/docs/starter-kits#vue',
     icon: BookOpen,
   },

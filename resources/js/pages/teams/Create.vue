@@ -5,10 +5,11 @@ import CreateTeamForm from '@/pages/teams/Partials/CreateTeamForm.vue';
 import { create } from '@/routes/teams';
 import type { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
+import { __ } from 'zorah-js';
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {
-    title: 'Create Team',
+    title: __('base.teams.create'),
     href: create().url,
   },
 ];
@@ -16,9 +17,9 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbItems">
-    <Head title="Create Team" />
+    <Head :title="__('base.teams.create')" />
 
-    <SectionLayout title="Create Team" description="Create a new team to collaborate with others">
+    <SectionLayout :title="__('base.teams.create')" :description="__('base.teams.create_description')">
       <CreateTeamForm />
     </SectionLayout>
   </AppLayout>

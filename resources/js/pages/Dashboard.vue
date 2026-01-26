@@ -11,11 +11,12 @@ import { type BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/vue3';
 import { KeyRound, LoaderCircle } from 'lucide-vue-next';
 import { ref } from 'vue';
+import { __ } from 'zorah-js';
 import PlaceholderPattern from '../components/PlaceholderPattern.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
+    title: __('base.nav.dashboard'),
     href: dashboard().url,
   },
 ];
@@ -24,7 +25,7 @@ const showModal = ref(false);
 </script>
 
 <template>
-  <Head title="Dashboard" />
+  <Head :title="__('base.nav.dashboard')" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded p-4">
@@ -59,14 +60,14 @@ const showModal = ref(false);
               <KeyRound class="relative z-20 size-6 text-foreground" />
             </div>
           </div>
-          <DialogTitle>Confirm your password</DialogTitle>
-          <DialogDescription>This is a secure area of the application. Please confirm your password before continuing.</DialogDescription>
+          <DialogTitle>{{ __('base.auth.confirm_your_password') }}</DialogTitle>
+          <DialogDescription>{{ __('base.auth.secure_area') }}</DialogDescription>
         </DialogHeader>
 
         <Form v-bind="store.form()" reset-on-success v-slot="{ errors, processing }">
           <div class="space-y-6">
             <div class="grid gap-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{{ __('base.fields.password') }}</Label>
               <Input id="password" type="password" name="password" class="mt-1 block w-full" required autocomplete="current-password" autofocus />
 
               <InputError :message="errors.password" />
@@ -75,7 +76,7 @@ const showModal = ref(false);
             <div class="flex items-center justify-end">
               <Button class="w-full" :disabled="processing" data-test="confirm-password-button">
                 <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
-                Confirm Password
+                {{ __('base.auth.confirm_password') }}
               </Button>
             </div>
           </div>

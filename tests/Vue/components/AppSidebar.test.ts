@@ -56,13 +56,13 @@ describe('AppSidebar', () => {
 
   it('renders NavMain with main nav items', () => {
     const wrapper = mountWithProvider();
-    expect(wrapper.text()).toContain('Dashboard');
+    expect(wrapper.text()).toContain('base.nav.dashboard');
   });
 
   it('renders NavFooter with footer nav items', () => {
     const wrapper = mountWithProvider();
-    expect(wrapper.text()).toContain('Github Repo');
-    expect(wrapper.text()).toContain('Documentation');
+    expect(wrapper.text()).toContain('base.nav.github_repo');
+    expect(wrapper.text()).toContain('base.nav.documentation');
   });
 
   it('renders NavUser', () => {

@@ -30,7 +30,7 @@ describe('SettingsLayout', () => {
         },
       },
     });
-    expect(wrapper.text()).toContain('Settings');
+    expect(wrapper.text()).toContain('base.nav.settings');
   });
 
   it('renders navigation items', () => {
@@ -44,10 +44,10 @@ describe('SettingsLayout', () => {
         },
       },
     });
-    expect(wrapper.text()).toContain('Profile');
-    expect(wrapper.text()).toContain('Password');
-    expect(wrapper.text()).toContain('Two-Factor Auth');
-    expect(wrapper.text()).toContain('Appearance');
+    expect(wrapper.text()).toContain('base.nav.profile');
+    expect(wrapper.text()).toContain('base.fields.password');
+    expect(wrapper.text()).toContain('base.nav.two_factor');
+    expect(wrapper.text()).toContain('base.nav.appearance');
   });
 
   it('renders slot content', () => {
@@ -67,4 +67,3 @@ describe('SettingsLayout', () => {
     expect(wrapper.html()).toContain('Settings Content');
   });
 });
-

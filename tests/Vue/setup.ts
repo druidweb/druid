@@ -1,6 +1,16 @@
 import { config, type VueWrapper } from '@vue/test-utils';
 import { beforeEach, expect, vi } from 'vitest';
 
+// Mock Zorah translation functions globally (for script setup usage)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const __ = (key: string, replace?: Record<string, string | number>): string => key;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const trans = (key: string, replace?: Record<string, string | number>): string => key;
+
+// Assign to globalThis for script setup blocks
+(globalThis as Record<string, unknown>).__ = __;
+(globalThis as Record<string, unknown>).trans = trans;
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -25,6 +35,14 @@ config.global.stubs = {
   Head: {
     template: '<div><slot /></div>',
   },
+};
+
+// Mock Zorah translation functions
+config.global.mocks = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  __: (key: string, replace?: Record<string, string | number>) => key,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  trans: (key: string, replace?: Record<string, string | number>) => key,
 };
 
 // Reset DOM state before each test

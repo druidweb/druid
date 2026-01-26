@@ -47,8 +47,8 @@ describe('DeleteUser', () => {
         },
       },
     });
-    expect(wrapper.text()).toContain('Delete Account');
-    expect(wrapper.text()).toContain('Delete your account and all of its resources');
+    expect(wrapper.text()).toContain('base.delete_account.title');
+    expect(wrapper.text()).toContain('base.delete_account.description');
   });
 
   it('renders delete account button', () => {
@@ -76,7 +76,7 @@ describe('DeleteUser', () => {
         },
       },
     });
-    expect(wrapper.text()).toContain('Delete Account');
+    expect(wrapper.text()).toContain('base.delete_account.title');
   });
 
   it('renders dialog content', () => {
@@ -102,7 +102,7 @@ describe('DeleteUser', () => {
         },
       },
     });
-    expect(wrapper.text()).toContain('Are you sure you want to delete your account?');
+    expect(wrapper.text()).toContain('base.delete_account.confirm_title');
   });
 
   it('has password input ref', () => {

@@ -53,7 +53,7 @@ describe('NavMain', () => {
       items: mockItems,
     });
 
-    expect(wrapper.text()).toContain('Platform');
+    expect(wrapper.text()).toContain('base.nav.platform');
   });
 
   it('renders item titles', () => {

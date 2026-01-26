@@ -16,6 +16,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { computed, ref } from 'vue';
+import { __ } from 'zorah-js';
 
 interface Props {
   mustVerifyEmail: boolean;
@@ -26,7 +27,7 @@ defineProps<Props>();
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {
-    title: 'Profile settings',
+    title: __('base.profile.settings'),
     href: edit().url,
   },
 ];
@@ -75,7 +76,7 @@ const clearPhotoFileInput = () => {
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbItems">
-    <Head title="Profile settings" />
+    <Head :title="__('base.profile.settings')" />
 
     <SettingsLayout>
       <div class="space-y-10">
@@ -86,8 +87,8 @@ const clearPhotoFileInput = () => {
             @success="clearPhotoFileInput"
             v-slot="{ errors, processing, recentlySuccessful }">
             <CardHeader>
-              <CardTitle>Profile Information</CardTitle>
-              <CardDescription>Update your name and email address</CardDescription>
+              <CardTitle>{{ __('base.profile.title') }}</CardTitle>
+              <CardDescription>{{ __('base.profile.description') }}</CardDescription>
             </CardHeader>
 
             <CardContent class="space-y-6">
@@ -95,7 +96,7 @@ const clearPhotoFileInput = () => {
               <div v-if="page.props.teams?.managesProfilePhotos" class="grid gap-2">
                 <input id="photo" ref="photoInput" type="file" name="photo" accept="image/*" class="hidden" @change="updatePhotoPreview" />
 
-                <Label>Avatar</Label>
+                <Label>{{ __('base.profile.avatar') }}</Label>
 
                 <!-- Current Profile Photo -->
                 <div v-show="!photoPreview" class="mt-2">
@@ -110,15 +111,17 @@ const clearPhotoFileInput = () => {
                 </div>
 
                 <div class="flex gap-2">
-                  <Button variant="outline" type="button" @click.prevent="selectNewPhoto">Select New Photo</Button>
-                  <Button v-if="user.profile_photo_path" variant="outline" type="button" @click.prevent="deletePhoto">Remove Photo</Button>
+                  <Button variant="outline" type="button" @click.prevent="selectNewPhoto">{{ __('base.profile.select_photo') }}</Button>
+                  <Button v-if="user.profile_photo_path" variant="outline" type="button" @click.prevent="deletePhoto">{{
+                    __('base.profile.remove_photo')
+                  }}</Button>
                 </div>
 
                 <InputError class="mt-2" :message="errors.photo" />
               </div>
 
               <div class="grid gap-2">
-                <Label for="name">Name</Label>
+                <Label for="name">{{ __('base.fields.name') }}</Label>
                 <Input
                   id="name"
                   class="mt-1 block w-full"
@@ -126,12 +129,12 @@ const clearPhotoFileInput = () => {
                   :default-value="user.name"
                   required
                   autocomplete="name"
-                  placeholder="Full name" />
+                  :placeholder="__('base.fields.full_name')" />
                 <InputError class="mt-2" :message="errors.name" />
               </div>
 
               <div class="grid gap-2">
-                <Label for="email">Email address</Label>
+                <Label for="email">{{ __('base.fields.email_address') }}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -140,7 +143,7 @@ const clearPhotoFileInput = () => {
                   :default-value="user.email"
                   required
                   autocomplete="username"
-                  placeholder="Email address" />
+                  :placeholder="__('base.fields.email_address')" />
                 <InputError class="mt-2" :message="errors.email" />
               </div>
 
@@ -167,10 +170,10 @@ const clearPhotoFileInput = () => {
                 enter-from-class="opacity-0"
                 leave-active-class="transition ease-in-out"
                 leave-to-class="opacity-0">
-                <p v-show="recentlySuccessful" class="text-sm text-muted-foreground">Saved.</p>
+                <p v-show="recentlySuccessful" class="text-sm text-muted-foreground">{{ __('base.status.saved') }}</p>
               </Transition>
 
-              <Button :disabled="processing" data-test="update-profile-button">Save</Button>
+              <Button :disabled="processing" data-test="update-profile-button">{{ __('base.actions.save') }}</Button>
             </CardFooter>
           </Form>
         </Card>

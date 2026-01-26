@@ -106,21 +106,21 @@ const deleteApiToken = () => {
     <Card>
       <form @submit.prevent="createApiToken">
         <CardHeader>
-          <CardTitle>Create API Token</CardTitle>
-          <CardDescription>API tokens allow third-party services to authenticate with our application on your behalf.</CardDescription>
+          <CardTitle>{{ __('base.api_tokens.create') }}</CardTitle>
+          <CardDescription>{{ __('base.api_tokens.description') }}</CardDescription>
         </CardHeader>
 
         <CardContent class="space-y-6">
           <!-- Token Name -->
           <div class="space-y-2">
-            <Label for="name">Name</Label>
+            <Label for="name">{{ __('base.fields.name') }}</Label>
             <Input id="name" v-model="createApiTokenForm.name" type="text" autofocus />
             <InputError :message="createApiTokenForm.errors.name" />
           </div>
 
           <!-- Token Permissions -->
           <div v-if="availablePermissions.length > 0" class="space-y-2">
-            <Label for="permissions">Permissions</Label>
+            <Label for="permissions">{{ __('base.fields.permissions') }}</Label>
 
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div v-for="permission in availablePermissions" :key="permission" class="flex items-center gap-2">
@@ -144,10 +144,12 @@ const deleteApiToken = () => {
 
         <CardFooter class="flex items-center justify-end gap-3">
           <Transition leave-active-class="transition ease-in duration-1000" leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <div v-show="createApiTokenForm.recentlySuccessful" class="text-sm text-muted-foreground">Created.</div>
+            <div v-show="createApiTokenForm.recentlySuccessful" class="text-sm text-muted-foreground">{{ __('base.status.created') }}</div>
           </Transition>
 
-          <Button :class="{ 'opacity-25': createApiTokenForm.processing }" :disabled="createApiTokenForm.processing"> Create </Button>
+          <Button :class="{ 'opacity-25': createApiTokenForm.processing }" :disabled="createApiTokenForm.processing">{{
+            __('base.actions.create')
+          }}</Button>
         </CardFooter>
       </form>
     </Card>
@@ -155,8 +157,8 @@ const deleteApiToken = () => {
     <!-- Manage API Tokens -->
     <Card v-if="tokens.length > 0">
       <CardHeader>
-        <CardTitle>Manage API Tokens</CardTitle>
-        <CardDescription>You may delete any of your existing tokens if they are no longer needed.</CardDescription>
+        <CardTitle>{{ __('base.api_tokens.manage') }}</CardTitle>
+        <CardDescription>{{ __('base.api_tokens.delete_existing') }}</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -175,11 +177,11 @@ const deleteApiToken = () => {
                 size="sm"
                 class="text-muted-foreground"
                 @click="manageApiTokenPermissions(token)">
-                Permissions
+                {{ __('base.fields.permissions') }}
               </Button>
 
               <Button variant="ghost" size="sm" class="text-destructive hover:text-destructive" @click="confirmApiTokenDeletion(token)">
-                Delete
+                {{ __('base.actions.delete') }}
               </Button>
             </div>
           </div>
@@ -191,8 +193,8 @@ const deleteApiToken = () => {
     <Dialog :open="displayingToken" @update:open="displayingToken = $event">
       <DialogContent class="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>API Token Created</DialogTitle>
-          <DialogDescription>Please copy your new API token. For your security, it won't be shown again.</DialogDescription>
+          <DialogTitle>{{ __('base.api_tokens.created') }}</DialogTitle>
+          <DialogDescription>{{ __('base.api_tokens.created_description') }}</DialogDescription>
         </DialogHeader>
 
         <div v-if="$page.props.teams.flash.token" class="group relative">
@@ -209,7 +211,7 @@ const deleteApiToken = () => {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{{ copied ? 'Copied!' : 'Copy to clipboard' }}</p>
+                  <p>{{ copied ? __('base.status.copied') : __('base.status.copy_to_clipboard') }}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -217,7 +219,7 @@ const deleteApiToken = () => {
         </div>
 
         <DialogFooter>
-          <Button @click="displayingToken = false">Done</Button>
+          <Button @click="displayingToken = false">{{ __('base.actions.done') }}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -226,7 +228,7 @@ const deleteApiToken = () => {
     <Dialog :open="managingPermissionsFor != null" @update:open="managingPermissionsFor = $event ? managingPermissionsFor : null">
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>API Token Permissions</DialogTitle>
+          <DialogTitle>{{ __('base.api_tokens.permissions') }}</DialogTitle>
         </DialogHeader>
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -248,11 +250,11 @@ const deleteApiToken = () => {
         </div>
 
         <DialogFooter>
-          <Button variant="outline" @click="managingPermissionsFor = null"> Cancel </Button>
+          <Button variant="outline" @click="managingPermissionsFor = null">{{ __('base.actions.cancel') }}</Button>
 
-          <Button :class="{ 'opacity-25': updateApiTokenForm.processing }" :disabled="updateApiTokenForm.processing" @click="updateApiToken">
-            Save
-          </Button>
+          <Button :class="{ 'opacity-25': updateApiTokenForm.processing }" :disabled="updateApiTokenForm.processing" @click="updateApiToken">{{
+            __('base.actions.save')
+          }}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -261,19 +263,19 @@ const deleteApiToken = () => {
     <Dialog :open="apiTokenBeingDeleted != null" @update:open="apiTokenBeingDeleted = $event ? apiTokenBeingDeleted : null">
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete API Token</DialogTitle>
-          <DialogDescription>Are you sure you would like to delete this API token?</DialogDescription>
+          <DialogTitle>{{ __('base.api_tokens.delete') }}</DialogTitle>
+          <DialogDescription>{{ __('base.api_tokens.delete_confirm') }}</DialogDescription>
         </DialogHeader>
 
         <DialogFooter>
-          <Button variant="outline" @click="apiTokenBeingDeleted = null"> Cancel </Button>
+          <Button variant="outline" @click="apiTokenBeingDeleted = null">{{ __('base.actions.cancel') }}</Button>
 
           <Button
             variant="destructive"
             :class="{ 'opacity-25': deleteApiTokenForm.processing }"
             :disabled="deleteApiTokenForm.processing"
             @click="deleteApiToken">
-            Delete
+            {{ __('base.actions.delete') }}
           </Button>
         </DialogFooter>
       </DialogContent>

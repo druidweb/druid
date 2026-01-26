@@ -18,8 +18,8 @@ const inputEmail = ref(props.email);
 </script>
 
 <template>
-  <AuthLayout title="Reset password" description="Please enter your new password below">
-    <Head title="Reset password" />
+  <AuthLayout :title="__('base.auth.reset_password')" :description="__('base.auth.reset_password_description')">
+    <Head :title="__('base.auth.reset_password')" />
 
     <Form
       v-bind="update.form()"
@@ -28,13 +28,13 @@ const inputEmail = ref(props.email);
       v-slot="{ errors, processing }">
       <div class="grid gap-6">
         <div class="grid gap-2">
-          <Label for="email">Email</Label>
+          <Label for="email">{{ __('base.fields.email') }}</Label>
           <Input id="email" type="email" name="email" autocomplete="email" v-model="inputEmail" class="mt-1 block w-full" readonly />
           <InputError :message="errors.email" class="mt-2" />
         </div>
 
         <div class="grid gap-2">
-          <Label for="password">Password</Label>
+          <Label for="password">{{ __('base.fields.password') }}</Label>
           <Input
             id="password"
             type="password"
@@ -42,25 +42,25 @@ const inputEmail = ref(props.email);
             autocomplete="new-password"
             class="mt-1 block w-full"
             autofocus
-            placeholder="Password" />
+            :placeholder="__('base.fields.password')" />
           <InputError :message="errors.password" />
         </div>
 
         <div class="grid gap-2">
-          <Label for="password_confirmation"> Confirm Password </Label>
+          <Label for="password_confirmation">{{ __('base.auth.confirm_password') }}</Label>
           <Input
             id="password_confirmation"
             type="password"
             name="password_confirmation"
             autocomplete="new-password"
             class="mt-1 block w-full"
-            placeholder="Confirm password" />
+            :placeholder="__('base.auth.confirm_password')" />
           <InputError :message="errors.password_confirmation" />
         </div>
 
         <Button type="submit" class="mt-4 w-full" :disabled="processing" data-test="reset-password-button">
           <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
-          Reset password
+          {{ __('base.auth.reset_password') }}
         </Button>
       </div>
     </Form>

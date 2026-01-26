@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import AppLogo from '@/components/AppLogo.vue';
 import { Head } from '@inertiajs/vue3';
+import { __ } from 'zorah-js';
 
 defineProps({
   policy: String,
@@ -8,7 +9,7 @@ defineProps({
 </script>
 
 <template>
-  <Head title="Privacy Policy" />
+  <Head :title="__('base.legal.privacy')" />
 
   <div class="font-sans text-gray-900 antialiased dark:text-gray-100">
     <div class="bg-gray-100 pt-4 dark:bg-gray-900">

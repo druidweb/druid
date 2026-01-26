@@ -20,8 +20,8 @@ defineProps<{
 </script>
 
 <template>
-  <AuthBase title="Log in to your account" description="Enter your email and password below to log in">
-    <Head title="Log in" />
+  <AuthBase :title="__('base.auth.log_in_to_account')" :description="__('base.auth.login_description')">
+    <Head :title="__('base.auth.log_in')" />
 
     <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
       {{ status }}
@@ -30,36 +30,51 @@ defineProps<{
     <Form v-bind="store.form()" :reset-on-success="['password']" v-slot="{ errors, processing }" class="flex flex-col gap-6">
       <div class="grid gap-6">
         <div class="grid gap-2">
-          <Label for="email">Email address</Label>
-          <Input id="email" type="email" name="email" required autofocus :tabindex="1" autocomplete="email" placeholder="email@example.com" />
+          <Label for="email">{{ __('base.fields.email_address') }}</Label>
+          <Input
+            id="email"
+            type="email"
+            name="email"
+            required
+            autofocus
+            :tabindex="1"
+            autocomplete="email"
+            :placeholder="__('base.fields.email_placeholder')" />
           <InputError :message="errors.email" />
         </div>
 
         <div class="grid gap-2">
           <div class="flex items-center justify-between">
-            <Label for="password">Password</Label>
-            <TextLink v-if="canResetPassword" :href="request()" class="text-sm" :tabindex="5"> Forgot password? </TextLink>
+            <Label for="password">{{ __('base.fields.password') }}</Label>
+            <TextLink v-if="canResetPassword" :href="request()" class="text-sm" :tabindex="5">{{ __('base.auth.forgot_password') }}</TextLink>
           </div>
-          <Input id="password" type="password" name="password" required :tabindex="2" autocomplete="current-password" placeholder="Password" />
+          <Input
+            id="password"
+            type="password"
+            name="password"
+            required
+            :tabindex="2"
+            autocomplete="current-password"
+            :placeholder="__('base.fields.password')" />
           <InputError :message="errors.password" />
         </div>
 
         <div class="flex items-center justify-between">
           <Label for="remember" class="flex items-center space-x-3">
             <Checkbox id="remember" name="remember" :tabindex="3" />
-            <span>Remember me</span>
+            <span>{{ __('base.auth.remember_me') }}</span>
           </Label>
         </div>
 
         <Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="processing" data-test="login-button">
           <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
-          Log in
+          {{ __('base.auth.log_in') }}
         </Button>
       </div>
 
       <div class="text-center text-sm text-muted-foreground" v-if="canRegister">
         Don't have an account?
-        <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
+        <TextLink :href="register()" :tabindex="5">{{ __('base.auth.sign_up') }}</TextLink>
       </div>
     </Form>
   </AuthBase>

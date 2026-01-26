@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { cn } from '@/lib/utils';
 import type { HTMLAttributes } from 'vue';
+import { __ } from 'zorah-js';
 import { useSidebar } from './utils';
 
 const props = defineProps<{
@@ -8,15 +9,17 @@ const props = defineProps<{
 }>();
 
 const { toggleSidebar } = useSidebar();
+
+const toggleLabel = __('base.nav.toggle_sidebar');
 </script>
 
 <template>
   <button
     data-sidebar="rail"
     data-slot="sidebar-rail"
-    aria-label="Toggle Sidebar"
+    :aria-label="toggleLabel"
     :tabindex="-1"
-    title="Toggle Sidebar"
+    :title="toggleLabel"
     :class="
       cn(
         'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex',

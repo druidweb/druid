@@ -61,7 +61,7 @@ describe('UserMenuContent', () => {
         },
       },
     });
-    expect(wrapper.text()).toContain('Settings');
+    expect(wrapper.text()).toContain('base.nav.settings');
   });
 
   it('displays logout option', () => {
@@ -80,7 +80,7 @@ describe('UserMenuContent', () => {
         },
       },
     });
-    expect(wrapper.text()).toContain('Log out');
+    expect(wrapper.text()).toContain('base.auth.log_out');
     const logoutButton = wrapper.find('[data-test="logout-button"]');
     expect(logoutButton.exists()).toBe(true);
   });

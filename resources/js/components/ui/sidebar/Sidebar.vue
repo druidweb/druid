@@ -40,8 +40,8 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
         '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
       }">
       <SheetHeader class="sr-only">
-        <SheetTitle>Sidebar</SheetTitle>
-        <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+        <SheetTitle>{{ __('base.nav.sidebar') }}</SheetTitle>
+        <SheetDescription>{{ __('base.nav.displays_mobile_sidebar') }}</SheetDescription>
       </SheetHeader>
       <div class="flex h-full w-full flex-col">
         <slot />

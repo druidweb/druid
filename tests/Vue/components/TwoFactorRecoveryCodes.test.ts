@@ -54,7 +54,7 @@ describe('TwoFactorRecoveryCodes', () => {
         },
       },
     });
-    expect(wrapper.text()).toContain('2FA Recovery Codes');
+    expect(wrapper.text()).toContain('base.two_factor.recovery_codes_title');
   });
 
   it('renders buttons', async () => {

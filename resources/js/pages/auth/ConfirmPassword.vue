@@ -23,7 +23,7 @@ const handleOpenChange = (open: boolean) => {
 
 <template>
   <AppLayout>
-    <Head title="Confirm password" />
+    <Head :title="__('base.auth.confirm_password')" />
 
     <Dialog :open="isOpen" @update:open="handleOpenChange">
       <DialogContent class="sm:max-w-md">
@@ -39,14 +39,14 @@ const handleOpenChange = (open: boolean) => {
               <KeyRound class="relative z-20 size-6 text-foreground" />
             </div>
           </div>
-          <DialogTitle>Confirm your password</DialogTitle>
-          <DialogDescription>This is a secure area of the application. Please confirm your password before continuing.</DialogDescription>
+          <DialogTitle>{{ __('base.auth.confirm_your_password') }}</DialogTitle>
+          <DialogDescription>{{ __('base.auth.secure_area') }}</DialogDescription>
         </DialogHeader>
 
         <Form v-bind="store.form()" reset-on-success v-slot="{ errors, processing }">
           <div class="space-y-6">
             <div class="grid gap-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{{ __('base.fields.password') }}</Label>
               <Input id="password" type="password" name="password" class="mt-1 block w-full" required autocomplete="current-password" autofocus />
 
               <InputError :message="errors.password" />
@@ -55,7 +55,7 @@ const handleOpenChange = (open: boolean) => {
             <div class="flex items-center justify-end">
               <Button class="w-full" :disabled="processing" data-test="confirm-password-button">
                 <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
-                Confirm Password
+                {{ __('base.auth.confirm_password') }}
               </Button>
             </div>
           </div>

@@ -132,23 +132,23 @@ const displayableRole = (role: string) => {
     <Card v-if="userPermissions.canAddTeamMembers">
       <form @submit.prevent="addTeamMember">
         <CardHeader>
-          <CardTitle>Add Team Member</CardTitle>
-          <CardDescription>Add a new team member to your team, allowing them to collaborate with you.</CardDescription>
+          <CardTitle>{{ __('base.teams.add_member') }}</CardTitle>
+          <CardDescription>{{ __('base.teams.add_member_description') }}</CardDescription>
         </CardHeader>
 
         <CardContent class="space-y-6">
-          <div class="max-w-xl text-sm text-muted-foreground">Please provide the email address of the person you would like to add to this team.</div>
+          <div class="max-w-xl text-sm text-muted-foreground">{{ __('base.teams.add_member_email') }}</div>
 
           <!-- Member Email -->
           <div class="space-y-2">
-            <Label for="email">Email</Label>
+            <Label for="email">{{ __('base.fields.email') }}</Label>
             <Input id="email" v-model="addTeamMemberForm.email" type="email" />
             <InputError :message="addTeamMemberForm.errors.email" />
           </div>
 
           <!-- Role -->
           <div v-if="availableRoles.length > 0" class="space-y-2">
-            <Label for="roles">Role</Label>
+            <Label for="roles">{{ __('base.teams.role') }}</Label>
             <InputError :message="addTeamMemberForm.errors.role" />
 
             <div class="relative z-0 cursor-pointer rounded-lg border">
@@ -184,10 +184,12 @@ const displayableRole = (role: string) => {
 
         <CardFooter class="flex items-center justify-end gap-3">
           <Transition leave-active-class="transition ease-in duration-1000" leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <div v-show="addTeamMemberForm.recentlySuccessful" class="text-sm text-muted-foreground">Added.</div>
+            <div v-show="addTeamMemberForm.recentlySuccessful" class="text-sm text-muted-foreground">{{ __('base.status.added') }}</div>
           </Transition>
 
-          <Button :class="{ 'opacity-25': addTeamMemberForm.processing }" :disabled="addTeamMemberForm.processing"> Add </Button>
+          <Button :class="{ 'opacity-25': addTeamMemberForm.processing }" :disabled="addTeamMemberForm.processing">{{
+            __('base.actions.add')
+          }}</Button>
         </CardFooter>
       </form>
     </Card>
@@ -195,10 +197,9 @@ const displayableRole = (role: string) => {
     <!-- Team Member Invitations -->
     <Card v-if="team.team_invitations.length > 0 && userPermissions.canAddTeamMembers">
       <CardHeader>
-        <CardTitle>Pending Team Invitations</CardTitle>
+        <CardTitle>{{ __('base.teams.pending_invitations') }}</CardTitle>
         <CardDescription>
-          These people have been invited to your team and have been sent an invitation email. They may join the team by accepting the email
-          invitation.
+          {{ __('base.teams.pending_invitations_description') }}
         </CardDescription>
       </CardHeader>
 
@@ -217,7 +218,7 @@ const displayableRole = (role: string) => {
                 size="sm"
                 class="text-destructive hover:text-destructive"
                 @click="cancelTeamInvitation(invitation)">
-                Cancel
+                {{ __('base.actions.cancel') }}
               </Button>
             </div>
           </div>
@@ -228,8 +229,8 @@ const displayableRole = (role: string) => {
     <!-- Manage Team Members -->
     <Card v-if="team.users.length > 0">
       <CardHeader>
-        <CardTitle>Team Members</CardTitle>
-        <CardDescription>All of the people that are part of this team.</CardDescription>
+        <CardTitle>{{ __('base.teams.members') }}</CardTitle>
+        <CardDescription>{{ __('base.teams.members_description') }}</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -264,7 +265,7 @@ const displayableRole = (role: string) => {
                 size="sm"
                 class="text-destructive hover:text-destructive"
                 @click="confirmLeavingTeam">
-                Leave
+                {{ __('base.actions.leave') }}
               </Button>
 
               <!-- Remove Team Member -->
@@ -274,7 +275,7 @@ const displayableRole = (role: string) => {
                 size="sm"
                 class="text-destructive hover:text-destructive"
                 @click="confirmTeamMemberRemoval(user)">
-                Remove
+                {{ __('base.actions.remove') }}
               </Button>
             </div>
           </div>
@@ -286,7 +287,7 @@ const displayableRole = (role: string) => {
     <Dialog :open="currentlyManagingRole" @update:open="currentlyManagingRole = $event">
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Manage Role</DialogTitle>
+          <DialogTitle>{{ __('base.teams.manage_role') }}</DialogTitle>
         </DialogHeader>
 
         <div v-if="managingRoleFor">
@@ -321,9 +322,11 @@ const displayableRole = (role: string) => {
         </div>
 
         <DialogFooter>
-          <Button variant="outline" @click="currentlyManagingRole = false"> Cancel </Button>
+          <Button variant="outline" @click="currentlyManagingRole = false">{{ __('base.actions.cancel') }}</Button>
 
-          <Button :class="{ 'opacity-25': updateRoleForm.processing }" :disabled="updateRoleForm.processing" @click="updateRole"> Save </Button>
+          <Button :class="{ 'opacity-25': updateRoleForm.processing }" :disabled="updateRoleForm.processing" @click="updateRole">{{
+            __('base.actions.save')
+          }}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -332,16 +335,16 @@ const displayableRole = (role: string) => {
     <Dialog :open="confirmingLeavingTeam" @update:open="confirmingLeavingTeam = $event">
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Leave Team</DialogTitle>
-          <DialogDescription>Are you sure you would like to leave this team?</DialogDescription>
+          <DialogTitle>{{ __('base.teams.leave') }}</DialogTitle>
+          <DialogDescription>{{ __('base.teams.leave_confirm') }}</DialogDescription>
         </DialogHeader>
 
         <DialogFooter>
-          <Button variant="outline" @click="confirmingLeavingTeam = false"> Cancel </Button>
+          <Button variant="outline" @click="confirmingLeavingTeam = false">{{ __('base.actions.cancel') }}</Button>
 
-          <Button variant="destructive" :class="{ 'opacity-25': leaveTeamForm.processing }" :disabled="leaveTeamForm.processing" @click="leaveTeam">
-            Leave
-          </Button>
+          <Button variant="destructive" :class="{ 'opacity-25': leaveTeamForm.processing }" :disabled="leaveTeamForm.processing" @click="leaveTeam">{{
+            __('base.actions.leave')
+          }}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -350,19 +353,19 @@ const displayableRole = (role: string) => {
     <Dialog :open="!!teamMemberBeingRemoved" @update:open="teamMemberBeingRemoved = $event ? teamMemberBeingRemoved : null">
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Remove Team Member</DialogTitle>
-          <DialogDescription>Are you sure you would like to remove this person from the team?</DialogDescription>
+          <DialogTitle>{{ __('base.teams.remove_member') }}</DialogTitle>
+          <DialogDescription>{{ __('base.teams.remove_member_confirm') }}</DialogDescription>
         </DialogHeader>
 
         <DialogFooter>
-          <Button variant="outline" @click="teamMemberBeingRemoved = null"> Cancel </Button>
+          <Button variant="outline" @click="teamMemberBeingRemoved = null">{{ __('base.actions.cancel') }}</Button>
 
           <Button
             variant="destructive"
             :class="{ 'opacity-25': removeTeamMemberForm.processing }"
             :disabled="removeTeamMemberForm.processing"
             @click="removeTeamMember">
-            Remove
+            {{ __('base.actions.remove') }}
           </Button>
         </DialogFooter>
       </DialogContent>

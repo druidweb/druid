@@ -16,8 +16,8 @@ defineProps<{
 </script>
 
 <template>
-  <AuthLayout title="Forgot password" description="Enter your email to receive a password reset link">
-    <Head title="Forgot password" />
+  <AuthLayout :title="__('base.auth.forgot_password')" :description="__('base.auth.forgot_password_description')">
+    <Head :title="__('base.auth.forgot_password')" />
 
     <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
       {{ status }}
@@ -26,8 +26,8 @@ defineProps<{
     <div class="space-y-6">
       <Form v-bind="email.form()" v-slot="{ errors, processing }">
         <div class="grid gap-2">
-          <Label for="email">Email address</Label>
-          <Input id="email" type="email" name="email" autocomplete="off" autofocus placeholder="email@example.com" />
+          <Label for="email">{{ __('base.fields.email_address') }}</Label>
+          <Input id="email" type="email" name="email" autocomplete="off" autofocus :placeholder="__('base.fields.email_placeholder')" />
           <InputError :message="errors.email" />
         </div>
 
@@ -40,8 +40,8 @@ defineProps<{
       </Form>
 
       <div class="space-x-1 text-center text-sm text-muted-foreground">
-        <span>Or, return to</span>
-        <TextLink :href="login()">log in</TextLink>
+        <span>{{ __('base.auth.or_return_to') }}</span>
+        <TextLink :href="login()">{{ __('base.auth.log_in') }}</TextLink>
       </div>
     </div>
   </AuthLayout>

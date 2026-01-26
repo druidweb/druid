@@ -45,16 +45,16 @@ const switchTeam = (teamId: number) => {
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="w-56">
-      <DropdownMenuLabel class="text-xs font-normal text-muted-foreground">Manage Team</DropdownMenuLabel>
+      <DropdownMenuLabel class="text-xs font-normal text-muted-foreground">{{ __('base.teams.manage_team') }}</DropdownMenuLabel>
       <DropdownMenuItem as-child>
-        <Link :href="showTeam(activeTeam.id)" class="cursor-pointer font-medium"> Team Settings </Link>
+        <Link :href="showTeam(activeTeam.id)" class="cursor-pointer font-medium">{{ __('base.teams.settings') }}</Link>
       </DropdownMenuItem>
       <DropdownMenuItem v-if="canCreateTeams" as-child>
-        <Link :href="createTeam()" class="cursor-pointer font-medium"> Create New Team </Link>
+        <Link :href="createTeam()" class="cursor-pointer font-medium">{{ __('base.teams.create_new') }}</Link>
       </DropdownMenuItem>
       <template v-if="hasMultipleTeams">
         <DropdownMenuSeparator />
-        <DropdownMenuLabel class="text-xs font-normal text-muted-foreground">Switch Teams</DropdownMenuLabel>
+        <DropdownMenuLabel class="text-xs font-normal text-muted-foreground">{{ __('base.teams.switch_teams') }}</DropdownMenuLabel>
         <DropdownMenuItem v-for="team in allTeams" :key="team.id" class="cursor-pointer" @click="switchTeam(team.id)">
           <CheckCircle v-if="team.id === currentTeam?.id" class="mr-2 size-4 text-green-500" />
           <span :class="{ 'ml-6': team.id !== currentTeam?.id }">{{ team.name }}</span>

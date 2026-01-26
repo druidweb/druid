@@ -9,7 +9,7 @@ it('allows any user to view any teams', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
   $policy = new TeamPolicy;
 
-  expect($policy->viewAny($user))->toBeTrue();
+  expect($policy->viewAny())->toBeTrue();
 });
 
 it('allows user to view team they belong to', function (): void {
@@ -31,7 +31,7 @@ it('allows user to create teams', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
   $policy = new TeamPolicy;
 
-  expect($policy->create($user))->toBeTrue();
+  expect($policy->create())->toBeTrue();
 });
 
 it('allows team owner to update team', function (): void {

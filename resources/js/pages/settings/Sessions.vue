@@ -12,10 +12,11 @@ import { BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/vue3';
 import { LoaderCircle, Monitor } from 'lucide-vue-next';
 import { ref } from 'vue';
+import { __ } from 'zorah-js';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Browser Sessions',
+    title: __('base.sessions.title'),
     href: index.url(),
   },
 ];
@@ -25,29 +26,28 @@ const showConfirmModal = ref(false);
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbs">
-    <Head title="Browser Sessions" />
+    <Head :title="__('base.sessions.title')" />
     <SettingsLayout>
       <Card>
         <CardHeader>
-          <CardTitle>Browser Sessions</CardTitle>
-          <CardDescription>Manage and log out your active sessions on other browsers and devices</CardDescription>
+          <CardTitle>{{ __('base.sessions.title') }}</CardTitle>
+          <CardDescription>{{ __('base.sessions.description') }}</CardDescription>
         </CardHeader>
 
         <CardContent class="space-y-6">
           <p class="text-muted-foreground">
-            If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed
-            below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.
+            {{ __('base.sessions.info') }}
           </p>
 
           <div class="flex items-center space-x-4 rounded-lg border p-4">
             <Monitor class="size-8 text-muted-foreground" />
             <div>
-              <p class="font-medium">This device</p>
-              <p class="text-sm text-muted-foreground">Your current browser session</p>
+              <p class="font-medium">{{ __('base.sessions.this_device') }}</p>
+              <p class="text-sm text-muted-foreground">{{ __('base.sessions.current_session') }}</p>
             </div>
           </div>
 
-          <Button @click="showConfirmModal = true">Log Out Other Browser Sessions</Button>
+          <Button @click="showConfirmModal = true">{{ __('base.sessions.logout_other') }}</Button>
         </CardContent>
       </Card>
     </SettingsLayout>
@@ -55,24 +55,24 @@ const showConfirmModal = ref(false);
     <Dialog v-model:open="showConfirmModal">
       <DialogContent class="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Log Out Other Browser Sessions</DialogTitle>
-          <DialogDescription>Please enter your password to confirm you would like to log out of your other browser sessions.</DialogDescription>
+          <DialogTitle>{{ __('base.sessions.logout_other') }}</DialogTitle>
+          <DialogDescription>{{ __('base.sessions.confirm_logout') }}</DialogDescription>
         </DialogHeader>
 
         <Form v-bind="destroy.form()" @success="showConfirmModal = false" v-slot="{ errors, processing }">
           <div class="space-y-6">
             <div class="grid gap-2">
-              <Label for="password">Password</Label>
+              <Label for="password">{{ __('base.fields.password') }}</Label>
               <Input id="password" type="password" name="password" class="mt-1 block w-full" required autocomplete="current-password" autofocus />
 
               <InputError :message="errors.password" />
             </div>
 
             <DialogFooter>
-              <Button type="button" variant="outline" @click="showConfirmModal = false">Cancel</Button>
+              <Button type="button" variant="outline" @click="showConfirmModal = false">{{ __('base.actions.cancel') }}</Button>
               <Button type="submit" :disabled="processing">
                 <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
-                Log Out Other Sessions
+                {{ __('base.sessions.logout_sessions') }}
               </Button>
             </DialogFooter>
           </div>

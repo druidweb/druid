@@ -5,6 +5,7 @@ import ApiTokenManager from '@/pages/api/Partials/ApiTokenManager.vue';
 import { index } from '@/routes/api-tokens';
 import type { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
+import { __ } from 'zorah-js';
 
 interface ApiToken {
   id: number;
@@ -23,7 +24,7 @@ defineProps<{
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {
-    title: 'API Tokens',
+    title: __('base.api_tokens.title'),
     href: index().url,
   },
 ];
@@ -31,9 +32,9 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbItems">
-    <Head title="API Tokens" />
+    <Head :title="__('base.api_tokens.title')" />
 
-    <SectionLayout title="API Tokens" description="Manage your API tokens for third-party access">
+    <SectionLayout :title="__('base.api_tokens.title')" :description="__('base.api_tokens.manage_description')">
       <ApiTokenManager :tokens="tokens" :available-permissions="availablePermissions" :default-permissions="defaultPermissions" />
     </SectionLayout>
   </AppLayout>

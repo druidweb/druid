@@ -8,6 +8,7 @@ import UpdateTeamNameForm from '@/pages/teams/Partials/UpdateTeamNameForm.vue';
 import { show } from '@/routes/teams';
 import type { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
+import { __ } from 'zorah-js';
 
 interface TeamMember {
   id: number;
@@ -62,7 +63,7 @@ const props = defineProps<{
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {
-    title: 'Team Settings',
+    title: __('base.teams.settings'),
     href: show(props.team.id).url,
   },
 ];
@@ -70,9 +71,9 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbItems">
-    <Head title="Team Settings" />
+    <Head :title="__('base.teams.settings')" />
 
-    <SectionLayout title="Team Settings" description="Manage your team's settings and members">
+    <SectionLayout :title="__('base.teams.settings')" :description="__('base.teams.settings_description')">
       <div class="space-y-10">
         <UpdateTeamNameForm :team="team" :permissions="permissions" />
 

@@ -1,4 +1,5 @@
 import { AppPageProps } from '@/types/index';
+import type { ReplacementValues } from 'zorah-js';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -22,5 +23,7 @@ declare module 'vue' {
     $inertia: typeof Router;
     $page: Page;
     $headManager: ReturnType<typeof createHeadManager>;
+    __: (key: string, replace?: ReplacementValues) => string;
+    trans: (key: string, replace?: ReplacementValues) => string;
   }
 }

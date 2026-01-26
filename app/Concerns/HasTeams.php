@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Laravel\Sanctum\HasApiTokens;
 
 trait HasTeams
 {
@@ -235,10 +234,8 @@ trait HasTeams
     }
 
     if (
-      in_array(HasApiTokens::class, class_uses_recursive($this)) &&
-      ! $this->tokenCan($permission) &&
-      /** @phpstan-ignore notIdentical.alwaysTrue */
-      $this->currentAccessToken() !== null
+      $this->currentAccessToken() !== null && // @phpstan-ignore notIdentical.alwaysTrue
+      ! $this->tokenCan($permission)
     ) {
       return false;
     }

@@ -41,6 +41,8 @@ return RectorConfig::configure()
   ])
   ->withSkip([
     AddOverrideAttributeToOverriddenMethodsRector::class,
+    // Rector 2.3.2 bug: "Scope not available on StaticCall" - https://github.com/rectorphp/rector/issues/9608
+    \Rector\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector::class,
   ])
   ->withPreparedSets(
     deadCode: true,

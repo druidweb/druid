@@ -52,8 +52,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      'zorah-js': path.resolve('vendor/zenphp/zorah/dist/index.js'),
-      zorah: path.resolve('vendor/zenphp/zorah/dist/vue.js'),
+      'zorah-js': path.resolve('vendor/zenphp/zorah/dist/index.esm.js'),
     },
   },
 });

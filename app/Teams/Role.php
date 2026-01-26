@@ -15,8 +15,6 @@ class Role implements JsonSerializable
 
   /**
    * Create a new role instance.
-   *
-   * @return void
    */
   public function __construct(
     /**

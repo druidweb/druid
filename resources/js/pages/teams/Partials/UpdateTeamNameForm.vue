@@ -44,14 +44,14 @@ const updateTeamName = () => {
   <Card>
     <form @submit.prevent="updateTeamName">
       <CardHeader>
-        <CardTitle>Team Name</CardTitle>
-        <CardDescription>The team's name and owner information.</CardDescription>
+        <CardTitle>{{ __('base.teams.name') }}</CardTitle>
+        <CardDescription>{{ __('base.teams.name_description') }}</CardDescription>
       </CardHeader>
 
       <CardContent class="space-y-6">
         <!-- Team Owner Information -->
         <div class="space-y-2">
-          <Label>Team Owner</Label>
+          <Label>{{ __('base.teams.owner') }}</Label>
 
           <div class="flex items-center">
             <img class="size-12 rounded-full object-cover" :src="team.owner.profile_photo_url" :alt="team.owner.name" />
@@ -67,7 +67,7 @@ const updateTeamName = () => {
 
         <!-- Team Name -->
         <div class="space-y-2">
-          <Label for="name">Team Name</Label>
+          <Label for="name">{{ __('base.teams.name') }}</Label>
 
           <Input id="name" v-model="form.name" type="text" :disabled="!permissions.canUpdateTeam" />
 
@@ -77,10 +77,10 @@ const updateTeamName = () => {
 
       <CardFooter v-if="permissions.canUpdateTeam" class="flex items-center justify-end gap-3">
         <Transition leave-active-class="transition ease-in duration-1000" leave-from-class="opacity-100" leave-to-class="opacity-0">
-          <div v-show="form.recentlySuccessful" class="text-sm text-muted-foreground">Saved.</div>
+          <div v-show="form.recentlySuccessful" class="text-sm text-muted-foreground">{{ __('base.status.saved') }}</div>
         </Transition>
 
-        <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Save </Button>
+        <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">{{ __('base.actions.save') }}</Button>
       </CardFooter>
     </form>
   </Card>

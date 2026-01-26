@@ -35,14 +35,14 @@ onMounted(async () => {
 <template>
   <Card class="w-full">
     <CardHeader>
-      <CardTitle class="flex gap-3"> <LockKeyhole class="size-4" />2FA Recovery Codes </CardTitle>
-      <CardDescription> Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager. </CardDescription>
+      <CardTitle class="flex gap-3"> <LockKeyhole class="size-4" />{{ __('base.two_factor.recovery_codes_title') }} </CardTitle>
+      <CardDescription>{{ __('base.two_factor.recovery_codes_description') }}</CardDescription>
     </CardHeader>
     <CardContent>
       <div class="flex flex-col gap-3 select-none sm:flex-row sm:items-center sm:justify-between">
         <Button @click="toggleRecoveryCodesVisibility" class="w-fit">
           <component :is="isRecoveryCodesVisible ? EyeOff : Eye" class="size-4" />
-          {{ isRecoveryCodesVisible ? 'Hide' : 'View' }} Recovery Codes
+          {{ isRecoveryCodesVisible ? __('base.two_factor.hide_recovery_codes') : __('base.two_factor.view_recovery_codes') }}
         </Button>
 
         <Form
@@ -52,7 +52,7 @@ onMounted(async () => {
           :options="{ preserveScroll: true }"
           @success="fetchRecoveryCodes"
           #default="{ processing }">
-          <Button variant="secondary" type="submit" :disabled="processing"> <RefreshCw /> Regenerate Codes </Button>
+          <Button variant="secondary" type="submit" :disabled="processing"> <RefreshCw /> {{ __('base.two_factor.regenerate_codes') }} </Button>
         </Form>
       </div>
       <div :class="['relative overflow-hidden transition-all duration-300', isRecoveryCodesVisible ? 'h-auto opacity-100' : 'h-0 opacity-0']">
@@ -69,8 +69,7 @@ onMounted(async () => {
             </div>
           </div>
           <p class="text-xs text-muted-foreground select-none">
-            Each recovery code can be used once to access your account and will be removed after use. If you need more, click
-            <span class="font-bold">Regenerate Codes</span> above.
+            {{ __('base.two_factor.recovery_codes_usage', { link: __('base.two_factor.regenerate_codes') }) }}
           </p>
         </div>
       </div>

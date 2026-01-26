@@ -8,6 +8,8 @@
     {{-- Inline script to detect system dark mode preference and apply it immediately --}}
     <script>
       (function() {
+        window.locale = '{{ app()->getLocale() }}';
+
         const appearance = '{{ $appearance ?? 'system' }}';
 
         if (appearance === 'system') {

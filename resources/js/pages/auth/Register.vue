@@ -20,31 +20,45 @@ const privacyPolicyUrl = privacyPolicyShow.url();
 </script>
 
 <template>
-  <AuthBase title="Create an account" description="Enter your details below to create your account">
-    <Head title="Register" />
+  <AuthBase :title="__('base.auth.create_account')" :description="__('base.auth.create_account_description')">
+    <Head :title="__('base.auth.register')" />
 
     <Form v-bind="store.form()" :reset-on-success="['password', 'password_confirmation']" v-slot="{ errors, processing }" class="flex flex-col gap-6">
       <div class="grid gap-6">
         <div class="grid gap-2">
-          <Label for="name">Name</Label>
-          <Input id="name" type="text" required autofocus :tabindex="1" autocomplete="name" name="name" placeholder="Full name" />
+          <Label for="name">{{ __('base.fields.name') }}</Label>
+          <Input id="name" type="text" required autofocus :tabindex="1" autocomplete="name" name="name" :placeholder="__('base.fields.full_name')" />
           <InputError :message="errors.name" />
         </div>
 
         <div class="grid gap-2">
-          <Label for="email">Email address</Label>
-          <Input id="email" type="email" required :tabindex="2" autocomplete="email" name="email" placeholder="email@example.com" />
+          <Label for="email">{{ __('base.fields.email_address') }}</Label>
+          <Input
+            id="email"
+            type="email"
+            required
+            :tabindex="2"
+            autocomplete="email"
+            name="email"
+            :placeholder="__('base.fields.email_placeholder')" />
           <InputError :message="errors.email" />
         </div>
 
         <div class="grid gap-2">
-          <Label for="password">Password</Label>
-          <Input id="password" type="password" required :tabindex="3" autocomplete="new-password" name="password" placeholder="Password" />
+          <Label for="password">{{ __('base.fields.password') }}</Label>
+          <Input
+            id="password"
+            type="password"
+            required
+            :tabindex="3"
+            autocomplete="new-password"
+            name="password"
+            :placeholder="__('base.fields.password')" />
           <InputError :message="errors.password" />
         </div>
 
         <div class="grid gap-2">
-          <Label for="password_confirmation">Confirm password</Label>
+          <Label for="password_confirmation">{{ __('base.auth.confirm_password') }}</Label>
           <Input
             id="password_confirmation"
             type="password"
@@ -52,7 +66,7 @@ const privacyPolicyUrl = privacyPolicyShow.url();
             :tabindex="4"
             autocomplete="new-password"
             name="password_confirmation"
-            placeholder="Confirm password" />
+            :placeholder="__('base.auth.confirm_password')" />
           <InputError :message="errors.password_confirmation" />
         </div>
 
@@ -61,11 +75,13 @@ const privacyPolicyUrl = privacyPolicyShow.url();
           <div class="grid gap-1.5 leading-none">
             <label for="terms" class="cursor-pointer text-sm leading-normal font-normal text-muted-foreground">
               I agree to the
-              <a :href="termsUrl" target="_blank" class="text-foreground underline underline-offset-2 hover:text-foreground/80">Terms of Service</a>
+              <a :href="termsUrl" target="_blank" class="text-foreground underline underline-offset-2 hover:text-foreground/80">{{
+                __('base.legal.terms')
+              }}</a>
               and
-              <a :href="privacyPolicyUrl" target="_blank" class="text-foreground underline underline-offset-2 hover:text-foreground/80"
-                >Privacy Policy</a
-              >
+              <a :href="privacyPolicyUrl" target="_blank" class="text-foreground underline underline-offset-2 hover:text-foreground/80">{{
+                __('base.legal.privacy')
+              }}</a>
             </label>
             <InputError :message="errors.terms" />
           </div>
@@ -73,13 +89,13 @@ const privacyPolicyUrl = privacyPolicyShow.url();
 
         <Button type="submit" class="mt-2 w-full" :tabindex="6" :disabled="processing" data-test="register-user-button">
           <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
-          Create account
+          {{ __('base.auth.create_account') }}
         </Button>
       </div>
 
       <div class="text-center text-sm text-muted-foreground">
         Already have an account?
-        <TextLink :href="login()" class="underline underline-offset-4" :tabindex="7">Log in</TextLink>
+        <TextLink :href="login()" class="underline underline-offset-4" :tabindex="7">{{ __('base.auth.log_in') }}</TextLink>
       </div>
     </Form>
   </AuthBase>

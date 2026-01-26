@@ -23,13 +23,13 @@ const createTeam = () => {
   <Card>
     <form @submit.prevent="createTeam">
       <CardHeader>
-        <CardTitle>Team Details</CardTitle>
-        <CardDescription>Create a new team to collaborate with others on projects.</CardDescription>
+        <CardTitle>{{ __('base.teams.details') }}</CardTitle>
+        <CardDescription>{{ __('base.teams.create_description') }}</CardDescription>
       </CardHeader>
 
       <CardContent class="space-y-6">
         <div class="space-y-2">
-          <Label>Team Owner</Label>
+          <Label>{{ __('base.teams.owner') }}</Label>
 
           <div class="flex items-center">
             <img class="size-12 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name" />
@@ -44,14 +44,14 @@ const createTeam = () => {
         </div>
 
         <div class="space-y-2">
-          <Label for="name">Team Name</Label>
+          <Label for="name">{{ __('base.teams.name') }}</Label>
           <Input id="name" v-model="form.name" type="text" autofocus />
           <InputError :message="form.errors.name" />
         </div>
       </CardContent>
 
       <CardFooter class="flex items-center justify-end">
-        <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Create </Button>
+        <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">{{ __('base.actions.create') }}</Button>
       </CardFooter>
     </form>
   </Card>

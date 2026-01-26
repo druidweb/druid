@@ -25,13 +25,13 @@ const handleLogout = () => {
     <DropdownMenuItem :as-child="true">
       <Link class="block w-full" :href="edit()" prefetch as="button">
         <Settings class="mr-2 h-4 w-4" />
-        Settings
+        {{ __('base.nav.settings') }}
       </Link>
     </DropdownMenuItem>
     <DropdownMenuItem v-if="page.props.teams.hasApiFeatures" :as-child="true">
       <Link class="block w-full" :href="apiTokensIndex()" prefetch as="button">
         <KeyRound class="mr-2 h-4 w-4" />
-        API Tokens
+        {{ __('base.api_tokens.title') }}
       </Link>
     </DropdownMenuItem>
   </DropdownMenuGroup>
@@ -39,7 +39,7 @@ const handleLogout = () => {
   <DropdownMenuItem :as-child="true">
     <Link class="block w-full" :href="logout()" @click="handleLogout" as="button" data-test="logout-button">
       <LogOut class="mr-2 h-4 w-4" />
-      Log out
+      {{ __('base.auth.log_out') }}
     </Link>
   </DropdownMenuItem>
 </template>

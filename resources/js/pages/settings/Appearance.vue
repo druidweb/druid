@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
+import { __ } from 'zorah-js';
 
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,7 +12,7 @@ import { edit } from '@/routes/appearance';
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {
-    title: 'Appearance settings',
+    title: __('base.appearance.title'),
     href: edit().url,
   },
 ];
@@ -19,13 +20,13 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbItems">
-    <Head title="Appearance settings" />
+    <Head :title="__('base.appearance.title')" />
 
     <SettingsLayout>
       <Card>
         <CardHeader>
-          <CardTitle>Appearance Settings</CardTitle>
-          <CardDescription>Update your account's appearance settings</CardDescription>
+          <CardTitle>{{ __('base.appearance.title') }}</CardTitle>
+          <CardDescription>{{ __('base.appearance.description') }}</CardDescription>
         </CardHeader>
 
         <CardContent>

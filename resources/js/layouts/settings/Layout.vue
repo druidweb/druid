@@ -6,33 +6,34 @@ import { edit as editPassword } from '@/routes/password';
 import { edit as editProfile } from '@/routes/profile';
 import { show } from '@/routes/two-factor';
 import { type NavItem } from '@/types';
+import { __ } from 'zorah-js';
 
 const navItems: NavItem[] = [
   {
-    title: 'Profile',
+    title: __('base.nav.profile'),
     href: editProfile(),
   },
   {
-    title: 'Password',
+    title: __('base.fields.password'),
     href: editPassword(),
   },
   {
-    title: 'Two-Factor Auth',
+    title: __('base.nav.two_factor'),
     href: show(),
   },
   {
-    title: 'Browser Sessions',
+    title: __('base.nav.browser_sessions'),
     href: browserSessions(),
   },
   {
-    title: 'Appearance',
+    title: __('base.nav.appearance'),
     href: editAppearance(),
   },
 ];
 </script>
 
 <template>
-  <SectionLayout title="Settings" description="Manage your profile and account settings" :nav-items="navItems">
+  <SectionLayout :title="__('base.nav.settings')" :description="__('base.nav.settings_description')" :nav-items="navItems">
     <slot />
   </SectionLayout>
 </template>

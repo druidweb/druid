@@ -17,6 +17,7 @@ import { BreadcrumbItem } from '@/types';
 import { Form, Head, router } from '@inertiajs/vue3';
 import { KeyRound, LoaderCircle, ShieldBan, ShieldCheck } from 'lucide-vue-next';
 import { onMounted, onUnmounted, ref } from 'vue';
+import { __ } from 'zorah-js';
 
 interface Props {
   requiresConfirmation?: boolean;
@@ -32,7 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Two-Factor Authentication',
+    title: __('base.two_factor.title'),
     href: show.url(),
   },
 ];
@@ -70,37 +71,35 @@ const handlePasswordConfirmed = () => {
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbs">
-    <Head title="Two-Factor Authentication" />
+    <Head :title="__('base.two_factor.title')" />
     <SettingsLayout>
       <Card>
         <CardHeader>
-          <CardTitle>Two-Factor Authentication</CardTitle>
-          <CardDescription>Manage your two-factor authentication settings</CardDescription>
+          <CardTitle>{{ __('base.two_factor.title') }}</CardTitle>
+          <CardDescription>{{ __('base.two_factor.description') }}</CardDescription>
         </CardHeader>
 
         <CardContent class="space-y-6">
           <div v-if="!twoFactorEnabled" class="flex flex-col items-start justify-start space-y-4">
-            <Badge variant="destructive">Disabled</Badge>
+            <Badge variant="destructive">{{ __('base.status.disabled') }}</Badge>
 
             <p class="text-muted-foreground">
-              When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a
-              TOTP-supported application on your phone.
+              {{ __('base.two_factor.enable_description') }}
             </p>
 
             <div>
-              <Button v-if="hasSetupData" @click="showSetupModal = true"> <ShieldCheck />Continue Setup </Button>
+              <Button v-if="hasSetupData" @click="showSetupModal = true"> <ShieldCheck />{{ __('base.two_factor.continue_setup') }} </Button>
               <Form v-else v-bind="enable.form()" @success="showSetupModal = true" #default="{ processing }">
-                <Button type="submit" :disabled="processing"> <ShieldCheck />Enable 2FA</Button></Form
+                <Button type="submit" :disabled="processing"> <ShieldCheck />{{ __('base.two_factor.enable') }}</Button></Form
               >
             </div>
           </div>
 
           <div v-else class="flex flex-col items-start justify-start space-y-4">
-            <Badge variant="default">Enabled</Badge>
+            <Badge variant="default">{{ __('base.status.enabled') }}</Badge>
 
             <p class="text-muted-foreground">
-              With two-factor authentication enabled, you will be prompted for a secure, random pin during login, which you can retrieve from the
-              TOTP-supported application on your phone.
+              {{ __('base.two_factor.enabled_description') }}
             </p>
 
             <TwoFactorRecoveryCodes />
@@ -109,7 +108,7 @@ const handlePasswordConfirmed = () => {
               <Form v-bind="disable.form()" #default="{ processing }">
                 <Button variant="destructive" type="submit" :disabled="processing">
                   <ShieldBan />
-                  Disable 2FA
+                  {{ __('base.two_factor.disable') }}
                 </Button>
               </Form>
             </div>
@@ -135,14 +134,14 @@ const handlePasswordConfirmed = () => {
               <KeyRound class="relative z-20 size-6 text-foreground" />
             </div>
           </div>
-          <DialogTitle>Confirm your password</DialogTitle>
-          <DialogDescription>This is a secure area of the application. Please confirm your password before continuing.</DialogDescription>
+          <DialogTitle>{{ __('base.auth.confirm_your_password') }}</DialogTitle>
+          <DialogDescription>{{ __('base.auth.secure_area') }}</DialogDescription>
         </DialogHeader>
 
         <Form v-bind="store.form()" reset-on-success @success="handlePasswordConfirmed" v-slot="{ errors, processing }">
           <div class="space-y-6">
             <div class="grid gap-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{{ __('base.fields.password') }}</Label>
               <Input id="password" type="password" name="password" class="mt-1 block w-full" required autocomplete="current-password" autofocus />
 
               <InputError :message="errors.password" />
@@ -151,7 +150,7 @@ const handlePasswordConfirmed = () => {
             <div class="flex items-center justify-end">
               <Button class="w-full" :disabled="processing" data-test="confirm-password-button">
                 <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
-                Confirm Password
+                {{ __('base.auth.confirm_password') }}
               </Button>
             </div>
           </div>
