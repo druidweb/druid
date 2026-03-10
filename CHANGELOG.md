@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.7](https://github.com/druidweb/druid/compare/v1.4.6...v1.4.7) (2026-03-10)
+
+
+### Code Refactoring
+
+* update dependencies ([2921377](https://github.com/druidweb/druid/commit/2921377aac31bc3a99475c16dcfbebe04f9f677c))
+
+
+### Maintenance
+
+* forgot to remove 8.4 from tests workflow ([061b232](https://github.com/druidweb/druid/commit/061b232b29efc770d716b1961d9766544c7fb126))
+
 ## [1.4.6](https://github.com/druidweb/druid/compare/v1.4.5...v1.4.6) (2026-01-26)
 
 
