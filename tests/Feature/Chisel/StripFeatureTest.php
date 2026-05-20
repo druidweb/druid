@@ -28,7 +28,7 @@ afterEach(function (): void {
 });
 
 test('stripping teams removes the team scaffolding and dangling references', function (): void {
-  chiselRun($this->sandbox, ['api-tokens', 'profile-photos', 'terms', 'account-deletion', 'email-verification']);
+  chiselRun($this->sandbox, ['registration', 'reset-passwords', 'update-passwords', 'two-factor', 'api-tokens', 'profile-photos', 'terms', 'account-deletion', 'email-verification']);
 
   $deletedFiles = [
     'app/Actions/Teams/AddTeamMember.php',
@@ -106,7 +106,7 @@ test('stripping teams removes the team scaffolding and dangling references', fun
 })->group('chisel-integration');
 
 test('stripping api-tokens removes sanctum hookup and personal access token plumbing', function (): void {
-  chiselRun($this->sandbox, ['teams', 'profile-photos', 'terms', 'account-deletion', 'email-verification']);
+  chiselRun($this->sandbox, ['registration', 'reset-passwords', 'update-passwords', 'two-factor', 'teams', 'profile-photos', 'terms', 'account-deletion', 'email-verification']);
 
   $deletedFiles = [
     'app/Http/Controllers/Api/ApiTokenController.php',
@@ -132,7 +132,7 @@ test('stripping api-tokens removes sanctum hookup and personal access token plum
 })->group('chisel-integration');
 
 test('stripping profile-photos removes the photo controller, concern, and UI hooks', function (): void {
-  chiselRun($this->sandbox, ['teams', 'api-tokens', 'terms', 'account-deletion', 'email-verification']);
+  chiselRun($this->sandbox, ['registration', 'reset-passwords', 'update-passwords', 'two-factor', 'teams', 'api-tokens', 'terms', 'account-deletion', 'email-verification']);
 
   $deletedFiles = [
     'app/Http/Controllers/Settings/ProfilePhotoController.php',
@@ -156,7 +156,7 @@ test('stripping profile-photos removes the photo controller, concern, and UI hoo
 })->group('chisel-integration');
 
 test('stripping terms removes both legal pages and the registration consent UI', function (): void {
-  chiselRun($this->sandbox, ['teams', 'api-tokens', 'profile-photos', 'account-deletion', 'email-verification']);
+  chiselRun($this->sandbox, ['registration', 'reset-passwords', 'update-passwords', 'two-factor', 'teams', 'api-tokens', 'profile-photos', 'account-deletion', 'email-verification']);
 
   $deletedFiles = [
     'app/Http/Controllers/TermsOfServiceController.php',
@@ -179,7 +179,7 @@ test('stripping terms removes both legal pages and the registration consent UI',
 })->group('chisel-integration');
 
 test('stripping account-deletion removes the deletion path everywhere it surfaces', function (): void {
-  chiselRun($this->sandbox, ['teams', 'api-tokens', 'profile-photos', 'terms', 'email-verification']);
+  chiselRun($this->sandbox, ['registration', 'reset-passwords', 'update-passwords', 'two-factor', 'teams', 'api-tokens', 'profile-photos', 'terms', 'email-verification']);
 
   $deletedFiles = [
     'app/Actions/Teams/DeleteUser.php',
@@ -204,7 +204,7 @@ test('stripping account-deletion removes the deletion path everywhere it surface
 })->group('chisel-integration');
 
 test('stripping email-verification removes the verify view, Fortify hookup, and User interface', function (): void {
-  chiselRun($this->sandbox, ['teams', 'api-tokens', 'profile-photos', 'terms', 'account-deletion']);
+  chiselRun($this->sandbox, ['registration', 'reset-passwords', 'update-passwords', 'two-factor', 'teams', 'api-tokens', 'profile-photos', 'terms', 'account-deletion']);
 
   $deletedFiles = [
     'resources/js/pages/auth/VerifyEmail.vue',
@@ -374,12 +374,12 @@ function expectContentRemoved(string $sandbox, string $path, array $needles): vo
 function expectNoLingeringVueReferences(string $sandbox, array $deletedComponents): void
 {
   foreach ($deletedComponents as $deleted) {
-    if (! str_ends_with($deleted, '.vue')) {
+    if (! str_ends_with((string) $deleted, '.vue')) {
       continue;
     }
 
     // 'resources/js/components/TeamSwitcher.vue' → '@/components/TeamSwitcher'
-    $importPath = '@/'.substr($deleted, strlen('resources/js/'), -strlen('.vue'));
+    $importPath = '@/'.substr((string) $deleted, strlen('resources/js/'), -strlen('.vue'));
 
     $grep = new Process(
       command: [

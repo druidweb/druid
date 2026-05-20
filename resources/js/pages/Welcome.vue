@@ -1,5 +1,7 @@
 <script setup lang="ts">
+/* @chisel-registration */
 import { dashboard, login, register } from '@/routes';
+/* @end-chisel-registration */
 import { Head, Link } from '@inertiajs/vue3';
 import {
   ArrowRight,
@@ -27,6 +29,7 @@ import {
   Users,
 } from 'lucide-vue-next';
 
+/* @chisel-registration */
 withDefaults(
   defineProps<{
     canRegister: boolean;
@@ -35,6 +38,7 @@ withDefaults(
     canRegister: true,
   },
 );
+/* @end-chisel-registration */
 
 const stackItems = [
   {
@@ -155,6 +159,7 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
         <span class="welcome-logo">druid</span>
       </div>
       <nav class="flex items-center gap-3">
+        <!-- @chisel-registration -->
         <template v-if="$page.props.auth.user">
           <Link :href="dashboard()" class="nav-btn nav-btn--solid">
             Dashboard
@@ -165,6 +170,7 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
           <Link :href="login()" class="nav-btn nav-btn--ghost">Sign in</Link>
           <Link v-if="canRegister" :href="register()" class="nav-btn nav-btn--solid"> Get started </Link>
         </template>
+        <!-- @end-chisel-registration -->
       </nav>
     </header>
 
@@ -183,9 +189,11 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
 
       <div
         class="mt-8 flex translate-y-0 flex-wrap items-center justify-center gap-3 opacity-100 transition-all delay-300 duration-700 starting:translate-y-4 starting:opacity-0">
+        <!-- @chisel-registration -->
         <Link v-if="canRegister" :href="register()" class="cta-btn cta-btn--primary">
           Get started <ArrowRight :size="15" class="ml-1.5 inline-block" />
         </Link>
+        <!-- @end-chisel-registration -->
         <a href="https://github.com/druidweb/druid" target="_blank" class="cta-btn cta-btn--ghost">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" class="-mt-px mr-1.5 inline-block">
             <path
@@ -351,12 +359,14 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
           </button>
         </div>
 
+        <!-- @chisel-registration -->
         <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link v-if="canRegister" :href="register()" class="cta-btn cta-btn--primary">
             Create account <ArrowRight :size="15" class="ml-1.5 inline-block" />
           </Link>
           <Link :href="login()" class="cta-btn cta-btn--ghost">Sign in</Link>
         </div>
+        <!-- @end-chisel-registration -->
       </div>
     </section>
 
