@@ -2,7 +2,9 @@
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
+/* @chisel-teams */
 import TeamSwitcher from '@/components/TeamSwitcher.vue';
+/* @end-chisel-teams */
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
@@ -53,7 +55,9 @@ const footerNavItems: NavItem[] = [
 
     <SidebarFooter>
       <NavFooter :items="footerNavItems" />
+      <!-- @chisel-teams -->
       <TeamSwitcher />
+      <!-- @end-chisel-teams -->
       <NavUser />
     </SidebarFooter>
   </Sidebar>

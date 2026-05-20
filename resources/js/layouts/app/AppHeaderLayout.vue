@@ -2,7 +2,9 @@
 import AppContent from '@/components/AppContent.vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppShell from '@/components/AppShell.vue';
+/* @chisel-teams */
 import TeamIndicatorBanner from '@/components/TeamIndicatorBanner.vue';
+/* @end-chisel-teams */
 import type { BreadcrumbItemType } from '@/types';
 import { provide } from 'vue';
 
@@ -19,7 +21,9 @@ provide('layoutVariant', 'default');
 
 <template>
   <AppShell class="flex-col">
+    <!-- @chisel-teams -->
     <TeamIndicatorBanner />
+    <!-- @end-chisel-teams -->
     <AppHeader :breadcrumbs="breadcrumbs" />
     <AppContent>
       <slot />

@@ -2,7 +2,9 @@
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
+/* @chisel-teams */
 import TeamSwitcher from '@/components/TeamSwitcher.vue';
+/* @end-chisel-teams */
 import UserAvatar from '@/components/UserAvatar.vue';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { Button } from '@/components/ui/button';
@@ -148,7 +150,9 @@ const rightNavItems: NavItem[] = [
             </div>
           </div>
 
+          <!-- @chisel-teams -->
           <TeamSwitcher />
+          <!-- @end-chisel-teams -->
 
           <DropdownMenu>
             <DropdownMenuTrigger :as-child="true">

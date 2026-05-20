@@ -130,6 +130,12 @@ return Chisel::script(__DIR__)
       $c->file('app/Models/User.php')
         ->removeLinesContaining('use App\Concerns\HasTeams;')
         ->removeLinesContaining('use HasTeams;');
+      $c->files(
+        'resources/js/layouts/app/AppHeaderLayout.vue',
+        'resources/js/layouts/app/AppSidebarLayout.vue',
+        'resources/js/components/AppHeader.vue',
+        'resources/js/components/AppSidebar.vue',
+      )->removeSection('teams');
     },
   )
   ->selected('features', 'api-tokens',

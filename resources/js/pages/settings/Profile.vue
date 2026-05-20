@@ -9,7 +9,9 @@ import { send } from '@/routes/verification';
 /* @end-chisel-email-verification */
 import { Form, Head, Link, router, usePage } from '@inertiajs/vue3';
 
+/* @chisel-account-deletion */
 import DeleteUser from '@/components/DeleteUser.vue';
+/* @end-chisel-account-deletion */
 import InputError from '@/components/InputError.vue';
 import UserAvatar from '@/components/UserAvatar.vue';
 import { Button } from '@/components/ui/button';

@@ -30,7 +30,7 @@ afterEach(function (): void {
 test('stripping teams removes the team scaffolding and dangling references', function (): void {
   chiselRun($this->sandbox, ['api-tokens', 'profile-photos', 'terms', 'account-deletion', 'email-verification']);
 
-  expectDeleted($this->sandbox, [
+  $deletedFiles = [
     'app/Actions/Teams/AddTeamMember.php',
     'app/Actions/Teams/CreateTeam.php',
     'app/Actions/Teams/DeleteTeam.php',
@@ -83,7 +83,9 @@ test('stripping teams removes the team scaffolding and dangling references', fun
     'resources/js/pages/teams/Partials/DeleteTeamForm.vue',
     'resources/js/pages/teams/Partials/TeamMemberManager.vue',
     'resources/js/pages/teams/Partials/UpdateTeamNameForm.vue',
-  ]);
+  ];
+
+  expectDeleted($this->sandbox, $deletedFiles);
 
   // Teams.php and Features.php survive — they are the runtime feature-flag
   // dispatcher and config builder that the rest of the kit still calls.
@@ -98,18 +100,24 @@ test('stripping teams removes the team scaffolding and dangling references', fun
     'use App\Concerns\HasTeams',
     'use HasTeams',
   ]);
+
+  // Catch any future regression where a deleted component is still imported.
+  expectNoLingeringVueReferences($this->sandbox, $deletedFiles);
 })->group('chisel-integration');
 
 test('stripping api-tokens removes sanctum hookup and personal access token plumbing', function (): void {
   chiselRun($this->sandbox, ['teams', 'profile-photos', 'terms', 'account-deletion', 'email-verification']);
 
-  expectDeleted($this->sandbox, [
+  $deletedFiles = [
     'app/Http/Controllers/Api/ApiTokenController.php',
     'app/Models/PersonalAccessToken.php',
     'database/migrations/0001_01_01_000006_create_personal_access_tokens_table.php',
     'resources/js/pages/api/Index.vue',
     'resources/js/pages/api/Partials/ApiTokenManager.vue',
-  ]);
+  ];
+
+  expectDeleted($this->sandbox, $deletedFiles);
+  expectNoLingeringVueReferences($this->sandbox, $deletedFiles);
 
   expectContentRemoved($this->sandbox, 'config/teams.php', ['Features::api(']);
   expectContentRemoved($this->sandbox, 'app/Models/User.php', [
@@ -126,10 +134,13 @@ test('stripping api-tokens removes sanctum hookup and personal access token plum
 test('stripping profile-photos removes the photo controller, concern, and UI hooks', function (): void {
   chiselRun($this->sandbox, ['teams', 'api-tokens', 'terms', 'account-deletion', 'email-verification']);
 
-  expectDeleted($this->sandbox, [
+  $deletedFiles = [
     'app/Http/Controllers/Settings/ProfilePhotoController.php',
     'app/Concerns/HasProfilePhoto.php',
-  ]);
+  ];
+
+  expectDeleted($this->sandbox, $deletedFiles);
+  expectNoLingeringVueReferences($this->sandbox, $deletedFiles);
 
   expectContentRemoved($this->sandbox, 'config/teams.php', ['Features::profilePhotos(']);
   expectContentRemoved($this->sandbox, 'app/Models/User.php', [
@@ -147,14 +158,17 @@ test('stripping profile-photos removes the photo controller, concern, and UI hoo
 test('stripping terms removes both legal pages and the registration consent UI', function (): void {
   chiselRun($this->sandbox, ['teams', 'api-tokens', 'profile-photos', 'account-deletion', 'email-verification']);
 
-  expectDeleted($this->sandbox, [
+  $deletedFiles = [
     'app/Http/Controllers/TermsOfServiceController.php',
     'app/Http/Controllers/PrivacyPolicyController.php',
     'resources/js/pages/TermsOfService.vue',
     'resources/js/pages/PrivacyPolicy.vue',
     'resources/markdown/terms.md',
     'resources/markdown/policy.md',
-  ]);
+  ];
+
+  expectDeleted($this->sandbox, $deletedFiles);
+  expectNoLingeringVueReferences($this->sandbox, $deletedFiles);
 
   expectContentRemoved($this->sandbox, 'config/teams.php', ['Features::termsAndPrivacyPolicy(']);
   expectContentRemoved($this->sandbox, 'resources/js/pages/auth/Register.vue', [
@@ -167,11 +181,14 @@ test('stripping terms removes both legal pages and the registration consent UI',
 test('stripping account-deletion removes the deletion path everywhere it surfaces', function (): void {
   chiselRun($this->sandbox, ['teams', 'api-tokens', 'profile-photos', 'terms', 'email-verification']);
 
-  expectDeleted($this->sandbox, [
+  $deletedFiles = [
     'app/Actions/Teams/DeleteUser.php',
     'app/Contracts/DeletesUsers.php',
     'resources/js/components/DeleteUser.vue',
-  ]);
+  ];
+
+  expectDeleted($this->sandbox, $deletedFiles);
+  expectNoLingeringVueReferences($this->sandbox, $deletedFiles);
 
   expectContentRemoved($this->sandbox, 'config/teams.php', ['Features::accountDeletion(']);
   expectContentRemoved($this->sandbox, 'app/Providers/TeamServiceProvider.php', [
@@ -189,9 +206,12 @@ test('stripping account-deletion removes the deletion path everywhere it surface
 test('stripping email-verification removes the verify view, Fortify hookup, and User interface', function (): void {
   chiselRun($this->sandbox, ['teams', 'api-tokens', 'profile-photos', 'terms', 'account-deletion']);
 
-  expectDeleted($this->sandbox, [
+  $deletedFiles = [
     'resources/js/pages/auth/VerifyEmail.vue',
-  ]);
+  ];
+
+  expectDeleted($this->sandbox, $deletedFiles);
+  expectNoLingeringVueReferences($this->sandbox, $deletedFiles);
 
   expectContentRemoved($this->sandbox, 'app/Providers/FortifyServiceProvider.php', [
     'Fortify::verifyEmailView',
@@ -295,5 +315,38 @@ function expectContentRemoved(string $sandbox, string $path, array $needles): vo
     // passes when the message string isn't in the haystack.
     expect(str_contains($contents, (string) $needle))
       ->toBeFalse("Expected {$path} not to contain '{$needle}' but it does");
+  }
+}
+
+// Sweep check: for each deleted Vue component, ensure no surviving Vue/TS
+// source still imports it. We match on the @-aliased import path
+// (e.g. '@/components/TeamSwitcher') rather than the bare name, because
+// bare names collide with common words (Create, Show, etc). Wayfinder
+// regenerated dirs are excluded.
+function expectNoLingeringVueReferences(string $sandbox, array $deletedComponents): void
+{
+  foreach ($deletedComponents as $deleted) {
+    if (! str_ends_with($deleted, '.vue')) {
+      continue;
+    }
+
+    // 'resources/js/components/TeamSwitcher.vue' → '@/components/TeamSwitcher'
+    $importPath = '@/'.substr($deleted, strlen('resources/js/'), -strlen('.vue'));
+
+    $grep = new Process(
+      command: [
+        'grep', '-rl', '--include=*.vue', '--include=*.ts',
+        '--exclude-dir=actions', '--exclude-dir=routes',
+        $importPath, 'resources/js',
+      ],
+      cwd: $sandbox,
+    );
+    $grep->run();
+
+    $matches = array_values(array_filter(explode("\n", trim($grep->getOutput()))));
+
+    expect($matches)->toBeEmpty(
+      "Deleted component import '{$importPath}' is still referenced in: ".implode(', ', $matches),
+    );
   }
 }
