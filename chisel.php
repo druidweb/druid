@@ -77,10 +77,13 @@ return Chisel::script(__DIR__)
         'app/Rules/OwnerRole.php',
         'app/Rules/Role.php',
       )->delete();
+      // App\Teams\Teams stays alive — it is the runtime feature-flag
+      // dispatcher (Teams::hasTeamFeatures(), hasApiFeatures(), etc.) that
+      // surviving middleware and controllers still call. Its config-driven
+      // methods return false after stripping, so the gates evaluate inert.
       $c->files(
         'app/Teams/Agent.php',
         'app/Teams/Role.php',
-        'app/Teams/Teams.php',
       )->delete();
       $c->files(
         'resources/js/pages/teams/Create.vue',
