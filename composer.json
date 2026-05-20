@@ -87,7 +87,7 @@
       "@test:types",
       "@test:static",
       "@test:lint",
-      "@test:feat"
+      "@test:coverage"
     ],
     "post-autoload-dump": [
       "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
