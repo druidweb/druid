@@ -80,14 +80,16 @@
       "bun run lint:check",
       "bun run format:check"
     ],
-    "test:feat": "./vendor/bin/pest --parallel",
-    "test:coverage": "./vendor/bin/pest --parallel --coverage --coverage-clover=coverage.xml --min=100.0; php bin/coverage-clean",
+    "test:feat": "./vendor/bin/pest --parallel --exclude-group=chisel-integration",
+    "test:coverage": "./vendor/bin/pest --parallel --exclude-group=chisel-integration --coverage --coverage-clover=coverage.xml --min=100.0; php bin/coverage-clean",
+    "test:chisel": "./vendor/bin/pest --group=chisel-integration",
     "test:static": "./vendor/bin/phpstan analyze",
     "test": [
       "@test:types",
       "@test:static",
       "@test:lint",
-      "@test:coverage"
+      "@test:coverage",
+      "@test:chisel"
     ],
     "post-autoload-dump": [
       "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
