@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.5.1](https://github.com/druidweb/druid/compare/v1.5.0...v1.5.1) (2026-05-20)
+
+
+### Bug Fixes
+
+* **chisel:** strip dangling provider/registration references ([e8ff6f8](https://github.com/druidweb/druid/commit/e8ff6f8c1d7e864bb1ed6157b82be65ca4c2d1c9))
+
+
+### Code Refactoring
+
+* **test:** per-feature chisel strip assertions, drop boot probe ([4414bdb](https://github.com/druidweb/druid/commit/4414bdba47cdc391f3c8b936de3a37863f1a5658))
+
+
+### Code Testing
+
+* **chisel:** add strip-feature integration suite + fix Teams.php deletion ([e634f26](https://github.com/druidweb/druid/commit/e634f26d5cf1afbc17ed36558246b36c77fbd7ac))
+
+
+### Maintenance
+
+* **scripts:** split chisel-integration into its own composer script ([1c3aaa9](https://github.com/druidweb/druid/commit/1c3aaa909c0fc40bd576c5485b12c1a6365d9705))
+
+
+### Work in Progress
+
+* fixed no-status test badge ([2a7f6c8](https://github.com/druidweb/druid/commit/2a7f6c850ec7b73245fcb665e163c0032da25eda))
+* new readme images ([241155f](https://github.com/druidweb/druid/commit/241155faae4ecf00fed4c9973ec00d9b031a7a90))
+* rendered zorah file ([deee7fe](https://github.com/druidweb/druid/commit/deee7fee3ef88a2081746304ab934172c3d7965c))
+* update badge img ([53e74eb](https://github.com/druidweb/druid/commit/53e74eb3c3ffaa73f1e3d782dea7a8910f7b7dce))
+* updated chisel script ([4ba8f72](https://github.com/druidweb/druid/commit/4ba8f72f9c567e5a860027f055502c22fe7d23db))
+
 # [1.5.0](https://github.com/druidweb/druid/compare/v1.4.8...v1.5.0) (2026-05-20)
 
 
