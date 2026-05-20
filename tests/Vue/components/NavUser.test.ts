@@ -12,6 +12,10 @@ vi.mock('@inertiajs/vue3', () => ({
           email: 'test@example.com',
         },
       },
+      teams: {
+        hasApiFeatures: false,
+        hasTeamFeatures: false,
+      },
     },
   }),
   Link: {

@@ -36,8 +36,8 @@ describe('SidebarRail', () => {
   it('button has correct attributes', () => {
     const wrapper = mountWithProvider();
     const button = wrapper.find('button');
-    expect(button.attributes('aria-label')).toBe('Toggle Sidebar');
-    expect(button.attributes('title')).toBe('Toggle Sidebar');
+    expect(button.attributes('aria-label')).toBe('base.nav.toggle_sidebar');
+    expect(button.attributes('title')).toBe('base.nav.toggle_sidebar');
   });
 
   it('has correct data attributes', () => {
