@@ -1,5 +1,24 @@
 # Changelog
 
+# [1.5.0](https://github.com/druidweb/druid/compare/v1.4.8...v1.5.0) (2026-05-20)
+
+
+### Code Testing
+
+* **chisel:** cover install:features command with feature tests ([5e371ef](https://github.com/druidweb/druid/commit/5e371ef7166c9d349605159b8f715d8a3ef8b381))
+
+
+### Features
+
+* **chisel:** add chisel.php and install:features command ([ccfecf6](https://github.com/druidweb/druid/commit/ccfecf6b8f0ef3544c160a234cff83e25edc2b98))
+* **chisel:** add section markers to source files ([cff21ef](https://github.com/druidweb/druid/commit/cff21ef17b638f0e43682c0bf0565469d3b3efb5))
+* **chisel:** register installer post-create-project hook ([356d2fa](https://github.com/druidweb/druid/commit/356d2fa30f77a2353d93b697f8478536bbb3593a))
+
+
+### Work in Progress
+
+* edits for new welcome page ([c3d2f8f](https://github.com/druidweb/druid/commit/c3d2f8f751bd203e0554f2603b8a7622ad8b7aa7))
+
 ## [1.4.8](https://github.com/druidweb/druid/compare/v1.4.7...v1.4.8) (2026-05-20)
 
 
