@@ -12,7 +12,7 @@ afterAll(function (): void {
   $template = chiselTemplatePath();
 
   if (is_dir($template)) {
-    (new Process(['rm', '-rf', $template]))->setTimeout(60)->mustRun();
+    new Process(['rm', '-rf', $template])->setTimeout(60)->mustRun();
   }
 });
 
@@ -22,8 +22,8 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-  if (isset($this->sandbox) && is_dir($this->sandbox)) {
-    (new Process(['rm', '-rf', $this->sandbox]))->setTimeout(60)->mustRun();
+  if (property_exists($this, 'sandbox') && $this->sandbox !== null && is_dir($this->sandbox)) {
+    new Process(['rm', '-rf', $this->sandbox])->setTimeout(60)->mustRun();
   }
 });
 
@@ -140,7 +140,7 @@ test('stripping profile-photos removes the photo controller, concern, and UI hoo
   expectContentRemoved($this->sandbox, 'resources/js/pages/settings/Profile.vue', [
     '@/routes/current-user-photo',
     '@success="clearPhotoFileInput"',
-    'managesProfilePhotos',
+    'page.props.teams?.managesProfilePhotos',
   ]);
 })->group('chisel-integration');
 
@@ -216,7 +216,7 @@ function chiselBuildTemplate(): void
   $template = chiselTemplatePath();
 
   if (is_dir($template)) {
-    (new Process(['rm', '-rf', $template]))->setTimeout(60)->mustRun();
+    new Process(['rm', '-rf', $template])->setTimeout(60)->mustRun();
   }
 
   mkdir($template, 0o755, true);
@@ -224,7 +224,7 @@ function chiselBuildTemplate(): void
   // We do NOT copy vendor or node_modules. The chisel subprocess loads
   // the original project's autoloader via LARAVEL_INSTALLER_AUTOLOADER,
   // so the sandbox only needs the source files chisel touches.
-  (new Process([
+  new Process([
     'rsync',
     '-a',
     '--exclude=node_modules',
@@ -239,7 +239,7 @@ function chiselBuildTemplate(): void
     '--exclude=.env',
     rtrim((string) getcwd(), '/').'/',
     rtrim($template, '/').'/',
-  ]))->setTimeout(120)->mustRun();
+  ])->setTimeout(120)->mustRun();
 }
 
 function chiselCloneTemplate(string $template, string $destination): void
@@ -247,7 +247,7 @@ function chiselCloneTemplate(string $template, string $destination): void
   // macOS APFS supports `cp -Rc` for O(1) copy-on-write clones.
   $flags = PHP_OS_FAMILY === 'Darwin' ? '-Rc' : '-R';
 
-  (new Process(['cp', $flags, $template.'/.', $destination]))
+  new Process(['cp', $flags, $template.'/.', $destination])
     ->setTimeout(60)
     ->mustRun();
 }
@@ -263,10 +263,10 @@ $s = require $sandbox.'/chisel.php';
 $s->chisel($answers);
 PHP;
 
-  (new Process(
+  new Process(
     command: [PHP_BINARY, '-r', $script, $sandbox, $answers],
     env: ['LARAVEL_INSTALLER_AUTOLOADER' => base_path('vendor/autoload.php')],
-  ))->setTimeout(60)->mustRun();
+  )->setTimeout(60)->mustRun();
 }
 
 function expectDeleted(string $sandbox, array $paths): void
@@ -290,7 +290,10 @@ function expectContentRemoved(string $sandbox, string $path, array $needles): vo
   $contents = (string) file_get_contents($sandbox.'/'.$path);
 
   foreach ($needles as $needle) {
-    expect($contents)
-      ->not->toContain($needle, "Expected {$path} not to contain '{$needle}' but it does");
+    // We can't use ->not->toContain($needle, $message) — Pest treats extra
+    // args as additional needles, not a failure message, which silently
+    // passes when the message string isn't in the haystack.
+    expect(str_contains($contents, (string) $needle))
+      ->toBeFalse("Expected {$path} not to contain '{$needle}' but it does");
   }
 }

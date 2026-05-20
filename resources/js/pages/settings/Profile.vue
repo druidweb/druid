@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-// @chisel-profile-photos
+/* @chisel-profile-photos */
 import { destroy as destroyPhoto } from '@/routes/current-user-photo';
-// @end-chisel-profile-photos
+/* @end-chisel-profile-photos */
 import { edit } from '@/routes/profile';
-// @chisel-email-verification
+/* @chisel-email-verification */
 import { send } from '@/routes/verification';
-// @end-chisel-email-verification
+/* @end-chisel-email-verification */
 import { Form, Head, Link, router, usePage } from '@inertiajs/vue3';
 
 import DeleteUser from '@/components/DeleteUser.vue';
@@ -22,14 +22,14 @@ import { type BreadcrumbItem } from '@/types';
 import { computed, ref } from 'vue';
 import { __ } from 'zorah-js';
 
-// @chisel-email-verification
+/* @chisel-email-verification */
 interface Props {
   mustVerifyEmail: boolean;
   status?: string;
 }
 
 defineProps<Props>();
-// @end-chisel-email-verification
+/* @end-chisel-email-verification */
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {
@@ -44,7 +44,7 @@ const page = usePage<{
 }>();
 const user = computed(() => page.props.auth.user);
 
-// @chisel-profile-photos
+/* @chisel-profile-photos */
 const photoInput = ref<HTMLInputElement | null>(null);
 const photoPreview = ref<string | null>(null);
 
@@ -79,7 +79,7 @@ const clearPhotoFileInput = () => {
   }
   photoPreview.value = null;
 };
-// @end-chisel-profile-photos
+/* @end-chisel-profile-photos */
 </script>
 
 <template>

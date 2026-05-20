@@ -7,22 +7,22 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
-// @chisel-terms
+/* @chisel-terms */
 import { show as privacyPolicyShow } from '@/routes/policy';
-// @end-chisel-terms
+/* @end-chisel-terms */
 import { store } from '@/routes/register';
-// @chisel-terms
+/* @chisel-terms */
 import { show as termsShow } from '@/routes/terms';
-// @end-chisel-terms
+/* @end-chisel-terms */
 import { Form, Head, usePage } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 
 const page = usePage();
 
-// @chisel-terms
+/* @chisel-terms */
 const termsUrl = termsShow.url();
 const privacyPolicyUrl = privacyPolicyShow.url();
-// @end-chisel-terms
+/* @end-chisel-terms */
 </script>
 
 <template>

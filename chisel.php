@@ -127,9 +127,9 @@ return Chisel::script(__DIR__)
       )->delete();
       $c->file('config/teams.php')->removeLinesContaining('Features::teams(');
       $c->file('bootstrap/providers.php')->removeLinesContaining('TeamServiceProvider::class');
-      $c->php('app/Models/User.php')
-        ->removeImport('App\\Concerns\\HasTeams')
-        ->removeTrait('HasTeams');
+      $c->file('app/Models/User.php')
+        ->removeLinesContaining('use App\Concerns\HasTeams;')
+        ->removeLinesContaining('use HasTeams;');
     },
   )
   ->selected('features', 'api-tokens',
@@ -150,13 +150,12 @@ return Chisel::script(__DIR__)
       )->delete();
       $c->file('config/teams.php')->removeLinesContaining('Features::api(');
       $c->file('app/Providers/AppServiceProvider.php')
-        ->removeLinesContaining('Sanctum::usePersonalAccessTokenModel');
-      $c->php('app/Providers/AppServiceProvider.php')
-        ->removeImport('App\\Models\\PersonalAccessToken')
-        ->removeImport('Laravel\\Sanctum\\Sanctum');
-      $c->php('app/Models/User.php')
-        ->removeImport('Laravel\\Sanctum\\HasApiTokens')
-        ->removeTrait('HasApiTokens');
+        ->removeLinesContaining('Sanctum::usePersonalAccessTokenModel')
+        ->removeLinesContaining('use App\Models\PersonalAccessToken;')
+        ->removeLinesContaining('use Laravel\Sanctum\Sanctum;');
+      $c->file('app/Models/User.php')
+        ->removeLinesContaining('use Laravel\Sanctum\HasApiTokens;')
+        ->removeLinesContaining('use HasApiTokens;');
     },
   )
   ->selected('features', 'profile-photos',
@@ -172,10 +171,9 @@ return Chisel::script(__DIR__)
       $c->file('resources/js/pages/settings/Profile.vue')
         ->removeSection('profile-photos')
         ->replace('@success="clearPhotoFileInput"', '');
-      $c->php('app/Models/User.php')
-        ->removeImport('App\\Concerns\\HasProfilePhoto')
-        ->removeTrait('HasProfilePhoto');
       $c->file('app/Models/User.php')
+        ->removeLinesContaining('use App\Concerns\HasProfilePhoto;')
+        ->removeLinesContaining('use HasProfilePhoto;')
         ->replace(
           "#[Appends([\n  'profile_photo_url',\n])]",
           '',
@@ -215,9 +213,8 @@ return Chisel::script(__DIR__)
       $c->file('tests/Vue/components/DeleteUser.test.ts')->delete();
       $c->file('config/teams.php')->removeLinesContaining('Features::accountDeletion(');
       $c->file('app/Providers/TeamServiceProvider.php')
-        ->removeLinesContaining('Teams::deleteUsersUsing');
-      $c->php('app/Providers/TeamServiceProvider.php')
-        ->removeImport('App\\Actions\\Teams\\DeleteUser');
+        ->removeLinesContaining('Teams::deleteUsersUsing')
+        ->removeLinesContaining('use App\Actions\Teams\DeleteUser;');
       $c->file('resources/js/pages/settings/Profile.vue')->removeSection('account-deletion');
       $c->file('routes/settings.php')->removeSection('account-deletion');
       $c->file('tests/Feature/Settings/ProfileUpdateTest.php')->removeSection('account-deletion');
@@ -235,9 +232,9 @@ return Chisel::script(__DIR__)
       $c->file('app/Providers/FortifyServiceProvider.php')->removeSection('email-verification');
       $c->file('tests/Feature/Providers/FortifyServiceProviderTest.php')->removeSection('email-verification');
       $c->file('resources/js/pages/settings/Profile.vue')->removeSection('email-verification');
-      $c->php('app/Models/User.php')
-        ->removeImport('Illuminate\\Contracts\\Auth\\MustVerifyEmail')
-        ->removeInterface('MustVerifyEmail');
+      $c->file('app/Models/User.php')
+        ->removeLinesContaining('use Illuminate\Contracts\Auth\MustVerifyEmail;')
+        ->replace(' implements MustVerifyEmail', '');
     },
   )
   ->apply(function (Chisel $c): void {
