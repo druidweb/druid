@@ -27,6 +27,65 @@ afterEach(function (): void {
   }
 });
 
+test('stripping registration removes the entire auth stack and orphaned configs', function (): void {
+  chiselRun($this->sandbox, []);
+
+  $deletedFiles = [
+    // Fortify actions
+    'app/Actions/Fortify/ConfirmPassword.php',
+    'app/Actions/Fortify/CreateNewUser.php',
+    'app/Actions/Fortify/PasswordValidationRules.php',
+    'app/Actions/Fortify/ResetUserPassword.php',
+    'app/Actions/Fortify/UpdateUserPassword.php',
+    'app/Actions/Fortify/UpdateUserProfileInformation.php',
+    // Models
+    'app/Models/User.php',
+    'app/Models/PersonalAccessToken.php',
+    'app/Models/Team.php',
+    'app/Models/TeamInvitation.php',
+    'app/Models/Membership.php',
+    // Providers
+    'app/Providers/FortifyServiceProvider.php',
+    'app/Providers/TeamServiceProvider.php',
+    // Configs — sanctum must go because the package is removed from composer.json
+    'config/fortify.php',
+    'config/sanctum.php',
+    'config/teams.php',
+    // Routes
+    'routes/settings.php',
+    'routes/teams.php',
+    // Migrations
+    'database/migrations/0001_01_01_000000_create_users_table.php',
+    'database/migrations/0001_01_01_000003_create_teams_table.php',
+    'database/migrations/0001_01_01_000004_create_team_user_table.php',
+    'database/migrations/0001_01_01_000005_create_team_invitations_table.php',
+    'database/migrations/0001_01_01_000006_create_personal_access_tokens_table.php',
+    // Auth pages
+    'resources/js/pages/auth/Login.vue',
+    'resources/js/pages/auth/Register.vue',
+    // Dashboard
+    'resources/js/pages/Dashboard.vue',
+  ];
+
+  expectDeleted($this->sandbox, $deletedFiles);
+
+  // composer.json must no longer reference Fortify or Sanctum packages.
+  expectContentRemoved($this->sandbox, 'composer.json', [
+    '"laravel/fortify"',
+    '"laravel/sanctum"',
+  ]);
+
+  // The registration section must be gone from the bootstrap and web routes.
+  expectContentRemoved($this->sandbox, 'bootstrap/providers.php', [
+    'FortifyServiceProvider',
+    'TeamServiceProvider',
+  ]);
+  expectContentRemoved($this->sandbox, 'routes/web.php', [
+    'routes/settings',
+    'routes/teams',
+  ]);
+})->group('chisel-integration');
+
 test('stripping teams removes the team scaffolding and dangling references', function (): void {
   chiselRun($this->sandbox, ['registration', 'reset-passwords', 'update-passwords', 'two-factor', 'api-tokens', 'profile-photos', 'terms', 'account-deletion', 'email-verification']);
 

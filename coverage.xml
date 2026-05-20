@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1779288808">
-  <project timestamp="1779288808" name="Clover Coverage">
+<coverage generated="1779291099">
+  <project timestamp="1779291099" name="Clover Coverage">
     <package name="App\Actions\Fortify">
       <file name="Actions/Fortify/ConfirmPassword.php">
         <class name="App\Actions\Fortify\ConfirmPassword" namespace="App\Actions\Fortify">

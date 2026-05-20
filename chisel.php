@@ -257,6 +257,7 @@ return Chisel::script(__DIR__)
       // Configs
       $c->files(
         'config/fortify.php',
+        'config/sanctum.php',
         'config/teams.php',
       )->delete();
 
