@@ -162,6 +162,7 @@ return Chisel::script(__DIR__)
       $c->file('app/Models/User.php')
         ->removeLinesContaining('use Laravel\Sanctum\HasApiTokens;')
         ->removeLinesContaining('use HasApiTokens;');
+      $c->file('resources/js/components/UserMenuContent.vue')->removeSection('api-tokens');
     },
   )
   ->selected('features', 'profile-photos',

@@ -2,7 +2,9 @@
 import UserInfo from '@/components/UserInfo.vue';
 import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { logout } from '@/routes';
+/* @chisel-api-tokens */
 import { index as apiTokensIndex } from '@/routes/api-tokens';
+/* @end-chisel-api-tokens */
 import { edit } from '@/routes/profile';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import { KeyRound, LogOut, Settings } from 'lucide-vue-next';
@@ -28,12 +30,14 @@ const handleLogout = () => {
         {{ __('base.nav.settings') }}
       </Link>
     </DropdownMenuItem>
+    <!-- @chisel-api-tokens -->
     <DropdownMenuItem v-if="page.props.teams.hasApiFeatures" :as-child="true">
       <Link class="block w-full" :href="apiTokensIndex()" prefetch as="button">
         <KeyRound class="mr-2 h-4 w-4" />
         {{ __('base.api_tokens.title') }}
       </Link>
     </DropdownMenuItem>
+    <!-- @end-chisel-api-tokens -->
   </DropdownMenuGroup>
   <DropdownMenuSeparator />
   <DropdownMenuItem :as-child="true">

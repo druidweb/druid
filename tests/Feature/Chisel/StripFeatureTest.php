@@ -226,6 +226,54 @@ test('stripping email-verification removes the verify view, Fortify hookup, and 
   ]);
 })->group('chisel-integration');
 
+// Catch-all build probe: strip every optional feature, regenerate wayfinder
+// + zorah, then actually run `vite build` in the sandbox. Any dangling import
+// in any surviving Vue/TS file will fail this — the gold standard test that
+// no targeted file-content grep can replace.
+test('vite build succeeds after stripping every optional feature', function (): void {
+  chiselRun($this->sandbox, []);
+
+  // Symlink node_modules and vendor so vite/artisan resolve without copying.
+  symlink(base_path('node_modules'), $this->sandbox.'/node_modules');
+  symlink(base_path('vendor'), $this->sandbox.'/vendor');
+
+  // Laravel needs writable cache dirs that rsync's --exclude wiped clean.
+  foreach (['storage/framework/cache/data', 'storage/framework/sessions', 'storage/framework/views', 'storage/framework/testing', 'storage/logs', 'bootstrap/cache'] as $dir) {
+    @mkdir($this->sandbox.'/'.$dir, 0o755, true);
+  }
+
+  // .env with a valid APP_KEY.
+  copy($this->sandbox.'/.env.example', $this->sandbox.'/.env');
+  $env = (string) file_get_contents($this->sandbox.'/.env');
+  $env = preg_replace('/^APP_KEY=.*$/m', 'APP_KEY=base64:'.base64_encode(random_bytes(32)), $env);
+  file_put_contents($this->sandbox.'/.env', $env);
+
+  // Wayfinder + zorah regenerate first; vite imports their output.
+  foreach (['wayfinder:generate', 'zorah:generate'] as $command) {
+    $process = new Process(
+      command: [PHP_BINARY, 'artisan', $command],
+      cwd: $this->sandbox,
+    );
+    $process->setTimeout(60)->run();
+
+    expect($process->getExitCode())->toBe(
+      0,
+      "{$command} failed:\nSTDOUT: ".$process->getOutput()."\nSTDERR: ".$process->getErrorOutput(),
+    );
+  }
+
+  $vite = new Process(
+    command: [base_path('node_modules/.bin/vite'), 'build'],
+    cwd: $this->sandbox,
+  );
+  $vite->setTimeout(180)->run();
+
+  expect($vite->getExitCode())->toBe(
+    0,
+    "vite build failed:\nSTDOUT: ".$vite->getOutput()."\nSTDERR: ".$vite->getErrorOutput(),
+  );
+})->group('chisel-integration');
+
 function chiselTemplatePath(): string
 {
   return sys_get_temp_dir().'/chisel-template-'.getmypid();
