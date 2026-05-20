@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.4](https://github.com/druidweb/druid/compare/v1.5.3...v1.5.4) (2026-05-20)
+
+
+### Bug Fixes
+
+* fix sanctum removal error in chisel ([f5a7de2](https://github.com/druidweb/druid/commit/f5a7de295a129c74d10f83c86b3bd3a0745dffcf))
+
+
+### Work in Progress
+
+* update bun action to v2 ([37f9e6d](https://github.com/druidweb/druid/commit/37f9e6db0624c8938b42117a9f0d99c0765268fe))
+
 ## [1.5.3](https://github.com/druidweb/druid/compare/v1.5.2...v1.5.3) (2026-05-20)
 
 
