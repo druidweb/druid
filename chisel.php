@@ -242,10 +242,14 @@ return Chisel::script(__DIR__)
   )
   ->apply(function (Chisel $c): void {
     $c->file('composer.json')
-      ->removeLinesContaining('"@php artisan install:features --ansi"');
+      ->removeLinesContaining('"@php artisan install:features --ansi"')
+      ->removeLinesContaining('"test:chisel"')
+      ->replace(' --exclude-group=chisel-integration', '')
+      ->replace(",\n      \"@test:chisel\"", '');
     $c->files(
       'app/Console/Commands/InstallFeaturesCommand.php',
       'tests/Feature/Console/InstallFeaturesCommandTest.php',
+      'tests/Feature/Chisel/StripFeatureTest.php',
       'chisel.php',
     )->delete();
   });
