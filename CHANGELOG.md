@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.4.8](https://github.com/druidweb/druid/compare/v1.4.7...v1.4.8) (2026-05-20)
+
+
+### Bug Fixes
+
+* **tests:** adjust mocks and snapshots after dependency bumps ([a128a2b](https://github.com/druidweb/druid/commit/a128a2b8d3f7c7bfce4cf1e79691bdcda77e3499))
+
+
+### Code Refactoring
+
+* **deps:** upgrade laravel to 13 and inertia to 3 ([8eb31e2](https://github.com/druidweb/druid/commit/8eb31e225f16c1a8db1ff3cdf35ec93ee457dcfd))
+* **inertia:** adapt config and types to v3 api ([a9f57fd](https://github.com/druidweb/druid/commit/a9f57fd80652ba6b05564be416ee08d3e34c4e1e))
+
+
+### Work in Progress
+
+* added hidden claude folder ([4e9420b](https://github.com/druidweb/druid/commit/4e9420b7c215149cbab77fc81b77c3c4ede887c3))
+
 ## [1.4.7](https://github.com/druidweb/druid/compare/v1.4.6...v1.4.7) (2026-03-10)
 
 
