@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.3](https://github.com/druidweb/druid/compare/v1.5.2...v1.5.3) (2026-05-20)
+
+
+### Code Refactoring
+
+* added support for chiseling fortify ([25935b8](https://github.com/druidweb/druid/commit/25935b82251674d2ae89895db66c4d26d1d44bb5))
+
 ## [1.5.2](https://github.com/druidweb/druid/compare/v1.5.1...v1.5.2) (2026-05-20)
 
 
