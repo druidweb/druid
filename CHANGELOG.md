@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.2](https://github.com/druidweb/druid/compare/v1.5.1...v1.5.2) (2026-05-20)
+
+
+### Bug Fixes
+
+* added smoke test for js build of chisel ([7343ef6](https://github.com/druidweb/druid/commit/7343ef6c0fe0cedf32498f73354a932899212df3))
+
+
+### Work in Progress
+
+* continue fixing chisel script ([bc23dc4](https://github.com/druidweb/druid/commit/bc23dc4f24e607ae8564d3d48f0196ae3c7a997b))
+* continue working chisel issues ([ff0ea13](https://github.com/druidweb/druid/commit/ff0ea1392dc53020cb0b894f5deab851a25d348c))
+
 ## [1.5.1](https://github.com/druidweb/druid/compare/v1.5.0...v1.5.1) (2026-05-20)
 
 
