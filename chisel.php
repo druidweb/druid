@@ -232,6 +232,7 @@ return Chisel::script(__DIR__)
       ->removeLinesContaining('"@php artisan install:features --ansi"');
     $c->files(
       'app/Console/Commands/InstallFeaturesCommand.php',
+      'tests/Feature/Console/InstallFeaturesCommandTest.php',
       'chisel.php',
     )->delete();
   });
