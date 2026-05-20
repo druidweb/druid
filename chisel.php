@@ -123,6 +123,7 @@ return Chisel::script(__DIR__)
         'tests/Feature/Rules/RoleRulesTest.php',
       )->delete();
       $c->file('config/teams.php')->removeLinesContaining('Features::teams(');
+      $c->file('bootstrap/providers.php')->removeLinesContaining('TeamServiceProvider::class');
       $c->php('app/Models/User.php')
         ->removeImport('App\\Concerns\\HasTeams')
         ->removeTrait('HasTeams');
@@ -145,6 +146,11 @@ return Chisel::script(__DIR__)
         'tests/Feature/Controllers/ApiTokenControllerTest.php',
       )->delete();
       $c->file('config/teams.php')->removeLinesContaining('Features::api(');
+      $c->file('app/Providers/AppServiceProvider.php')
+        ->removeLinesContaining('Sanctum::usePersonalAccessTokenModel');
+      $c->php('app/Providers/AppServiceProvider.php')
+        ->removeImport('App\\Models\\PersonalAccessToken')
+        ->removeImport('Laravel\\Sanctum\\Sanctum');
       $c->php('app/Models/User.php')
         ->removeImport('Laravel\\Sanctum\\HasApiTokens')
         ->removeTrait('HasApiTokens');
@@ -205,6 +211,10 @@ return Chisel::script(__DIR__)
       $c->file('tests/Feature/Settings/DeleteAccountTest.php')->delete();
       $c->file('tests/Vue/components/DeleteUser.test.ts')->delete();
       $c->file('config/teams.php')->removeLinesContaining('Features::accountDeletion(');
+      $c->file('app/Providers/TeamServiceProvider.php')
+        ->removeLinesContaining('Teams::deleteUsersUsing');
+      $c->php('app/Providers/TeamServiceProvider.php')
+        ->removeImport('App\\Actions\\Teams\\DeleteUser');
       $c->file('resources/js/pages/settings/Profile.vue')->removeSection('account-deletion');
       $c->file('routes/settings.php')->removeSection('account-deletion');
       $c->file('tests/Feature/Settings/ProfileUpdateTest.php')->removeSection('account-deletion');
