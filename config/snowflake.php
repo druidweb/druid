@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Zen\Snowflake\Resolvers\LaravelResolver;
 use Zen\Snowflake\Resolvers\RandomResolver;
 use Zen\Snowflake\Resolvers\RedisResolver;

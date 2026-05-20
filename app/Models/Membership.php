@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+#[Table(name: 'team_user')]
 final class Membership extends Pivot
 {
   /** @phpstan-ignore missingType.generics */
@@ -18,11 +20,4 @@ final class Membership extends Pivot
    * @var bool
    */
   public $incrementing = true;
-
-  /**
-   * The table associated with the pivot model.
-   *
-   * @var string
-   */
-  protected $table = 'team_user';
 }

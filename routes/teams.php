@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\Api\ApiTokenController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\Settings\OtherBrowserSessionsController;

@@ -154,10 +154,9 @@ final class Teams
    */
   public static function validPermissions(array $permissions): array
   {
-    /** @var array<int, string> $result */
-    $result = array_values(array_intersect($permissions, self::$permissions));
+    $stringPermissions = array_values(array_filter($permissions, is_string(...)));
 
-    return $result;
+    return array_values(array_intersect($stringPermissions, self::$permissions));
   }
 
   /**

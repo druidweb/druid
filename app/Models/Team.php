@@ -9,6 +9,7 @@ use App\Events\TeamDeleted;
 use App\Events\TeamUpdated;
 use App\Teams\Teams;
 use Database\Factories\TeamFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Zen\Snowflake\Concerns\HasSnowflakePrimary;
 
+#[Fillable([
+  'name',
+  'personal_team',
+])]
 final class Team extends Model
 {
   /** @use HasFactory<TeamFactory> */
@@ -30,16 +35,6 @@ final class Team extends Model
    * @var bool
    */
   public $incrementing = false;
-
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var list<string>
-   */
-  protected $fillable = [
-    'name',
-    'personal_team',
-  ];
 
   /**
    * The event map for the model.
