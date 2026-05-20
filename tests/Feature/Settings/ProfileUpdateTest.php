@@ -52,6 +52,7 @@ test('email verification status is unchanged when the email address is unchanged
   expect($user->refresh()->email_verified_at)->not->toBeNull();
 });
 
+/* @chisel-account-deletion */
 test('user can delete their account', function (): void {
   $user = User::factory()->create();
 
@@ -86,3 +87,4 @@ test('correct password must be provided to delete account', function (): void {
 
   expect($user->fresh())->not->toBeNull();
 });
+/* @end-chisel-account-deletion */

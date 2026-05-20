@@ -12,7 +12,9 @@ Route::middleware('auth')->group(function (): void {
 
   Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
+  /* @chisel-account-deletion */
   Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+  /* @end-chisel-account-deletion */
 
   Route::get('settings/password', fn () => Inertia::render('settings/Password'))->name('password.edit');
 

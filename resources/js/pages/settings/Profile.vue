@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
+// @chisel-profile-photos
 import { destroy as destroyPhoto } from '@/routes/current-user-photo';
+// @end-chisel-profile-photos
 import { edit } from '@/routes/profile';
+// @chisel-email-verification
 import { send } from '@/routes/verification';
+// @end-chisel-email-verification
 import { Form, Head, Link, router, usePage } from '@inertiajs/vue3';
 
 import DeleteUser from '@/components/DeleteUser.vue';
@@ -18,12 +22,14 @@ import { type BreadcrumbItem } from '@/types';
 import { computed, ref } from 'vue';
 import { __ } from 'zorah-js';
 
+// @chisel-email-verification
 interface Props {
   mustVerifyEmail: boolean;
   status?: string;
 }
 
 defineProps<Props>();
+// @end-chisel-email-verification
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {
@@ -38,6 +44,7 @@ const page = usePage<{
 }>();
 const user = computed(() => page.props.auth.user);
 
+// @chisel-profile-photos
 const photoInput = ref<HTMLInputElement | null>(null);
 const photoPreview = ref<string | null>(null);
 
@@ -72,6 +79,7 @@ const clearPhotoFileInput = () => {
   }
   photoPreview.value = null;
 };
+// @end-chisel-profile-photos
 </script>
 
 <template>
@@ -92,6 +100,7 @@ const clearPhotoFileInput = () => {
             </CardHeader>
 
             <CardContent class="space-y-6">
+              <!-- @chisel-profile-photos -->
               <!-- Profile Photo -->
               <div v-if="page.props.teams?.managesProfilePhotos" class="grid gap-2">
                 <input id="photo" ref="photoInput" type="file" name="photo" accept="image/*" class="hidden" @change="updatePhotoPreview" />
@@ -119,6 +128,7 @@ const clearPhotoFileInput = () => {
 
                 <InputError class="mt-2" :message="errors.photo" />
               </div>
+              <!-- @end-chisel-profile-photos -->
 
               <div class="grid gap-2">
                 <Label for="name">{{ __('base.fields.name') }}</Label>
@@ -147,6 +157,7 @@ const clearPhotoFileInput = () => {
                 <InputError class="mt-2" :message="errors.email" />
               </div>
 
+              <!-- @chisel-email-verification -->
               <div v-if="mustVerifyEmail && !user.email_verified_at">
                 <p class="-mt-4 text-sm text-muted-foreground">
                   Your email address is unverified.
@@ -162,6 +173,7 @@ const clearPhotoFileInput = () => {
                   A new verification link has been sent to your email address.
                 </div>
               </div>
+              <!-- @end-chisel-email-verification -->
             </CardContent>
 
             <CardFooter class="flex items-center justify-end gap-3">
@@ -178,7 +190,9 @@ const clearPhotoFileInput = () => {
           </Form>
         </Card>
 
+        <!-- @chisel-account-deletion -->
         <DeleteUser />
+        <!-- @end-chisel-account-deletion -->
       </div>
     </SettingsLayout>
   </AppLayout>

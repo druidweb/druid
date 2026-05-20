@@ -7,16 +7,22 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
+// @chisel-terms
 import { show as privacyPolicyShow } from '@/routes/policy';
+// @end-chisel-terms
 import { store } from '@/routes/register';
+// @chisel-terms
 import { show as termsShow } from '@/routes/terms';
+// @end-chisel-terms
 import { Form, Head, usePage } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 
 const page = usePage();
 
+// @chisel-terms
 const termsUrl = termsShow.url();
 const privacyPolicyUrl = privacyPolicyShow.url();
+// @end-chisel-terms
 </script>
 
 <template>
@@ -70,6 +76,7 @@ const privacyPolicyUrl = privacyPolicyShow.url();
           <InputError :message="errors.password_confirmation" />
         </div>
 
+        <!-- @chisel-terms -->
         <div v-if="page.props.teams.hasTermsAndPrivacyPolicyFeature" class="flex items-start gap-2">
           <Checkbox id="terms" name="terms" value="true" :tabindex="5" class="mt-0.5" />
           <div class="grid gap-1.5 leading-none">
@@ -86,6 +93,7 @@ const privacyPolicyUrl = privacyPolicyShow.url();
             <InputError :message="errors.terms" />
           </div>
         </div>
+        <!-- @end-chisel-terms -->
 
         <Button type="submit" class="mt-2 w-full" :tabindex="6" :disabled="processing" data-test="register-user-button">
           <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />

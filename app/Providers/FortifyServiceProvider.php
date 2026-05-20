@@ -76,9 +76,11 @@ final class FortifyServiceProvider extends ServiceProvider
       'status' => $request->session()->get('status'),
     ]));
 
+    /* @chisel-email-verification */
     Fortify::verifyEmailView(fn (Request $request) => Inertia::render('auth/VerifyEmail', [
       'status' => $request->session()->get('status'),
     ]));
+    /* @end-chisel-email-verification */
 
     Fortify::registerView(fn () => Inertia::render('auth/Register'));
 
