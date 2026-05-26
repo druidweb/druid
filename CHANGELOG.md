@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.5](https://github.com/druidweb/druid/compare/v1.5.4...v1.5.5) (2026-05-26)
+
+
+### Bug Fixes
+
+* trigger a release with trigger ([d456bb9](https://github.com/druidweb/druid/commit/d456bb9ac721f4deafdfe6f2cab08890baa7f4ac))
+
+
+### Work in Progress
+
+* fix chisel fucking nonsense ([f7eb9bd](https://github.com/druidweb/druid/commit/f7eb9bda230aa627755b7982cf372afb892a178c))
+* fix more chisel bullshit ([9120e27](https://github.com/druidweb/druid/commit/9120e27bbc5b0a7e7b9290560403dd680944ad14))
+
 ## [1.5.4](https://github.com/druidweb/druid/compare/v1.5.3...v1.5.4) (2026-05-20)
 
 
