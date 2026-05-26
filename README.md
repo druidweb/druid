@@ -53,7 +53,6 @@ Unlike other starter kits that give you a basic setup and leave you to figure ou
 - ⚡️ [Vitest](https://vitest.dev) - Lightning-fast JavaScript unit testing
 - 🔍 [Larastan](https://github.com/larastan/larastan) - Static analysis at max level
 - 🤖 [Laravel PAO](https://github.com/laravel/pao) - Agent-optimized output for Pest, PHPStan, and Paratest so AI assistants can read test results cleanly
-- 🪚 [Laravel Chisel](https://github.com/laravel/chisel) - Post-install feature selection lets consumers strip the optional pieces they don't need
 - 📝 [ESLint](https://eslint.org) + [Prettier](https://prettier.io) - Consistent code style
 - 🔄 Automated semantic releases with conventional commits
 - 👷 GitHub Actions CI/CD with parallel testing
@@ -74,18 +73,6 @@ All Jetstream-equivalent features are configurable in `config/teams.php`:
 ```
 
 Simply remove any feature from the array to disable it. The UI automatically adapts to show only enabled features.
-
-### Installation-time Feature Selection (Chisel)
-
-In addition to runtime toggles, Druid ships with [Laravel Chisel](https://github.com/laravel/chisel) so you can permanently remove optional pieces of the kit right after `laravel new`. Source files are annotated with Chisel section markers, and an interactive `install:features` Artisan command is invoked automatically by the Laravel installer once `composer create-project` finishes.
-
-Choose which modules (e.g. teams, API tokens, profile photos, terms & privacy, account deletion, email verification) to retain — Chisel strips the marked sections, deletes the unused routes, components, and tests, and leaves you with a lean codebase tailored to your app. The selection is driven by `chisel.php` at the project root, which is wired into the installer via the `extra.laravel.installer.post-create-project` hook in `composer.json`. After Chisel runs, both `chisel.php` and the `install:features` command remove themselves so your project ships clean.
-
-To re-run the selection manually (e.g. on a project you already created), use:
-
-```bash
-php artisan install:features
-```
 
 ## Requirements
 
