@@ -12,17 +12,11 @@ Route::middleware('auth')->group(function (): void {
 
   Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
-  /* @chisel-account-deletion */
   Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-  /* @end-chisel-account-deletion */
 
-  /* @chisel-update-passwords */
   Route::get('settings/password', fn () => Inertia::render('settings/Password'))->name('password.edit');
-  /* @end-chisel-update-passwords */
 
-  /* @chisel-two-factor */
   Route::get('settings/two-factor', [TwoFactorAuthenticationController::class, 'show'])->name('two-factor.show');
-  /* @end-chisel-two-factor */
 
   Route::get('settings/appearance', fn () => Inertia::render('settings/Appearance'))->name('appearance.edit');
 });

@@ -78,7 +78,6 @@ test('request password reset link view is configured', function (): void {
       ->component('auth/ForgotPassword'));
 });
 
-/* @chisel-email-verification */
 test('verify email view is configured', function (): void {
   $user = User::factory()->unverified()->create();
 
@@ -87,7 +86,6 @@ test('verify email view is configured', function (): void {
     ->assertInertia(fn ($page) => $page
       ->component('auth/VerifyEmail'));
 });
-/* @end-chisel-email-verification */
 
 test('register view is configured', function (): void {
   $this->get('/register')

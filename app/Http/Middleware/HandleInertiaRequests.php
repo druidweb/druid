@@ -4,22 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-/* @chisel-registration */
 use App\Teams\Teams;
-/* @end-chisel-registration */
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
-/* @chisel-registration */
 use Illuminate\Support\Facades\Gate;
-/* @end-chisel-registration */
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\ViewErrorBag;
 use Inertia\Middleware;
-/* @chisel-registration */
 use Laravel\Fortify\Features;
-
-/* @end-chisel-registration */
 
 final class HandleInertiaRequests extends Middleware
 {
@@ -61,7 +54,6 @@ final class HandleInertiaRequests extends Middleware
       ...parent::share($request),
       'name' => config('app.name'),
       'quote' => ['message' => trim((string) $message), 'author' => trim((string) $author)],
-      /* @chisel-registration */
       'teams' => function () use ($request): array {
         $user = $request->user();
 
@@ -69,12 +61,8 @@ final class HandleInertiaRequests extends Middleware
           'canCreateTeams' => $user &&
                               Teams::userHasTeamFeatures($user) &&
                               Gate::forUser($user)->check('create', Teams::newTeamModel()),
-          /* @chisel-two-factor */
           'canManageTwoFactorAuthentication' => Features::canManageTwoFactorAuthentication(),
-          /* @end-chisel-two-factor */
-          /* @chisel-update-passwords */
           'canUpdatePassword' => Features::enabled(Features::updatePasswords()),
-          /* @end-chisel-update-passwords */
           'canUpdateProfileInformation' => Features::canUpdateProfileInformation(),
           'hasEmailVerification' => Features::enabled(Features::emailVerification()),
           'flash' => $request->session()->get('flash', []),
@@ -94,21 +82,17 @@ final class HandleInertiaRequests extends Middleware
           $userHasTeamFeatures = Teams::userHasTeamFeatures($user);
 
           if ($userHasTeamFeatures) {
-            // Load the current team relationship
             $user->load('currentTeam');
           }
 
           return array_merge($user->toArray(), array_filter([
             'all_teams' => $userHasTeamFeatures ? $user->allTeams()->values() : null,
           ]), [
-            /* @chisel-two-factor */
             'two_factor_enabled' => Features::enabled(Features::twoFactorAuthentication())
                 && ! is_null($user->two_factor_secret),
-            /* @end-chisel-two-factor */
           ]);
         },
       ],
-      /* @end-chisel-registration */
       'errorBags' => function () {
         /** @var ViewErrorBag|null $errors */
         $errors = Session::get('errors');

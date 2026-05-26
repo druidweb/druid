@@ -15,9 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-/* @chisel-two-factor */
 use Laravel\Fortify\TwoFactorAuthenticatable;
-/* @end-chisel-two-factor */
 use Laravel\Sanctum\HasApiTokens;
 use Zen\Snowflake\Concerns\HasSnowflakePrimary;
 
@@ -31,10 +29,8 @@ use Zen\Snowflake\Concerns\HasSnowflakePrimary;
 ])]
 #[Hidden([
   'password',
-  /* @chisel-two-factor */
   'two_factor_secret',
   'two_factor_recovery_codes',
-  /* @end-chisel-two-factor */
   'remember_token',
 ])]
 final class User extends Authenticatable implements MustVerifyEmail
@@ -49,17 +45,7 @@ final class User extends Authenticatable implements MustVerifyEmail
   use HasTeams;
   use Notifiable;
   use SoftDeletes;
-
-  /* @chisel-two-factor */
   use TwoFactorAuthenticatable;
-  /* @end-chisel-two-factor */
-
-  /**
-   * Indicates if the IDs are auto-incrementing.
-   *
-   * @var bool
-   */
-  public $incrementing = false;
 
   /**
    * Get the attributes that should be cast.
@@ -71,9 +57,7 @@ final class User extends Authenticatable implements MustVerifyEmail
     return [
       'email_verified_at' => 'datetime',
       'password' => 'hashed',
-      /* @chisel-two-factor */
       'two_factor_confirmed_at' => 'datetime',
-      /* @end-chisel-two-factor */
     ];
   }
 }

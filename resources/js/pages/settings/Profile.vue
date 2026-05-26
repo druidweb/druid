@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-/* @chisel-profile-photos */
 import { destroy as destroyPhoto } from '@/routes/current-user-photo';
 /* @end-chisel-profile-photos */
 import { edit } from '@/routes/profile';
-/* @chisel-email-verification */
 import { send } from '@/routes/verification';
 /* @end-chisel-email-verification */
 import { Form, Head, Link, router, usePage } from '@inertiajs/vue3';
 
-/* @chisel-account-deletion */
 import DeleteUser from '@/components/DeleteUser.vue';
 /* @end-chisel-account-deletion */
 import InputError from '@/components/InputError.vue';
@@ -24,7 +21,6 @@ import { type BreadcrumbItem } from '@/types';
 import { computed, ref } from 'vue';
 import { __ } from 'zorah-js';
 
-/* @chisel-email-verification */
 interface Props {
   mustVerifyEmail: boolean;
   status?: string;
@@ -46,7 +42,6 @@ const page = usePage<{
 }>();
 const user = computed(() => page.props.auth.user);
 
-/* @chisel-profile-photos */
 const photoInput = ref<HTMLInputElement | null>(null);
 const photoPreview = ref<string | null>(null);
 
@@ -102,7 +97,6 @@ const clearPhotoFileInput = () => {
             </CardHeader>
 
             <CardContent class="space-y-6">
-              <!-- @chisel-profile-photos -->
               <!-- Profile Photo -->
               <div v-if="page.props.teams?.managesProfilePhotos" class="grid gap-2">
                 <input id="photo" ref="photoInput" type="file" name="photo" accept="image/*" class="hidden" @change="updatePhotoPreview" />
@@ -159,7 +153,6 @@ const clearPhotoFileInput = () => {
                 <InputError class="mt-2" :message="errors.email" />
               </div>
 
-              <!-- @chisel-email-verification -->
               <div v-if="mustVerifyEmail && !user.email_verified_at">
                 <p class="-mt-4 text-sm text-muted-foreground">
                   Your email address is unverified.
@@ -192,7 +185,6 @@ const clearPhotoFileInput = () => {
           </Form>
         </Card>
 
-        <!-- @chisel-account-deletion -->
         <DeleteUser />
         <!-- @end-chisel-account-deletion -->
       </div>

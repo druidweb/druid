@@ -1,7 +1,5 @@
 <script setup lang="ts">
-/* @chisel-registration */
 import { dashboard, login, register } from '@/routes';
-/* @end-chisel-registration */
 import { Head, Link } from '@inertiajs/vue3';
 import {
   ArrowRight,
@@ -18,7 +16,6 @@ import {
   Mail,
   Monitor,
   Palette,
-  Scissors,
   Server,
   Shield,
   ShieldCheck,
@@ -27,9 +24,9 @@ import {
   Trash2,
   Type,
   Users,
+  Zap,
 } from 'lucide-vue-next';
 
-/* @chisel-registration */
 withDefaults(
   defineProps<{
     canRegister: boolean;
@@ -38,7 +35,6 @@ withDefaults(
     canRegister: true,
   },
 );
-/* @end-chisel-registration */
 
 const stackItems = [
   {
@@ -109,10 +105,9 @@ const devFeatures = [
     accent: '#8b5cf6',
   },
   {
-    icon: Scissors,
-    name: 'Laravel Chisel',
-    description:
-      'Post-install feature selection via an interactive Artisan command. Strip teams, API tokens, profile photos — keep only what your app needs.',
+    icon: Zap,
+    name: 'Laravel Octane',
+    description: 'FrankenPHP-powered production server with sub-millisecond boot times. Configured and ready for Forge deployment.',
     accent: '#f59e0b',
   },
   {
@@ -135,9 +130,7 @@ const devFeatures = [
   },
 ];
 
-const chiselFeatures = ['Teams & Invitations', 'API Tokens', 'Profile Photos', 'Terms & Privacy', 'Account Deletion', 'Email Verification'];
-
-const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode', 'SSR Ready', 'PAO Ready', 'Chisel Support'];
+const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode', 'SSR Ready', 'PAO Ready', 'Octane Ready'];
 </script>
 
 <template>
@@ -159,7 +152,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
         <span class="welcome-logo">druid</span>
       </div>
       <nav class="flex items-center gap-3">
-        <!-- @chisel-registration -->
         <template v-if="$page.props.auth.user">
           <Link :href="dashboard()" class="nav-btn nav-btn--solid">
             Dashboard
@@ -170,7 +162,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
           <Link :href="login()" class="nav-btn nav-btn--ghost">Sign in</Link>
           <Link v-if="canRegister" :href="register()" class="nav-btn nav-btn--solid"> Get started </Link>
         </template>
-        <!-- @end-chisel-registration -->
       </nav>
     </header>
 
@@ -189,11 +180,9 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
 
       <div
         class="mt-8 flex translate-y-0 flex-wrap items-center justify-center gap-3 opacity-100 transition-all delay-300 duration-700 starting:translate-y-4 starting:opacity-0">
-        <!-- @chisel-registration -->
         <Link v-if="canRegister" :href="register()" class="cta-btn cta-btn--primary">
           Get started <ArrowRight :size="15" class="ml-1.5 inline-block" />
         </Link>
-        <!-- @end-chisel-registration -->
         <a href="https://github.com/druidweb/druid" target="_blank" class="cta-btn cta-btn--ghost">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" class="-mt-px mr-1.5 inline-block">
             <path
@@ -292,44 +281,8 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
       </div>
     </section>
 
-    <!-- Chisel callout -->
-    <section class="welcome-section welcome-section--alt">
-      <div class="mx-auto max-w-5xl px-6">
-        <div class="chisel-box">
-          <div class="chisel-box-left">
-            <div class="section-label">Feature Selection</div>
-            <h2 class="mb-4 text-[28px] leading-tight font-bold tracking-tight text-[#111827] lg:text-[38px] dark:text-[#f9fafb]">
-              Keep only what<br />you need.
-            </h2>
-            <p class="max-w-xs text-[14px] leading-relaxed text-[#6b7280] dark:text-[rgba(255,255,255,0.45)]">
-              Druid ships with Laravel Chisel support. After installation, an interactive Artisan command walks you through which optional features to
-              retain. Source files, routes, components, and tests are cleanly removed — leaving you with a lean, focused codebase.
-            </p>
-            <div class="mt-6">
-              <code class="chisel-cmd-badge">php artisan druid:install</code>
-            </div>
-          </div>
-          <div class="chisel-box-right">
-            <p class="mb-4 text-[11px] font-semibold tracking-widest text-[#9ca3af] uppercase">Optional features</p>
-            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div v-for="feat in chiselFeatures" :key="feat" class="chisel-feat-item">
-                <span class="chisel-check">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                    <path d="M2 5l2.2 2.2L8 2.8" stroke="#FF2D20" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </span>
-                <span class="text-[13px] font-medium text-[#374151] dark:text-[rgba(255,255,255,0.65)]">
-                  {{ feat }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Installation CTA -->
-    <section class="welcome-section">
+    <section class="welcome-section welcome-section--alt">
       <div class="mx-auto max-w-2xl px-6 text-center">
         <div class="section-label">Get Started</div>
         <h2 class="section-title">Start building<br />in seconds.</h2>
@@ -359,14 +312,12 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
           </button>
         </div>
 
-        <!-- @chisel-registration -->
         <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link v-if="canRegister" :href="register()" class="cta-btn cta-btn--primary">
             Create account <ArrowRight :size="15" class="ml-1.5 inline-block" />
           </Link>
           <Link :href="login()" class="cta-btn cta-btn--ghost">Sign in</Link>
         </div>
-        <!-- @end-chisel-registration -->
       </div>
     </section>
 
@@ -407,7 +358,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   color: #f9fafb;
 }
 
-/* Background grid */
 .welcome-bg-grid {
   position: fixed;
   inset: 0;
@@ -421,7 +371,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   background-image: radial-gradient(circle, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
 }
 
-/* Background glow */
 .welcome-bg-glow {
   position: fixed;
   top: -250px;
@@ -438,7 +387,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   background: radial-gradient(ellipse, rgba(255, 45, 32, 0.1) 0%, transparent 65%);
 }
 
-/* Logo */
 .welcome-logo {
   font-size: 15px;
   font-weight: 700;
@@ -450,7 +398,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   color: #f9fafb;
 }
 
-/* Nav buttons */
 .nav-btn {
   display: inline-flex;
   align-items: center;
@@ -492,7 +439,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   background: #e02419;
 }
 
-/* Hero badge */
 .hero-badge {
   display: inline-block;
   font-size: 11px;
@@ -507,7 +453,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   margin-bottom: 28px;
 }
 
-/* Hero title */
 .hero-title {
   font-size: clamp(72px, 14vw, 116px);
   font-weight: 800;
@@ -521,7 +466,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   color: #f9fafb;
 }
 
-/* Hero subtitle */
 .hero-subtitle {
   font-size: 16px;
   line-height: 1.75;
@@ -533,7 +477,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* CTA buttons */
 .cta-btn {
   display: inline-flex;
   align-items: center;
@@ -578,7 +521,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Install snippet (hero) */
 .install-snippet {
   display: inline-flex;
   align-items: center;
@@ -609,7 +551,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   color: #f9fafb;
 }
 
-/* Stack pills — bumped opacity for legibility */
 .stack-pill {
   font-size: 11px;
   font-family: 'Courier New', monospace;
@@ -633,7 +574,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   border-color: rgba(255, 45, 32, 0.3);
 }
 
-/* Stats bar */
 .welcome-stats-bar {
   position: relative;
   z-index: 10;
@@ -668,7 +608,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   flex-shrink: 0;
 }
 
-/* Sections */
 .welcome-section {
   position: relative;
   z-index: 10;
@@ -692,7 +631,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   border-color: rgba(255, 255, 255, 0.055);
 }
 
-/* Section typography */
 .section-label {
   display: inline-block;
   font-size: 11px;
@@ -726,7 +664,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   color: rgba(255, 255, 255, 0.45);
 }
 
-/* Feature cards (stack) */
 .feature-card {
   display: block;
   padding: 22px;
@@ -777,7 +714,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* Auth cards */
 .auth-card {
   display: flex;
   align-items: center;
@@ -809,7 +745,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   color: rgba(255, 255, 255, 0.65);
 }
 
-/* Dev cards */
 .dev-card {
   padding: 24px;
   border-radius: 12px;
@@ -843,58 +778,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   border-radius: 9px;
 }
 
-/* Chisel section */
-.chisel-box {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 48px;
-  padding: 40px;
-  border-radius: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  background: #ffffff;
-}
-
-@media (min-width: 768px) {
-  .chisel-box {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.dark .chisel-box {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.chisel-cmd-badge {
-  display: inline-block;
-  font-family: 'Courier New', monospace;
-  font-size: 13px;
-  color: #ff2d20;
-  background: rgba(255, 45, 32, 0.06);
-  border: 1px solid rgba(255, 45, 32, 0.15);
-  padding: 8px 16px;
-  border-radius: 8px;
-}
-
-.chisel-feat-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.chisel-check {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
-  border: 1px solid rgba(255, 45, 32, 0.3);
-  background: rgba(255, 45, 32, 0.06);
-  flex-shrink: 0;
-}
-
-/* Install block */
 .install-block {
   display: flex;
   align-items: center;
@@ -944,7 +827,6 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
   background: rgba(255, 45, 32, 0.06);
 }
 
-/* Footer */
 .welcome-footer {
   position: relative;
   z-index: 10;

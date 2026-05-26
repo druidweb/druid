@@ -6,13 +6,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
-/* @chisel-registration */
 import { register } from '@/routes';
-/* @end-chisel-registration */
 import { store } from '@/routes/login';
-/* @chisel-reset-passwords */
 import { request } from '@/routes/password';
-/* @end-chisel-reset-passwords */
 import { Form, Head } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 
@@ -50,9 +46,7 @@ defineProps<{
         <div class="grid gap-2">
           <div class="flex items-center justify-between">
             <Label for="password">{{ __('base.fields.password') }}</Label>
-            <!-- @chisel-reset-passwords -->
             <TextLink v-if="canResetPassword" :href="request()" class="text-sm" :tabindex="5">{{ __('base.auth.forgot_password') }}</TextLink>
-            <!-- @end-chisel-reset-passwords -->
           </div>
           <Input
             id="password"
@@ -78,12 +72,10 @@ defineProps<{
         </Button>
       </div>
 
-      <!-- @chisel-registration -->
-      <div class="text-center text-sm text-muted-foreground" v-if="canRegister">
+      <div v-if="canRegister" class="text-center text-sm text-muted-foreground">
         Don't have an account?
         <TextLink :href="register()" :tabindex="5">{{ __('base.auth.sign_up') }}</TextLink>
       </div>
-      <!-- @end-chisel-registration -->
     </Form>
   </AuthBase>
 </template>
