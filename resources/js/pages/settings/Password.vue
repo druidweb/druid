@@ -33,6 +33,7 @@ const currentPasswordInput = ref<HTMLInputElement | null>(null);
       <Card>
         <Form
           v-bind="update.form()"
+          error-bag="updatePassword"
           :options="{
             preserveScroll: true,
           }"

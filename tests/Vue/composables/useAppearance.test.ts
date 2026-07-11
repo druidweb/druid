@@ -73,6 +73,43 @@ describe('initializeTheme', () => {
     expect(addEventListenerMock).toHaveBeenCalledWith('change', expect.any(Function));
   });
 
+  it('re-applies the stored theme when the system preference changes', () => {
+    let changeHandler: (() => void) | undefined;
+    const matchMediaMock = vi.fn().mockReturnValue({
+      matches: false,
+      addEventListener: (_event: string, handler: () => void) => {
+        changeHandler = handler;
+      },
+    });
+    vi.stubGlobal('matchMedia', matchMediaMock);
+    localStorage.setItem('appearance', 'dark');
+
+    initializeTheme();
+    expect(changeHandler).toBeDefined();
+
+    // Invoke the registered handler to exercise handleSystemThemeChange
+    changeHandler!();
+
+    expect(document.documentElement.classList.contains('dark')).toBe(true);
+  });
+
+  it('falls back to system theme on change when no preference is stored', () => {
+    let changeHandler: (() => void) | undefined;
+    const matchMediaMock = vi.fn().mockReturnValue({
+      matches: true,
+      addEventListener: (_event: string, handler: () => void) => {
+        changeHandler = handler;
+      },
+    });
+    vi.stubGlobal('matchMedia', matchMediaMock);
+    // no stored appearance -> handler resolves to 'system'
+
+    initializeTheme();
+    changeHandler!();
+
+    expect(document.documentElement.classList.contains('dark')).toBe(true);
+  });
+
   it('returns early when window is undefined (SSR)', () => {
     const originalWindow = global.window;
     // @ts-expect-error - Testing SSR scenario

@@ -31,3 +31,5 @@ yarn-error.log
 /.zed
 /.claude
 /vitest.md
+
+/tests/Browser/Screenshots

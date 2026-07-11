@@ -35,8 +35,6 @@ class Role implements JsonSerializable
 
   /**
    * Describe the role.
-   *
-   * @return $this
    */
   public function description(string $description): static
   {

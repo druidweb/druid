@@ -5,6 +5,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { ZorahVue } from 'zorah-js';
+import { Toaster } from './components/ui/toast';
 import { initializeTheme } from './composables/useAppearance';
 import { Zorah } from './zorah';
 
@@ -14,7 +15,7 @@ createInertiaApp({
   title: (title) => (title ? `${title} - ${appName}` : appName),
   resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
   setup({ el, App, props, plugin }) {
-    createApp({ render: () => h(App, props) })
+    createApp({ render: () => [h(App, props), h(Toaster)] })
       .use(plugin)
       .use(ZorahVue, Zorah)
       .mount(el);

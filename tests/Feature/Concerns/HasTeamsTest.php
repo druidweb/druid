@@ -244,6 +244,20 @@ it('checks team permission with update wildcard', function (): void {
   expect($user->hasTeamPermission($memberTeam, 'posts:create'))->toBeFalse();
 });
 
+it('checks team permission with global wildcard for non-owner member', function (): void {
+  Teams::role('superadmin', 'Super Admin', ['*'])->description('Can do anything');
+
+  $user = User::factory()->withPersonalTeam()->create();
+  $memberTeam = Team::factory()->create();
+  $memberTeam->users()->attach($user, ['role' => 'superadmin']);
+
+  $user = User::with(['teams', 'ownedTeams'])->find($user->id);
+  $memberTeam = Team::with('users')->find($memberTeam->id);
+
+  // Non-owner member whose role grants '*' matches any permission not listed literally
+  expect($user->hasTeamPermission($memberTeam, 'anything:goes'))->toBeTrue();
+});
+
 it('returns false for hasTeamPermission when api token lacks permission', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
   $memberTeam = Team::factory()->create();

@@ -27,12 +27,16 @@ const sizeClasses = computed(() => {
       return 'size-8';
   }
 });
+
+// Scale the initials with the avatar so they don't look lost in the larger sizes
+const fallbackTextClasses = computed(() => (props.size === 'lg' ? 'text-4xl' : ''));
 </script>
 
 <template>
-  <Avatar :class="['overflow-hidden rounded-full', sizeClasses]">
+  <!-- Key on the photo path so removing/changing it remounts the Avatar and the fallback shows immediately -->
+  <Avatar :key="user.profile_photo_path ?? 'fallback'" :class="['overflow-hidden rounded-full', sizeClasses]">
     <AvatarImage v-if="user.profile_photo_path" :src="user.profile_photo_url" :alt="user.name" />
-    <AvatarFallback class="rounded-full bg-muted text-foreground">
+    <AvatarFallback :class="['rounded-full bg-muted text-foreground', fallbackTextClasses]">
       {{ getInitials(user.name) }}
     </AvatarFallback>
   </Avatar>

@@ -17,10 +17,25 @@ export interface NavItem {
   isActive?: boolean;
 }
 
+export interface SharedTeams {
+  canCreateTeams: boolean;
+  canManageTwoFactorAuthentication: boolean;
+  canUpdatePassword: boolean;
+  canUpdateProfileInformation: boolean;
+  hasEmailVerification: boolean;
+  flash: { token?: string; [key: string]: unknown };
+  hasAccountDeletionFeatures: boolean;
+  hasApiFeatures: boolean;
+  hasTeamFeatures: boolean;
+  hasTermsAndPrivacyPolicyFeature: boolean;
+  managesProfilePhotos: boolean;
+}
+
 export type AppPageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
   name: string;
   quote: { message: string; author: string };
   auth: Auth;
+  teams: SharedTeams;
   sidebarOpen: boolean;
 };
 

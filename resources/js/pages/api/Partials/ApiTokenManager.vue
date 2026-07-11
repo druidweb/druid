@@ -65,7 +65,7 @@ const apiTokenBeingDeleted = ref<ApiToken | null>(null);
 
 const createApiToken = () => {
   console.log('Creating token with permissions:', createApiTokenForm.permissions);
-  createApiTokenForm.post(store(), {
+  createApiTokenForm.post(store().url, {
     preserveScroll: true,
     onSuccess: () => {
       displayingToken.value = true;
@@ -80,7 +80,7 @@ const manageApiTokenPermissions = (token: ApiToken) => {
 };
 
 const updateApiToken = () => {
-  updateApiTokenForm.put(update(managingPermissionsFor.value!.id), {
+  updateApiTokenForm.put(update(managingPermissionsFor.value!.id).url, {
     preserveScroll: true,
     preserveState: true,
     onSuccess: () => (managingPermissionsFor.value = null),
@@ -92,7 +92,7 @@ const confirmApiTokenDeletion = (token: ApiToken) => {
 };
 
 const deleteApiToken = () => {
-  deleteApiTokenForm.delete(destroy(apiTokenBeingDeleted.value!.id), {
+  deleteApiTokenForm.delete(destroy(apiTokenBeingDeleted.value!.id).url, {
     preserveScroll: true,
     preserveState: true,
     onSuccess: () => (apiTokenBeingDeleted.value = null),
