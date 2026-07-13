@@ -43,10 +43,19 @@ it('shows the initials immediately after the avatar is removed', function (): vo
     ->assertDontSee('Remove Photo');
 });
 
-// NOTE: uploading a photo through the form is NOT E2E-drivable here — Playwright rejects local file
-// paths ("localPaths are not allowed when the client is not local"), so `attach()` on a file input
-// can't be used in this setup. The upload branch (ProfileController@update photo path) stays covered
-// by the Feature suite. Avatar *removal* is covered above (that photo is set via the model).
+// NOTE: uploading a photo through the form is NOT E2E-drivable here — and neither is any
+// file upload via this harness. Two independent blockers:
+//   1. Playwright rejects local file paths ("localPaths are not allowed when the client is not
+//      local"), so `attach()` on the file input can't be used in this setup.
+//   2. A same-origin multipart fetch also can't deliver the file: the plugin's in-process server
+//      (Pest\Browser\Drivers\LaravelHttpServer::handleRequest) hardcodes the $files argument of
+//      Request::create() to [] with a literal `// @TODO files...`, and only parses request bodies
+//      when the Content-Type is application/x-www-form-urlencoded. So $request->file('photo') is
+//      always null and multipart form fields (even a spoofed _method=PATCH) are dropped —
+//      confirmed empirically: multipart POST -> 405, native PATCH multipart -> 422 (name/email lost).
+// The upload branch (ProfileController@update photo path + HasProfilePhoto::updateProfilePhoto)
+// therefore stays covered by the Feature suite. Avatar *removal* is covered above (that photo is
+// set via the model, not through an HTTP upload).
 
 it('changes the email and resets email verification', function (): void {
   $user = User::factory()->withPersonalTeam()->create();

@@ -82,7 +82,7 @@
     ],
     "test:feat": "./vendor/bin/pest --parallel --processes=24",
     "test:e2e": "./vendor/bin/pest tests/Browser",
-    "test:e2e:coverage": "./vendor/bin/pest tests/Browser --coverage --min=79.5",
+    "test:e2e:coverage": "./vendor/bin/pest tests/Browser --coverage --min=100",
     "test:coverage": "./vendor/bin/pest --parallel --processes=24 --coverage --coverage-clover=coverage.xml --min=100.0; php bin/coverage-clean",
     "test:static": [
       "./vendor/bin/phpstan analyze",

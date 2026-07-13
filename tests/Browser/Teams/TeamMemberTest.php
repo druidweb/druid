@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Team;
 use App\Models\User;
+use App\Teams\Features;
 
 // Same-origin request from the authenticated browser session, resolving to the HTTP
 // status. Guarded against redeclaration when the whole Browser suite loads every
@@ -169,6 +170,33 @@ it('forbids a non-owner member from adding a member via a direct request', funct
 
   expect((int) $status)->toBe(403);
   expect($team->fresh()->teamInvitations()->where('email', 'intruder@example.com')->exists())->toBeFalse();
+});
+
+it('directly adds an existing user when team invitations are disabled', function (): void {
+  // Flip the invitations option off for the served (in-process) request so the controller
+  // takes the else-branch in store() and resolves AddsTeamMembers instead of the inviter.
+  // The exact key is teams-options.teams.invitations (Features::sendsTeamInvitations reads it).
+  config(['teams-options.teams.invitations' => false]);
+  expect(Features::sendsTeamInvitations())->toBeFalse();
+
+  $owner = User::factory()->withPersonalTeam()->create();
+  $added = User::factory()->withPersonalTeam()->create(['email' => 'existing@example.com']);
+  $team = $owner->currentTeam;
+  $this->actingAs($owner);
+
+  // AddTeamMember requires an email that belongs to a real registered user; it attaches
+  // that user directly rather than creating an invitation.
+  $status = visit('/teams/'.$team->id)->script(teamApiRequest('POST', '/teams/'.$team->id.'/members', [
+    'email' => 'existing@example.com',
+    'role' => 'admin',
+  ]));
+
+  // back(303) is followed by fetch to the referring page (200): the request succeeded, no error thrown.
+  expect((int) $status)->toBe(200);
+  // The direct-add path attached the existing user to the team...
+  expect($team->fresh()->users()->where('users.id', $added->id)->exists())->toBeTrue();
+  // ...and, crucially, created NO invitation — proving the else-branch (direct add), not the invite path, ran.
+  expect($team->fresh()->teamInvitations()->where('email', 'existing@example.com')->exists())->toBeFalse();
 });
 
 it('forbids a non-owner member from changing another member role via a direct request', function (): void {
