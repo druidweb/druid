@@ -26,7 +26,7 @@ it('resets the password with a valid token', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
   $token = Password::createToken($user);
 
-  visit('/reset-password/'.$token.'?email='.urlencode($user->email))
+  visit('/reset-password/'.$token.'?email='.urlencode((string) $user->email))
     ->fill('password', 'new-password-123')
     ->fill('password_confirmation', 'new-password-123')
     ->click('@reset-password-button')
@@ -39,7 +39,7 @@ it('rejects a password reset that is too short', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
   $token = Password::createToken($user);
 
-  visit('/reset-password/'.$token.'?email='.urlencode($user->email))
+  visit('/reset-password/'.$token.'?email='.urlencode((string) $user->email))
     ->fill('password', 'short')
     ->fill('password_confirmation', 'short')
     ->click('@reset-password-button')

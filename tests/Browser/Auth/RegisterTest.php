@@ -22,5 +22,5 @@ it('registers a new user', function (): void {
     ->click('@register-user-button')
     ->assertPathIsNot('/register');
 
-  expect(User::where('email', 'ada@example.com')->exists())->toBeTrue();
+  expect(User::query()->where('email', 'ada@example.com')->exists())->toBeTrue();
 });

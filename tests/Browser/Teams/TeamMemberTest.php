@@ -149,7 +149,7 @@ it('prevents the owner from leaving a team they created', function (): void {
   $status = visit('/dashboard')->script(teamApiRequest('DELETE', '/teams/'.$team->id.'/members/'.$owner->id));
 
   expect((int) $status)->toBe(422);
-  expect(Team::find($team->id))->not->toBeNull();
+  expect(Team::query()->find($team->id))->not->toBeNull();
   expect((string) $team->fresh()->user_id)->toBe((string) $owner->id);
 });
 
@@ -217,4 +217,38 @@ it('forbids a non-owner member from changing another member role via a direct re
 
   expect((int) $status)->toBe(403);
   expect($team->fresh()->users()->find($memberB->id)->membership->role)->toBe('editor');
+});
+
+it('rejects an invalid role when inviting a member', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $this->actingAs($owner);
+  $team = $owner->currentTeam;
+
+  // The role picker only offers valid roles, so drive the endpoint directly with a bogus role to
+  // exercise the Rules\Role validation-failure branch ($fail). XHR Accept header -> 422.
+  $status = visit('/teams/'.$team->id)->script(teamApiRequest('POST', '/teams/'.$team->id.'/members', [
+    'email' => 'newbie@example.com',
+    'role' => 'not-a-real-role',
+  ]));
+
+  expect((int) $status)->toBe(422);
+  expect($team->fresh()->teamInvitations()->where('email', 'newbie@example.com')->exists())->toBeFalse();
+});
+
+it('clears the current team when removing a member whose current team is this team', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $member = User::factory()->withPersonalTeam()->create(['name' => 'Curt Current']);
+  $team = $owner->currentTeam;
+  $team->users()->attach($member, ['role' => 'admin']);
+  // Point the member's CURRENT team at this shared team so removal must reset it (Team::removeUser).
+  $member->forceFill(['current_team_id' => $team->id])->save();
+  $this->actingAs($owner);
+
+  $status = visit('/teams/'.$team->id)->script(teamApiRequest('DELETE', '/teams/'.$team->id.'/members/'.$member->id));
+
+  // back(303) is followed by fetch to the referring page (200): removal succeeded.
+  expect((int) $status)->toBe(200);
+  expect($team->fresh()->users()->where('users.id', $member->id)->exists())->toBeFalse();
+  // Proves Team::removeUser reset the detached member's current team (lines 156-158).
+  expect($member->fresh()->current_team_id)->toBeNull();
 });

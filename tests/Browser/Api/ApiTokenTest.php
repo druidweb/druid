@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use Illuminate\Support\Sleep;
 
 // Same-origin request fired from the authenticated browser page, resolving to the HTTP
 // status. It reads the XSRF-TOKEN cookie and drives the real route through the real
@@ -53,7 +54,7 @@ it('creates an api token and shows the plaintext value once', function (): void 
     if (strlen($shownToken) > 30) {
       break;
     }
-    usleep(50_000);
+    Sleep::usleep(50_000);
   }
 
   $page->assertSee('API Token Created')
@@ -79,7 +80,7 @@ it('rejects creating an api token without a name', function (): void {
       $seen = true;
       break;
     }
-    usleep(100_000);
+    Sleep::usleep(100_000);
   }
 
   expect($seen)->toBeTrue();
@@ -107,7 +108,7 @@ it("updates an api token's permissions", function (): void {
     if (in_array('create', $abilities, true)) {
       break;
     }
-    usleep(50_000);
+    Sleep::usleep(50_000);
   }
 
   expect($abilities)->toContain('create')->toContain('read');
@@ -133,7 +134,7 @@ it('deletes an api token', function (): void {
     if ($remaining === 0) {
       break;
     }
-    usleep(50_000);
+    Sleep::usleep(50_000);
   }
 
   expect($remaining)->toBe(0);

@@ -26,7 +26,7 @@ it('accepts a team invitation from a signed url', function (): void {
     ->assertPathIs('/dashboard');
 
   expect($team->fresh()->hasUser($invited))->toBeTrue();
-  expect(TeamInvitation::find($invitation->id))->toBeNull();
+  expect(TeamInvitation::query()->find($invitation->id))->toBeNull();
 });
 
 it('cancels a pending team invitation', function (): void {
@@ -45,5 +45,5 @@ it('cancels a pending team invitation', function (): void {
     ->press('Cancel')
     ->assertDontSee('pending@example.com');
 
-  expect(TeamInvitation::find($invitation->id))->toBeNull();
+  expect(TeamInvitation::query()->find($invitation->id))->toBeNull();
 });

@@ -13,7 +13,7 @@ if (! function_exists('currentTwoFactorOtp')) {
   {
     $secret = Fortify::currentEncrypter()->decrypt($user->fresh()->two_factor_secret);
 
-    return app(Google2FA::class)->getCurrentOtp($secret);
+    return resolve(Google2FA::class)->getCurrentOtp($secret);
   }
 }
 
@@ -21,7 +21,7 @@ if (! function_exists('currentTwoFactorOtp')) {
 if (! function_exists('enableTwoFactorFor')) {
   function enableTwoFactorFor(User $user, array $recoveryCodes): void
   {
-    $secret = app(TwoFactorAuthenticationProvider::class)->generateSecretKey();
+    $secret = resolve(TwoFactorAuthenticationProvider::class)->generateSecretKey();
 
     $user->forceFill([
       'two_factor_secret' => Fortify::currentEncrypter()->encrypt($secret),

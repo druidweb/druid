@@ -52,7 +52,7 @@ it('lets the owner delete a non-personal team', function (): void {
     ->click('[data-slot="dialog-content"] button.bg-destructive')
     ->assertPathIs('/dashboard');
 
-  expect(Team::find($team->id))->toBeNull();
+  expect(Team::query()->find($team->id))->toBeNull();
 });
 
 it('does not offer deletion for a personal team', function (): void {
@@ -91,7 +91,7 @@ it('rejects deleting a personal team via a direct request', function (): void {
   $status = visit('/dashboard')->script(teamApiRequest('DELETE', '/teams/'.$team->id));
 
   expect((int) $status)->toBe(422);
-  expect(Team::find($team->id))->not->toBeNull();
+  expect(Team::query()->find($team->id))->not->toBeNull();
 });
 
 it('forbids a non-owner member from deleting the team via a direct request', function (): void {
@@ -107,5 +107,5 @@ it('forbids a non-owner member from deleting the team via a direct request', fun
   $status = visit('/dashboard')->script(teamApiRequest('DELETE', '/teams/'.$team->id));
 
   expect((int) $status)->toBe(403);
-  expect(Team::find($team->id))->not->toBeNull();
+  expect(Team::query()->find($team->id))->not->toBeNull();
 });
