@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.7](https://github.com/druidweb/druid/compare/v1.5.6...v1.5.7) (2026-07-13)
+
+
+### Bug Fixes
+
+* zorah listed in dev requires ([ef1f227](https://github.com/druidweb/druid/commit/ef1f2270f32485e47ee04661dc0fa7c534a07f30))
+
 ## [1.5.6](https://github.com/druidweb/druid/compare/v1.5.5...v1.5.6) (2026-07-13)
 
 
