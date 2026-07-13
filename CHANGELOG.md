@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.5.6](https://github.com/druidweb/druid/compare/v1.5.5...v1.5.6) (2026-07-13)
+
+
+### Code Refactoring
+
+* upgraded javascript testing to 85% ([d8218c6](https://github.com/druidweb/druid/commit/d8218c6bba5b6d281097541f086c9cb4ea64ffcd))
+
+
+### Maintenance
+
+* remove trigger ([e0dc22d](https://github.com/druidweb/druid/commit/e0dc22db1a05e0f05144ff1c4696aaff7c5cec5a))
+
+
+### Work in Progress
+
+* additional browser testing 84.5 ([854ae79](https://github.com/druidweb/druid/commit/854ae795de78cf57ba0e2a4192f597d4e1a5068e))
+* converting and adding javascript tests ([ef5d669](https://github.com/druidweb/druid/commit/ef5d66912522d69ab23625405a45e13940a71368))
+
 ## [1.5.5](https://github.com/druidweb/druid/compare/v1.5.4...v1.5.5) (2026-05-26)
 
 
