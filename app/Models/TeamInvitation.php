@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Teams\Teams;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\WithoutIncrementing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,19 +16,13 @@ use Zen\Snowflake\Concerns\HasSnowflakePrimary;
   'email',
   'role',
 ])]
+#[WithoutIncrementing]
 final class TeamInvitation extends Model
 {
   /** @phpstan-ignore missingType.generics */
   use HasFactory;
 
   use HasSnowflakePrimary;
-
-  /**
-   * Indicates if the IDs are auto-incrementing.
-   *
-   * @var bool
-   */
-  public $incrementing = false;
 
   /**
    * Get the team that the invitation belongs to.

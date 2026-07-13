@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { toast } from '@/composables/useToast';
 import { dashboard, login, register } from '@/routes';
 import { Head, Link } from '@inertiajs/vue3';
+import { useClipboard } from '@vueuse/core';
 import {
   ArrowRight,
   Bot,
@@ -35,6 +37,15 @@ withDefaults(
     canRegister: true,
   },
 );
+
+const installCommand = 'laravel new my_app --using=druidweb/druid';
+
+const { copy } = useClipboard();
+
+const copyInstallCommand = (): void => {
+  void copy(installCommand);
+  toast.success('Copied to clipboard');
+};
 
 const stackItems = [
   {
@@ -291,12 +302,9 @@ const statsItems = ['100% Test Coverage', 'PHP 8.5+', 'Fully Typed', 'Dark Mode'
         <div class="install-block mt-10">
           <div class="install-block-content">
             <span class="font-mono text-[#6b7280] select-none">$</span>
-            <span class="install-block-cmd">laravel new my_app --using=druidweb/druid</span>
+            <span class="install-block-cmd">{{ installCommand }}</span>
           </div>
-          <button
-            class="install-copy-btn"
-            title="Copy to clipboard"
-            onclick="navigator.clipboard?.writeText('laravel new my_app --using=druidweb/druid')">
+          <button class="install-copy-btn" type="button" title="Copy to clipboard" data-test="copy-install" @click="copyInstallCommand">
             <svg
               width="14"
               height="14"

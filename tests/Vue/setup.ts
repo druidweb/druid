@@ -11,6 +11,36 @@ const trans = (key: string, replace?: Record<string, string | number>): string =
 (globalThis as Record<string, unknown>).__ = __;
 (globalThis as Record<string, unknown>).trans = trans;
 
+// jsdom under vitest exposes localStorage/sessionStorage as empty stubs (no clear/getItem),
+// so install a functional in-memory Storage for both.
+function createStorage(): Storage {
+  const store = new Map<string, string>();
+
+  return {
+    get length(): number {
+      return store.size;
+    },
+    clear(): void {
+      store.clear();
+    },
+    getItem(key: string): string | null {
+      return store.has(key) ? store.get(key)! : null;
+    },
+    key(index: number): string | null {
+      return Array.from(store.keys())[index] ?? null;
+    },
+    removeItem(key: string): void {
+      store.delete(key);
+    },
+    setItem(key: string, value: string): void {
+      store.set(key, String(value));
+    },
+  };
+}
+
+Object.defineProperty(globalThis, 'localStorage', { configurable: true, writable: true, value: createStorage() });
+Object.defineProperty(globalThis, 'sessionStorage', { configurable: true, writable: true, value: createStorage() });
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

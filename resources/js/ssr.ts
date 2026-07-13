@@ -4,6 +4,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createSSRApp, DefineComponent, h } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { ZorahSSR } from 'zorah-js';
+import { Toaster } from './components/ui/toast';
 import { Zorah } from './zorah';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -16,7 +17,7 @@ createServer(
       title: (title) => (title ? `${title} - ${appName}` : appName),
       resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
       setup: ({ App, props, plugin }) =>
-        createSSRApp({ render: () => h(App, props) })
+        createSSRApp({ render: () => [h(App, props), h(Toaster)] })
           .use(plugin)
           .use(ZorahSSR, Zorah),
     }),

@@ -10,6 +10,7 @@ use App\Events\TeamUpdated;
 use App\Teams\Teams;
 use Database\Factories\TeamFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\WithoutIncrementing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,19 +23,13 @@ use Zen\Snowflake\Concerns\HasSnowflakePrimary;
   'name',
   'personal_team',
 ])]
+#[WithoutIncrementing]
 final class Team extends Model
 {
   /** @use HasFactory<TeamFactory> */
   use HasFactory;
 
   use HasSnowflakePrimary;
-
-  /**
-   * Indicates if the IDs are auto-incrementing.
-   *
-   * @var bool
-   */
-  public $incrementing = false;
 
   /**
    * The event map for the model.

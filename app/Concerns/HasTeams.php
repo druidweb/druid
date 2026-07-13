@@ -241,10 +241,16 @@ trait HasTeams
     }
 
     $permissions = $this->teamPermissions($team);
+    if (in_array($permission, $permissions)) {
+      return true;
+    }
+    if (in_array('*', $permissions)) {
+      return true;
+    }
+    if (Str::endsWith($permission, ':create') && in_array('*:create', $permissions)) {
+      return true;
+    }
 
-    return in_array($permission, $permissions) ||
-           in_array('*', $permissions) ||
-           (Str::endsWith($permission, ':create') && in_array('*:create', $permissions)) ||
-           (Str::endsWith($permission, ':update') && in_array('*:update', $permissions));
+    return Str::endsWith($permission, ':update') && in_array('*:update', $permissions);
   }
 }

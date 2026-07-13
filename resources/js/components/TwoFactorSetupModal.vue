@@ -162,7 +162,13 @@ watch(
         </template>
 
         <template v-else>
-          <Form v-bind="confirm.form()" reset-on-error @finish="code = []" @success="isOpen = false" v-slot="{ errors, processing }">
+          <Form
+            v-bind="confirm.form()"
+            error-bag="confirmTwoFactorAuthentication"
+            reset-on-error
+            @finish="code = []"
+            @success="isOpen = false"
+            v-slot="{ errors, processing }">
             <input type="hidden" name="code" :value="codeValue" />
             <div ref="pinInputContainerRef" class="relative w-full space-y-3">
               <div class="flex w-full flex-col items-center justify-center space-y-3 py-2">
@@ -171,7 +177,7 @@ watch(
                     <PinInputSlot autofocus v-for="(id, index) in 6" :key="id" :index="index" :disabled="processing" />
                   </PinInputGroup>
                 </PinInput>
-                <InputError :message="errors?.confirmTwoFactorAuthentication?.code" />
+                <InputError :message="errors?.code" />
               </div>
 
               <div class="flex w-full items-center space-x-5">

@@ -88,6 +88,7 @@ const clearPhotoFileInput = () => {
         <Card>
           <Form
             v-bind="ProfileController.update.form()"
+            error-bag="updateProfileInformation"
             enctype="multipart/form-data"
             @success="clearPhotoFileInput"
             v-slot="{ errors, processing, recentlySuccessful }">

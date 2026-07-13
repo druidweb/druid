@@ -55,4 +55,15 @@ export default defineConfig({
       'zorah-js': path.resolve('vendor/zenphp/zorah/dist/index.esm.js'),
     },
   },
+  build: {
+    rollupOptions: {
+      // Suppress harmless /* #__PURE__ */ annotation warnings from prebuilt deps (e.g. @vueuse/core)
+      onwarn(warning, warn) {
+        if (warning.code === 'INVALID_ANNOTATION' && warning.message.includes('#__PURE__')) {
+          return;
+        }
+        warn(warning);
+      },
+    },
+  },
 });
