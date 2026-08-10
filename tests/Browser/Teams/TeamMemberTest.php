@@ -51,6 +51,40 @@ it('invites a new team member via email', function (): void {
   expect($team->fresh()->teamInvitations()->where('email', 'newcomer@example.com')->exists())->toBeTrue();
 });
 
+it('rejects inviting an email that already belongs to the team', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $member = User::factory()->withPersonalTeam()->create(['email' => 'already@example.com']);
+  $team = $owner->currentTeam;
+  $team->users()->attach($member, ['role' => 'editor']);
+  $this->actingAs($owner);
+
+  // Team::hasUserWithEmail matches the existing member, so the after-hook adds the
+  // duplicate-member validation error instead of creating an invitation.
+  visit('/teams/'.$team->id)
+    ->fill('email', 'already@example.com')
+    ->click('Administrator')
+    ->press('Add')
+    ->assertSee('This user already belongs to the team.');
+
+  expect($team->fresh()->teamInvitations()->count())->toBe(0);
+});
+
+it('rejects inviting the team owner by email', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create(['email' => 'boss@example.com']);
+  $team = $owner->currentTeam;
+  $this->actingAs($owner);
+
+  // The owner is not in the members pivot; hasUserWithEmail only finds them through
+  // Team::allUsers' owner merge, so this drives that branch and the same error.
+  visit('/teams/'.$team->id)
+    ->fill('email', 'boss@example.com')
+    ->click('Administrator')
+    ->press('Add')
+    ->assertSee('This user already belongs to the team.');
+
+  expect($team->fresh()->teamInvitations()->count())->toBe(0);
+});
+
 it('requires a role when inviting a member', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
   $this->actingAs($user);

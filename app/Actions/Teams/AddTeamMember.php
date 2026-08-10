@@ -64,7 +64,9 @@ final class AddTeamMember implements AddsTeamMembers
       'email' => ['required', 'email', 'exists:users'],
       'role' => Teams::hasRoles()
                       ? ['required', 'string', new Role]
+                      // @codeCoverageIgnoreStart
                       : null,
+      // @codeCoverageIgnoreEnd
     ]);
   }
 

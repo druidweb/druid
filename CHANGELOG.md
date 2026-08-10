@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.8](https://github.com/druidweb/druid/compare/v1.5.7...v1.5.8) (2026-08-10)
+
+
+### Code Refactoring
+
+* update pest to v5 ([7b22f23](https://github.com/druidweb/druid/commit/7b22f23a8ffbc6520570d03f472dff54c360125e))
+
 ## [1.5.7](https://github.com/druidweb/druid/compare/v1.5.6...v1.5.7) (2026-07-13)
 
 

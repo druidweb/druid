@@ -1,48 +1,35 @@
 <?php
 
-namespace Tests\Feature;
+declare(strict_types=1);
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UpdateTeamMemberRoleTest extends TestCase
-{
-  use RefreshDatabase;
+it('updates team member roles', function (): void {
+  $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-  public function test_team_member_roles_can_be_updated(): void
-  {
-    $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+  $user->currentTeam->users()->attach(
+    $otherUser = User::factory()->create(), ['role' => 'admin']
+  );
 
-    $user->currentTeam->users()->attach(
-      $otherUser = User::factory()->create(), ['role' => 'admin']
-    );
+  $this->put('/teams/'.$user->currentTeam->id.'/members/'.$otherUser->id, [
+    'role' => 'editor',
+  ]);
 
-    $this->put('/teams/'.$user->currentTeam->id.'/members/'.$otherUser->id, [
-      'role' => 'editor',
-    ]);
+  expect($otherUser->fresh()->hasTeamRole($user->currentTeam->fresh(), 'editor'))->toBeTrue();
+});
 
-    $this->assertTrue($otherUser->fresh()->hasTeamRole(
-      $user->currentTeam->fresh(), 'editor'
-    ));
-  }
+it('only lets the team owner update team member roles', function (): void {
+  $user = User::factory()->withPersonalTeam()->create();
 
-  public function test_only_team_owner_can_update_team_member_roles(): void
-  {
-    $user = User::factory()->withPersonalTeam()->create();
+  $user->currentTeam->users()->attach(
+    $otherUser = User::factory()->create(), ['role' => 'admin']
+  );
 
-    $user->currentTeam->users()->attach(
-      $otherUser = User::factory()->create(), ['role' => 'admin']
-    );
+  $this->actingAs($otherUser);
 
-    $this->actingAs($otherUser);
+  $this->put('/teams/'.$user->currentTeam->id.'/members/'.$otherUser->id, [
+    'role' => 'editor',
+  ]);
 
-    $this->put('/teams/'.$user->currentTeam->id.'/members/'.$otherUser->id, [
-      'role' => 'editor',
-    ]);
-
-    $this->assertTrue($otherUser->fresh()->hasTeamRole(
-      $user->currentTeam->fresh(), 'admin'
-    ));
-  }
-}
+  expect($otherUser->fresh()->hasTeamRole($user->currentTeam->fresh(), 'admin'))->toBeTrue();
+});
