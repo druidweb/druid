@@ -6,6 +6,7 @@ use App\Actions\Teams\AddTeamMember;
 use App\Events\AddingTeamMember;
 use App\Events\TeamMemberAdded;
 use App\Models\User;
+use App\Teams\Teams;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Validation\ValidationException;
@@ -74,4 +75,22 @@ it('validates role when roles are enabled', function (): void {
 
   expect(fn () => $action->add($owner, $owner->currentTeam, $newMember->email, 'invalid-role'))
     ->toThrow(ValidationException::class);
+});
+
+it('skips role validation when no roles are registered', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $newMember = User::factory()->create();
+
+  // Clear registered roles so Teams::hasRoles() is false, restoring them afterwards
+  $originalRoles = Teams::$roles;
+  Teams::$roles = [];
+
+  try {
+    $action = new AddTeamMember;
+    $action->add($owner, $owner->currentTeam, $newMember->email);
+
+    expect($owner->currentTeam->fresh()->hasUser($newMember))->toBeTrue();
+  } finally {
+    Teams::$roles = $originalRoles;
+  }
 });

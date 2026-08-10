@@ -49,6 +49,21 @@ it('switches the authenticated user to another team they own', function (): void
   expect((string) $user->fresh()->current_team_id)->not->toBe($personalTeamId);
 });
 
+it('resolves no current team for a user who has no teams at all', function (): void {
+  // A user with no owned or joined teams: currentTeam() finds current_team_id null,
+  // personalTeam() returns null, and switchTeam(null) falls through belongsToTeam's
+  // null guard (HasTeams) instead of crashing the request.
+  $user = User::factory()->create();
+  $this->actingAs($user);
+
+  visit('/dashboard')
+    ->assertPathIs('/dashboard')
+    ->assertNoJavaScriptErrors();
+
+  // The failed personal-team fallback must leave the user without a current team.
+  expect($user->fresh()->current_team_id)->toBeNull();
+});
+
 it('forbids switching to a team the user does not belong to', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
   $stranger = User::factory()->withPersonalTeam()->create();

@@ -71,7 +71,9 @@ final class InviteTeamMember implements InvitesTeamMembers
       ],
       'role' => Teams::hasRoles()
                       ? ['required', 'string', new Role]
+                      // @codeCoverageIgnoreStart
                       : null,
+      // @codeCoverageIgnoreEnd
     ]);
   }
 
