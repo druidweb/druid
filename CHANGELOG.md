@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.6.0](https://github.com/druidweb/druid/compare/v1.5.8...v1.6.0) (2026-11-26)
+
+
+### Features
+
+* upgraded deps and completed browser testing ([d6e90f7](https://github.com/druidweb/druid/commit/d6e90f797aa6d7880b2ef6d6bee21c4bb573859f))
+
 ## [1.5.8](https://github.com/druidweb/druid/compare/v1.5.7...v1.5.8) (2026-08-10)
 
 
