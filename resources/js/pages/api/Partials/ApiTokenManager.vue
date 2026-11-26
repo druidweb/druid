@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { destroy, store, update } from '@/routes/api-tokens';
 import { useForm } from '@inertiajs/vue3';
 import { Check, Copy } from 'lucide-vue-next';
-import { onMounted, ref, watch } from 'vue';
+import { ref } from 'vue';
 
 const copied = ref(false);
 
@@ -31,22 +31,12 @@ interface ApiToken {
   [key: string]: any;
 }
 
-const props = defineProps<{
+defineProps<{
   tokens: ApiToken[];
+  hasPermissions: boolean;
   availablePermissions: string[];
   defaultPermissions: string[];
 }>();
-
-onMounted(() => {
-  console.log('Tokens on mount:', props.tokens);
-});
-
-watch(
-  () => props.tokens,
-  (newTokens) => {
-    console.log('Tokens updated:', newTokens);
-  },
-);
 
 const createApiTokenForm = useForm({
   name: '',
@@ -64,7 +54,6 @@ const managingPermissionsFor = ref<ApiToken | null>(null);
 const apiTokenBeingDeleted = ref<ApiToken | null>(null);
 
 const createApiToken = () => {
-  console.log('Creating token with permissions:', createApiTokenForm.permissions);
   createApiTokenForm.post(store().url, {
     preserveScroll: true,
     onSuccess: () => {
@@ -119,7 +108,7 @@ const deleteApiToken = () => {
           </div>
 
           <!-- Token Permissions -->
-          <div v-if="availablePermissions.length > 0" class="space-y-2">
+          <div v-if="hasPermissions" class="space-y-2">
             <Label for="permissions">{{ __('base.fields.permissions') }}</Label>
 
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -171,12 +160,7 @@ const deleteApiToken = () => {
             <div class="ms-2 flex items-center gap-2">
               <div v-if="token.last_used_ago" class="text-sm text-muted-foreground">Last used {{ token.last_used_ago }}</div>
 
-              <Button
-                v-if="availablePermissions.length > 0"
-                variant="link"
-                size="sm"
-                class="text-muted-foreground"
-                @click="manageApiTokenPermissions(token)">
+              <Button v-if="hasPermissions" variant="link" size="sm" class="text-muted-foreground" @click="manageApiTokenPermissions(token)">
                 {{ __('base.fields.permissions') }}
               </Button>
 

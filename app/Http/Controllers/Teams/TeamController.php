@@ -56,9 +56,17 @@ final class TeamController implements HasMiddleware
 
     Gate::authorize('view', $team);
 
+    /** @var User $user */
+    $user = $request->user();
+
+    $team->load('owner', 'users', 'teamInvitations');
+
     return Inertia::render('teams/Show', [
-      'team' => $team->load('owner', 'users', 'teamInvitations'),
+      'team' => $team,
       'availableRoles' => array_values(Teams::$roles),
+      // Roles this user may grant, and the members whose role/membership they may change — the UI only offers those.
+      'assignableRoles' => array_values(array_filter(array_keys(Teams::$roles), fn (string $role): bool => $user->canAssignTeamRole($team, $role))),
+      'manageableMembers' => $team->users->filter(fn (User $member): bool => $user->canManageTeamMember($team, $member))->pluck('id')->values(),
       'availablePermissions' => Teams::$permissions,
       'defaultPermissions' => Teams::$defaultPermissions,
       'permissions' => [

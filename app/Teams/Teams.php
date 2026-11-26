@@ -186,12 +186,8 @@ final class Teams
   /**
    * Determine if a given user model utilizes the "HasTeams" trait.
    */
-  public static function userHasTeamFeatures(mixed $user): bool
+  public static function userHasTeamFeatures(object|string $user): bool
   {
-    if (! is_object($user) && ! is_string($user)) {
-      return false;
-    }
-
     return (array_key_exists(HasTeams::class, class_uses_recursive($user)) ||
             method_exists($user, 'currentTeam')) &&
             self::hasTeamFeatures();

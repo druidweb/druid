@@ -52,3 +52,14 @@ it('rejects the wrong password and does not confirm', function (): void {
   visit('/user/confirmed-password-status')
     ->assertSee('"confirmed":false');
 });
+
+it('rejects a confirmation request that carries no password at all', function (): void {
+  $user = User::factory()->withPersonalTeam()->create();
+  $this->actingAs($user);
+
+  // The form marks the field required, so only a scripted client can omit it; the action must still refuse.
+  $status = visit('/user/confirm-password')->script(sameOriginRequest('POST', '/user/confirm-password', []));
+
+  expect((int) $status)->toBe(422);
+  visit('/user/confirmed-password-status')->assertSee('"confirmed":false');
+});

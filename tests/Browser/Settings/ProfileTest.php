@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 
 it('updates the profile name and reports success', function (): void {
   $user = User::factory()->withPersonalTeam()->create(['name' => 'Old Name']);
@@ -43,19 +46,49 @@ it('shows the initials immediately after the avatar is removed', function (): vo
     ->assertDontSee('Remove Photo');
 });
 
-// NOTE: uploading a photo through the form is NOT E2E-drivable here — and neither is any
-// file upload via this harness. Two independent blockers:
-//   1. Playwright rejects local file paths ("localPaths are not allowed when the client is not
-//      local"), so `attach()` on the file input can't be used in this setup.
-//   2. A same-origin multipart fetch also can't deliver the file: the plugin's in-process server
-//      (Pest\Browser\Drivers\LaravelHttpServer::handleRequest) hardcodes the $files argument of
-//      Request::create() to [] with a literal `// @TODO files...`, and only parses request bodies
-//      when the Content-Type is application/x-www-form-urlencoded. So $request->file('photo') is
-//      always null and multipart form fields (even a spoofed _method=PATCH) are dropped —
-//      confirmed empirically: multipart POST -> 405, native PATCH multipart -> 422 (name/email lost).
-// The upload branch (ProfileController@update photo path + HasProfilePhoto::updateProfilePhoto)
-// therefore stays covered by the Feature suite. Avatar *removal* is covered above (that photo is
-// set via the model, not through an HTTP upload).
+it('uploads a profile photo, then replaces it and deletes the old file', function (): void {
+  Storage::fake('public');
+  $user = User::factory()->withPersonalTeam()->create();
+  $this->actingAs($user);
+  // Keep the fakes in scope: their temp files are deleted when the UploadedFile is destroyed.
+  $first = UploadedFile::fake()->image('first.png', 120, 120);
+  $second = UploadedFile::fake()->image('second.jpg', 120, 120);
+
+  visit('/settings/profile')
+    ->attach('photo', $first->getPathname())
+    ->click('@update-profile-button')
+    ->assertSee('Saved.')
+    ->assertNoJavaScriptErrors();
+
+  $firstPath = $user->fresh()->profile_photo_path;
+  expect($firstPath)->toStartWith($user->id.'/avatars/');
+  Storage::disk('public')->assertExists($firstPath);
+
+  visit('/settings/profile')
+    ->assertSee('Remove Photo')
+    ->attach('photo', $second->getPathname())
+    ->click('@update-profile-button')
+    ->assertSee('Saved.');
+
+  $secondPath = $user->fresh()->profile_photo_path;
+  expect($secondPath)->not->toBe($firstPath);
+  Storage::disk('public')->assertExists($secondPath);
+  Storage::disk('public')->assertMissing($firstPath);
+});
+
+it('rejects a file that is not an image', function (): void {
+  Storage::fake('public');
+  $user = User::factory()->withPersonalTeam()->create();
+  $this->actingAs($user);
+  $pdf = UploadedFile::fake()->create('notes.pdf', 10, 'application/pdf');
+
+  visit('/settings/profile')
+    ->attach('photo', $pdf->getPathname())
+    ->click('@update-profile-button')
+    ->assertSee('must be a file of type');
+
+  expect($user->fresh()->profile_photo_path)->toBeNull();
+});
 
 it('changes the email and resets email verification', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
@@ -63,6 +96,7 @@ it('changes the email and resets email verification', function (): void {
 
   expect($user->email_verified_at)->not->toBeNull();
 
+  Notification::fake();
   $newEmail = 'changed-'.uniqid().'@example.com';
 
   visit('/settings/profile')
@@ -73,4 +107,6 @@ it('changes the email and resets email verification', function (): void {
   $fresh = $user->fresh();
   expect($fresh->email)->toBe($newEmail);
   expect($fresh->email_verified_at)->toBeNull();
+  // The new address has to be verifiable, so a verification link goes to it.
+  Notification::assertSentTo($fresh, VerifyEmail::class);
 });

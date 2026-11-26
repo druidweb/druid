@@ -23,6 +23,7 @@ interface TeamMember {
 interface TeamInvitation {
   id: number;
   email: string;
+  role: string | null;
 }
 
 interface Team {
@@ -58,6 +59,8 @@ interface Permissions {
 const props = defineProps<{
   team: Team;
   availableRoles: Role[];
+  assignableRoles: string[];
+  manageableMembers: TeamMember['id'][];
   permissions: Permissions;
 }>();
 
@@ -77,7 +80,12 @@ const breadcrumbItems: BreadcrumbItem[] = [
       <div class="space-y-10">
         <UpdateTeamNameForm :team="team" :permissions="permissions" />
 
-        <TeamMemberManager :team="team" :available-roles="availableRoles" :user-permissions="permissions" />
+        <TeamMemberManager
+          :team="team"
+          :available-roles="availableRoles"
+          :assignable-roles="assignableRoles"
+          :manageable-members="manageableMembers"
+          :user-permissions="permissions" />
 
         <template v-if="permissions.canDeleteTeam && !team.personal_team">
           <Separator class="my-10" />

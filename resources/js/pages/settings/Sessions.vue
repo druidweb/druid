@@ -10,9 +10,18 @@ import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { destroy, index } from '@/routes/other-browser-sessions';
 import { BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/vue3';
-import { LoaderCircle, Monitor } from 'lucide-vue-next';
+import { LoaderCircle, Monitor, Smartphone } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { __ } from 'zorah-js';
+
+defineProps<{
+  device: {
+    platform: string;
+    browser: string;
+    is_desktop: boolean;
+    ip_address: string | null;
+  };
+}>();
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -40,10 +49,14 @@ const showConfirmModal = ref(false);
           </p>
 
           <div class="flex items-center space-x-4 rounded-lg border p-4">
-            <Monitor class="size-8 text-muted-foreground" />
+            <Monitor v-if="device.is_desktop" class="size-8 text-muted-foreground" />
+            <Smartphone v-else class="size-8 text-muted-foreground" />
             <div>
-              <p class="font-medium">{{ __('base.sessions.this_device') }}</p>
-              <p class="text-sm text-muted-foreground">{{ __('base.sessions.current_session') }}</p>
+              <p class="font-medium">{{ device.platform }} - {{ device.browser }}</p>
+              <p class="text-sm text-muted-foreground">
+                <span v-if="device.ip_address">{{ device.ip_address }}, </span>
+                <span class="font-semibold text-green-600">{{ __('base.sessions.this_device') }}</span>
+              </p>
             </div>
           </div>
 

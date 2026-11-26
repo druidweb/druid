@@ -25,22 +25,6 @@ it('uses redirectTo method when available', function (): void {
   expect($result->getTargetUrl())->toContain('/custom-path');
 });
 
-it('uses redirectTo property when method not available', function (): void {
-  $trait = new class
-  {
-    use RedirectsActions;
-  };
-  $action = new class
-  {
-    public ?string $redirectTo = '/property-path';
-  };
-
-  $result = $trait->redirectPath($action);
-
-  expect($result)->toBeInstanceOf(RedirectResponse::class);
-  expect($result->getTargetUrl())->toContain('/property-path');
-});
-
 it('uses fortify home config when no redirectTo', function (): void {
   $trait = new class
   {

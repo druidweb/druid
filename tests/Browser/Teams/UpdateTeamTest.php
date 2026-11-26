@@ -76,14 +76,15 @@ it('rejects an empty team name', function (): void {
   expect($team->fresh()->name)->toBe($original);
 });
 
-it('does not let a non-owner member edit the team name', function (): void {
+it('does not let a member without the update permission edit the team name', function (): void {
   $owner = User::factory()->withPersonalTeam()->create();
   $member = User::factory()->withPersonalTeam()->create();
   $team = Team::factory()->create([
     'user_id' => $owner->id,
     'personal_team' => false,
   ]);
-  $team->users()->attach($member, ['role' => 'editor']);
+  // An undefined role key grants no permissions (editors and admins hold 'update' and may rename).
+  $team->users()->attach($member, ['role' => 'retired-role']);
   $this->actingAs($member);
 
   visit('/teams/'.$team->id)
@@ -93,7 +94,7 @@ it('does not let a non-owner member edit the team name', function (): void {
     ->assertNoJavaScriptErrors();
 });
 
-it('forbids a non-owner member from updating the team name via a direct request', function (): void {
+it('forbids a member without the update permission from renaming the team via a direct request', function (): void {
   $owner = User::factory()->withPersonalTeam()->create();
   $member = User::factory()->withPersonalTeam()->create();
   $team = Team::factory()->create([
@@ -101,7 +102,8 @@ it('forbids a non-owner member from updating the team name via a direct request'
     'personal_team' => false,
     'name' => 'Locked Team',
   ]);
-  $team->users()->attach($member, ['role' => 'editor']);
+  // An undefined role key grants no permissions (editors and admins hold 'update' and may rename).
+  $team->users()->attach($member, ['role' => 'retired-role']);
   $this->actingAs($member);
 
   $status = visit('/dashboard')->script(teamApiRequest('PUT', '/teams/'.$team->id, ['name' => 'Hijacked Name']));
@@ -123,4 +125,40 @@ it('forbids a non-member from viewing the team management page', function (): vo
   $status = visit('/dashboard')->script(teamApiRequest('GET', '/teams/'.$team->id));
 
   expect((int) $status)->toBe(403);
+});
+
+it('forbids a non-member from renaming the team via a direct request', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $stranger = User::factory()->withPersonalTeam()->create();
+  $team = Team::factory()->create(['user_id' => $owner->id, 'personal_team' => false, 'name' => 'Not Yours']);
+  $this->actingAs($stranger);
+
+  $status = visit('/dashboard')->script(sameOriginRequest('PUT', '/teams/'.$team->id, ['name' => 'Taken Over']));
+
+  expect((int) $status)->toBe(403);
+  expect($team->fresh()->name)->toBe('Not Yours');
+});
+
+// One token per test: the in-process server keeps the guard's resolved user between requests, so a second
+// bearer in the same test would be answered as the first.
+it('refuses an owner api token that lacks the update ability', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $team = Team::factory()->create(['user_id' => $owner->id, 'personal_team' => false, 'name' => 'Token Team']);
+  $readOnly = $owner->createToken('read-only', ['read'])->plainTextToken;
+
+  // No session: the request authenticates purely with the bearer token.
+  $status = visit('/')->script(sameOriginRequest('PUT', '/teams/'.$team->id, ['name' => 'Read Only Rename'], $readOnly));
+
+  expect((int) $status)->toBe(403);
+  expect($team->fresh()->name)->toBe('Token Team');
+});
+
+it('lets an owner api token with the update ability rename the team', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $team = Team::factory()->create(['user_id' => $owner->id, 'personal_team' => false, 'name' => 'Token Team']);
+  $updater = $owner->createToken('updater', ['update'])->plainTextToken;
+
+  visit('/')->script(sameOriginRequest('PUT', '/teams/'.$team->id, ['name' => 'Updated By Token'], $updater));
+
+  expect($team->fresh()->name)->toBe('Updated By Token');
 });

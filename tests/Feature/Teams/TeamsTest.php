@@ -56,8 +56,7 @@ it('can check if user has team features', function (): void {
   $user = User::factory()->withPersonalTeam()->create();
 
   expect(Teams::userHasTeamFeatures($user))->toBeTrue();
-  expect(Teams::userHasTeamFeatures(123))->toBeFalse();
-  expect(Teams::userHasTeamFeatures(null))->toBeFalse();
+  expect(Teams::userHasTeamFeatures(new stdClass))->toBeFalse();
 });
 
 it('can get and set user model', function (): void {

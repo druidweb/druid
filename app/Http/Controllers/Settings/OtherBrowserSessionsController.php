@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Settings;
 
+use App\Teams\Agent;
 use Illuminate\Auth\SessionGuard;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
@@ -18,9 +19,19 @@ final class OtherBrowserSessionsController
   /**
    * Show the browser sessions page.
    */
-  public function index(): Response
+  public function index(Request $request): Response
   {
-    return Inertia::render('settings/Sessions');
+    $agent = new Agent;
+    $agent->setUserAgent((string) $request->userAgent());
+
+    return Inertia::render('settings/Sessions', [
+      'device' => [
+        'platform' => $agent->platform() ?? __('base.sessions.unknown'),
+        'browser' => $agent->browser() ?? __('base.sessions.unknown'),
+        'is_desktop' => $agent->isDesktop(),
+        'ip_address' => $request->ip(),
+      ],
+    ]);
   }
 
   /**

@@ -9,6 +9,7 @@ use App\Events\AddingTeam;
 use App\Models\Team;
 use App\Models\User;
 use App\Teams\Teams;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,5 +39,15 @@ final class CreateTeam implements CreatesTeams
     $user->switchTeam($team);
 
     return $team;
+  }
+
+  // Land on the new team's settings so the creator can invite people straight away. create() switched the
+  // user onto the new team, so their current team is the one just made.
+  public function redirectTo(): string
+  {
+    /** @var User $user */
+    $user = Auth::user();
+
+    return route('teams.show', $user->current_team_id);
   }
 }

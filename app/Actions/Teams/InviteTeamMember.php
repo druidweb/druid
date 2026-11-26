@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 final class InviteTeamMember implements InvitesTeamMembers
 {
@@ -28,6 +29,10 @@ final class InviteTeamMember implements InvitesTeamMembers
     Gate::forUser($user)->authorize('addTeamMember', $team);
 
     $this->validate($team, $email, $role);
+
+    throw_if($role !== null && ! $user->canAssignTeamRole($team, $role), ValidationException::withMessages([
+      'role' => __('You may not assign a role with more permissions than your own.'),
+    ])->errorBag('addTeamMember'));
 
     event(new InvitingTeamMember($team, $email, $role));
 

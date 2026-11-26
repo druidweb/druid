@@ -71,9 +71,7 @@ final class TeamInvitationController implements HasMiddleware
     /** @var string $home */
     $home = config('fortify.home', '/');
 
-    $request->session()->flash('flash.banner', __('Great! You have accepted the invitation to join the :team team.', ['team' => $team->name]));
-
-    return redirect()->to($home);
+    return redirect()->to($home)->banner(__('Great! You have accepted the invitation to join the :team team.', ['team' => $team->name]));
   }
 
   /**
@@ -93,7 +91,11 @@ final class TeamInvitationController implements HasMiddleware
     /** @var Team $team */
     $team = $invitation->team;
 
-    throw_unless(Gate::forUser($user)->check('removeTeamMember', $team), AuthorizationException::class);
+    // Whoever could send this invitation may withdraw it: they need to add members and be able to grant its role.
+    throw_unless(
+      Gate::forUser($user)->check('addTeamMember', $team) && $user->canAssignTeamRole($team, (string) $invitation->role),
+      AuthorizationException::class
+    );
 
     $invitation->delete();
 

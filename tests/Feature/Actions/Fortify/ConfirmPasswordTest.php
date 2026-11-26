@@ -4,49 +4,38 @@ declare(strict_types=1);
 
 use App\Actions\Fortify\ConfirmPassword;
 use App\Models\User;
+use Laravel\Fortify\Fortify;
 
-test('confirms password for authenticated user with correct password', function (): void {
-  $user = User::factory()->create([
-    'password' => bcrypt('password'),
-  ]);
+test('confirms the correct password', function (): void {
+  $user = User::factory()->create(['password' => bcrypt('password')]);
 
-  $this->actingAs($user);
-
-  $confirmPassword = new ConfirmPassword;
-  $result = $confirmPassword('password');
-
-  expect($result)->toBeTrue();
+  expect((new ConfirmPassword)($user, 'password'))->toBeTrue();
 });
 
-test('rejects incorrect password for authenticated user', function (): void {
-  $user = User::factory()->create([
-    'password' => bcrypt('password'),
-  ]);
+test('rejects an incorrect password', function (): void {
+  $user = User::factory()->create(['password' => bcrypt('password')]);
 
-  $this->actingAs($user);
-
-  $confirmPassword = new ConfirmPassword;
-  $result = $confirmPassword('wrong-password');
-
-  expect($result)->toBeFalse();
+  expect((new ConfirmPassword)($user, 'wrong-password'))->toBeFalse();
 });
 
-test('returns false when no user is authenticated', function (): void {
-  $confirmPassword = new ConfirmPassword;
-  $result = $confirmPassword('password');
+test('rejects a null password', function (): void {
+  $user = User::factory()->create(['password' => bcrypt('password')]);
 
-  expect($result)->toBeFalse();
+  expect((new ConfirmPassword)($user, null))->toBeFalse();
 });
 
-test('returns false when password is null', function (): void {
-  $user = User::factory()->create([
-    'password' => bcrypt('password'),
-  ]);
+test('is registered as the fortify password confirmation callback', function (): void {
+  expect(Fortify::$confirmPasswordsUsingCallback)->toBeInstanceOf(ConfirmPassword::class);
+});
 
-  $this->actingAs($user);
+test('fortify confirm-password route delegates to the action', function (): void {
+  $user = User::factory()->create(['password' => bcrypt('password')]);
 
-  $confirmPassword = new ConfirmPassword;
-  $result = $confirmPassword(null);
+  $this->actingAs($user)
+    ->post('/user/confirm-password', ['password' => 'wrong-password'])
+    ->assertSessionHasErrors('password');
 
-  expect($result)->toBeFalse();
+  $this->actingAs($user)
+    ->post('/user/confirm-password', ['password' => 'password'])
+    ->assertSessionHasNoErrors();
 });

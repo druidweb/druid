@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Concerns;
 
 use App\Models\Team;
+use App\Models\User;
 use App\Rules\OwnerRole;
 use App\Teams\Role;
 use App\Teams\Teams;
@@ -12,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 trait HasTeams
 {
@@ -21,11 +21,9 @@ trait HasTeams
    */
   public function isCurrentTeam(mixed $team): bool
   {
-    /** @var Team $team */
-    /** @var Team $currentTeam */
-    $currentTeam = $this->currentTeam;
-
-    return $team->id === $currentTeam->id;
+    // Reads the column, not the currentTeam relation, which would switch a team-less user to their personal team.
+    /** @var Team|null $team */
+    return $team !== null && (string) $team->id === (string) $this->current_team_id;
   }
 
   /**
@@ -122,12 +120,8 @@ trait HasTeams
    */
   public function ownsTeam(mixed $team): bool
   {
-    if (is_null($team)) {
-      return false;
-    }
-
-    /** @var Team $team */
-    return $this->id == $team->{$this->getForeignKey()};
+    /** @var Team|null $team */
+    return $team !== null && $this->id == $team->{$this->getForeignKey()};
   }
 
   /**
@@ -135,15 +129,8 @@ trait HasTeams
    */
   public function belongsToTeam(mixed $team): bool
   {
-    if (is_null($team)) {
-      return false;
-    }
-    if ($this->ownsTeam($team)) {
-      return true;
-    }
-
-    /** @var Team $team */
-    return (bool) $this->teams->contains(fn ($t): bool => $t->id === $team->id);
+    /** @var Team|null $team */
+    return $this->ownsTeam($team) || ($team !== null && $this->teams->contains(fn ($t): bool => $t->id === $team->id));
   }
 
   /**
@@ -155,23 +142,12 @@ trait HasTeams
       return new OwnerRole;
     }
 
-    if (! $this->belongsToTeam($team)) {
-      return null;
-    }
+    // Non-members (and a null team) have no membership pivot, so they fall through to null.
+    /** @var Team|null $team */
+    /** @var object{role: string|null}|null $membership */
+    $membership = $team?->users->firstWhere('id', $this->id)?->membership; // @phpstan-ignore property.notFound
 
-    /** @var Team $team */
-    /** @phpstan-ignore property.notFound */
-    $membership = $team->users
-      ->where('id', $this->id)
-      ->first()
-      ?->membership;
-
-    if (! $membership) {
-      return null;
-    }
-
-    /** @var object{role: string} $membership */
-    return $membership->role ? Teams::findRole($membership->role) : null;
+    return $membership?->role ? Teams::findRole($membership->role) : null;
   }
 
   /**
@@ -179,27 +155,8 @@ trait HasTeams
    */
   public function hasTeamRole(mixed $team, string $role): bool
   {
-    if ($this->ownsTeam($team)) {
-      return true;
-    }
-
-    if (! $this->belongsToTeam($team)) {
-      return false;
-    }
-
-    /** @var Team $team */
-    /** @phpstan-ignore property.notFound */
-    $membership = $team->users
-      ->where('id', $this->id)
-      ->first()
-      ?->membership;
-
-    if (! $membership) {
-      return false;
-    }
-
-    /** @var object{role: string} $membership */
-    return Teams::findRole($membership->role)?->key === $role;
+    // Owners hold every role.
+    return $this->ownsTeam($team) || $this->teamRole($team)?->key === $role;
   }
 
   /**
@@ -209,14 +166,6 @@ trait HasTeams
    */
   public function teamPermissions(mixed $team): array
   {
-    if ($this->ownsTeam($team)) {
-      return ['*'];
-    }
-
-    if (! $this->belongsToTeam($team)) {
-      return [];
-    }
-
     return (array) $this->teamRole($team)?->permissions;
   }
 
@@ -225,10 +174,7 @@ trait HasTeams
    */
   public function hasTeamPermission(mixed $team, string $permission): bool
   {
-    if ($this->ownsTeam($team)) {
-      return true;
-    }
-
+    // Owners resolve to OwnerRole ('*') via teamPermissions(), so an owner's API token is still bound by its abilities.
     if (! $this->belongsToTeam($team)) {
       return false;
     }
@@ -241,16 +187,26 @@ trait HasTeams
     }
 
     $permissions = $this->teamPermissions($team);
-    if (in_array($permission, $permissions)) {
-      return true;
-    }
-    if (in_array('*', $permissions)) {
-      return true;
-    }
-    if (Str::endsWith($permission, ':create') && in_array('*:create', $permissions)) {
-      return true;
+
+    return in_array($permission, $permissions, true) || in_array('*', $permissions, true);
+  }
+
+  // A role may only be granted by someone who holds all of its permissions. Owners hold '*' through OwnerRole, but this
+  // still runs through hasTeamPermission() so an owner's scoped API token can't grant more than the token allows.
+  public function canAssignTeamRole(mixed $team, string $role): bool
+  {
+    $permissions = Teams::findRole($role)->permissions ?? ['*'];
+
+    return array_all($permissions, fn (string $permission): bool => $this->hasTeamPermission($team, $permission));
+  }
+
+  // Only other non-owner members are manageable, and only when they hold no permission the user (or their token) lacks.
+  public function canManageTeamMember(mixed $team, User $member): bool
+  {
+    if ((string) $member->id === (string) $this->id || $member->ownsTeam($team) || ! $member->belongsToTeam($team)) {
+      return false;
     }
 
-    return Str::endsWith($permission, ':update') && in_array('*:update', $permissions);
+    return array_all($member->teamPermissions($team), fn (string $permission): bool => $this->hasTeamPermission($team, $permission));
   }
 }

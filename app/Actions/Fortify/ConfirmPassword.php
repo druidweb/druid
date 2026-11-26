@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace App\Actions\Fortify;
 
+use App\Models\User;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Auth;
 
+// Registered via Fortify::confirmPasswordsUsing(), so Fortify's confirm-password route and every
+// controller that resolves Fortify's ConfirmPassword action delegate here.
 final class ConfirmPassword
 {
-  /**
-   * Confirm that the given password is valid for the given user.
-   */
-  public function __invoke(?string $password = null): bool
+  public function __invoke(User $user, ?string $password = null): bool
   {
+    if ($password === null) {
+      return false;
+    }
+
     /** @var string|null $guardName */
     $guardName = config('fortify.guard');
 
     /** @var StatefulGuard $guard */
     $guard = Auth::guard($guardName);
-
-    $user = $guard->user();
-
-    if (! $user) {
-      return false;
-    }
 
     return $guard->validate([
       'email' => $user->email,

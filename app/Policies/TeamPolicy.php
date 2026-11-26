@@ -8,71 +8,50 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
+// Team management maps onto the role permissions (create/read/update/delete). Owners hold '*' via OwnerRole.
+// Escalation guards for specific members and roles live in HasTeams::canManageTeamMember()/canAssignTeamRole().
 final class TeamPolicy
 {
   use HandlesAuthorization;
 
-  /**
-   * Determine whether the user can view any models.
-   */
   public function viewAny(): bool
   {
     return true;
   }
 
-  /**
-   * Determine whether the user can view the model.
-   */
   public function view(User $user, Team $team): bool
   {
-    return $user->belongsToTeam($team);
+    return $team->hasUser($user);
   }
 
-  /**
-   * Determine whether the user can create models.
-   */
   public function create(): bool
   {
     return true;
   }
 
-  /**
-   * Determine whether the user can update the model.
-   */
   public function update(User $user, Team $team): bool
   {
-    return $user->ownsTeam($team);
+    return $team->userHasPermission($user, 'update');
   }
 
-  /**
-   * Determine whether the user can add team members.
-   */
   public function addTeamMember(User $user, Team $team): bool
   {
-    return $user->ownsTeam($team);
+    return $team->userHasPermission($user, 'create');
   }
 
-  /**
-   * Determine whether the user can update team member permissions.
-   */
   public function updateTeamMember(User $user, Team $team): bool
   {
-    return $user->ownsTeam($team);
+    return $team->userHasPermission($user, 'update');
   }
 
-  /**
-   * Determine whether the user can remove team members.
-   */
   public function removeTeamMember(User $user, Team $team): bool
   {
-    return $user->ownsTeam($team);
+    return $team->userHasPermission($user, 'delete');
   }
 
-  /**
-   * Determine whether the user can delete the model.
-   */
+  // Deleting a team stays owner-only regardless of role, and an owner's API token still needs the delete ability.
   public function delete(User $user, Team $team): bool
   {
-    return $user->ownsTeam($team);
+    return $user->ownsTeam($team) && $team->userHasPermission($user, 'delete');
   }
 }

@@ -28,17 +28,40 @@ it('can add a team member', function (): void {
   Event::assertDispatched(TeamMemberAdded::class);
 });
 
-it('throws authorization exception when user cannot add team members', function (): void {
+it('throws authorization exception when the member lacks the create permission', function (): void {
   $owner = User::factory()->withPersonalTeam()->create();
-  $nonOwner = User::factory()->create();
+  $member = User::factory()->create();
   $newMember = User::factory()->create();
 
-  $owner->currentTeam->users()->attach($nonOwner, ['role' => 'editor']);
+  // An undefined role key grants no permissions.
+  $owner->currentTeam->users()->attach($member, ['role' => 'retired-role']);
 
-  $action = new AddTeamMember;
-
-  expect(fn () => $action->add($nonOwner, $owner->currentTeam, $newMember->email, 'admin'))
+  expect(fn () => (new AddTeamMember)->add($member, $owner->currentTeam, $newMember->email, 'editor'))
     ->toThrow(AuthorizationException::class);
+});
+
+it('lets an editor add members at their own role', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $editor = User::factory()->create();
+  $newMember = User::factory()->create();
+
+  $owner->currentTeam->users()->attach($editor, ['role' => 'editor']);
+
+  (new AddTeamMember)->add($editor, $owner->currentTeam, $newMember->email, 'editor');
+
+  expect($newMember->fresh()->belongsToTeam($owner->currentTeam))->toBeTrue();
+});
+
+it('stops an editor from adding an admin', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $editor = User::factory()->create();
+  $newMember = User::factory()->create();
+
+  $owner->currentTeam->users()->attach($editor, ['role' => 'editor']);
+
+  expect(fn () => (new AddTeamMember)->add($editor, $owner->currentTeam, $newMember->email, 'admin'))
+    ->toThrow(ValidationException::class, 'You may not assign a role with more permissions than your own.');
+  expect($newMember->fresh()->belongsToTeam($owner->currentTeam))->toBeFalse();
 });
 
 it('validates that email exists', function (): void {

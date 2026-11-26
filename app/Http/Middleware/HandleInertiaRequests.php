@@ -86,7 +86,7 @@ final class HandleInertiaRequests extends Middleware
           }
 
           return array_merge($user->toArray(), array_filter([
-            'all_teams' => $userHasTeamFeatures ? $user->allTeams()->values() : null,
+            'all_teams' => $userHasTeamFeatures && Gate::forUser($user)->check('viewAny', Teams::newTeamModel()) ? $user->allTeams()->values() : null,
           ]), [
             'two_factor_enabled' => Features::enabled(Features::twoFactorAuthentication())
                 && ! is_null($user->two_factor_secret),

@@ -9,7 +9,7 @@ import { destroy as destroyInvitation } from '@/routes/team-invitations';
 import { destroy as destroyMember, store as storeMember, update as updateMember } from '@/routes/team-members';
 import { router, useForm, usePage } from '@inertiajs/vue3';
 import { CheckCircle2 } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 interface Role {
   key: string;
@@ -31,6 +31,7 @@ interface TeamMember {
 interface TeamInvitation {
   id: number;
   email: string;
+  role: string | null;
 }
 
 interface Team {
@@ -51,10 +52,18 @@ interface UserPermissions {
 const props = defineProps<{
   team: Team;
   availableRoles: Role[];
+  assignableRoles: string[];
+  manageableMembers: TeamMember['id'][];
   userPermissions: UserPermissions;
 }>();
 
 const page = usePage();
+
+// The server enforces these too; the UI just stops offering roles and members the user can't act on.
+const grantableRoles = computed(() => props.availableRoles.filter((role) => props.assignableRoles.includes(role.key)));
+const canManage = (member: TeamMember) => props.manageableMembers.includes(member.id);
+const canCancelInvitation = (invitation: TeamInvitation) =>
+  props.userPermissions.canAddTeamMembers && props.assignableRoles.includes(invitation.role ?? '');
 
 const addTeamMemberForm = useForm({
   email: '',
@@ -147,19 +156,19 @@ const displayableRole = (role: string) => {
           </div>
 
           <!-- Role -->
-          <div v-if="availableRoles.length > 0" class="space-y-2">
+          <div v-if="grantableRoles.length > 0" class="space-y-2">
             <Label for="roles">{{ __('base.teams.role') }}</Label>
             <InputError :message="addTeamMemberForm.errors.role" />
 
             <div class="relative z-0 cursor-pointer rounded-lg border">
               <button
-                v-for="(role, i) in availableRoles"
+                v-for="(role, i) in grantableRoles"
                 :key="role.key"
                 type="button"
                 class="relative inline-flex w-full rounded-lg px-4 py-3 focus:z-10 focus:ring-2 focus:ring-ring focus:outline-none"
                 :class="{
                   'rounded-t-none border-t': i > 0,
-                  'rounded-b-none': i != Object.keys(availableRoles).length - 1,
+                  'rounded-b-none': i != Object.keys(grantableRoles).length - 1,
                 }"
                 @click="addTeamMemberForm.role = role.key">
                 <div :class="{ 'opacity-50': addTeamMemberForm.role && addTeamMemberForm.role != role.key }">
@@ -213,7 +222,7 @@ const displayableRole = (role: string) => {
             <div class="flex items-center">
               <!-- Cancel Team Invitation -->
               <Button
-                v-if="userPermissions.canRemoveTeamMembers"
+                v-if="canCancelInvitation(invitation)"
                 variant="ghost"
                 size="sm"
                 class="text-destructive hover:text-destructive"
@@ -246,7 +255,7 @@ const displayableRole = (role: string) => {
             <div class="flex items-center gap-2">
               <!-- Manage Team Member Role -->
               <Button
-                v-if="userPermissions.canUpdateTeamMembers && availableRoles.length"
+                v-if="userPermissions.canUpdateTeamMembers && availableRoles.length && canManage(user)"
                 variant="link"
                 size="sm"
                 class="text-muted-foreground"
@@ -270,7 +279,7 @@ const displayableRole = (role: string) => {
 
               <!-- Remove Team Member -->
               <Button
-                v-else-if="userPermissions.canRemoveTeamMembers"
+                v-else-if="userPermissions.canRemoveTeamMembers && canManage(user)"
                 variant="ghost"
                 size="sm"
                 class="text-destructive hover:text-destructive"
@@ -293,13 +302,13 @@ const displayableRole = (role: string) => {
         <div v-if="managingRoleFor">
           <div class="relative z-0 cursor-pointer rounded-lg border">
             <button
-              v-for="(role, i) in availableRoles"
+              v-for="(role, i) in grantableRoles"
               :key="role.key"
               type="button"
               class="relative inline-flex w-full rounded-lg px-4 py-3 focus:z-10 focus:ring-2 focus:ring-ring focus:outline-none"
               :class="{
                 'rounded-t-none border-t': i > 0,
-                'rounded-b-none': i !== Object.keys(availableRoles).length - 1,
+                'rounded-b-none': i !== Object.keys(grantableRoles).length - 1,
               }"
               @click="updateRoleForm.role = role.key">
               <div :class="{ 'opacity-50': updateRoleForm.role && updateRoleForm.role !== role.key }">

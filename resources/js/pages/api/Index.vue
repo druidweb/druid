@@ -18,6 +18,7 @@ interface ApiToken {
 
 defineProps<{
   tokens: ApiToken[];
+  hasPermissions: boolean;
   availablePermissions: string[];
   defaultPermissions: string[];
 }>();
@@ -35,7 +36,11 @@ const breadcrumbItems: BreadcrumbItem[] = [
     <Head :title="__('base.api_tokens.title')" />
 
     <SectionLayout :title="__('base.api_tokens.title')" :description="__('base.api_tokens.manage_description')">
-      <ApiTokenManager :tokens="tokens" :available-permissions="availablePermissions" :default-permissions="defaultPermissions" />
+      <ApiTokenManager
+        :tokens="tokens"
+        :has-permissions="hasPermissions"
+        :available-permissions="availablePermissions"
+        :default-permissions="defaultPermissions" />
     </SectionLayout>
   </AppLayout>
 </template>

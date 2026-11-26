@@ -1,3 +1,4 @@
+import type { FlashBanner } from '@/composables/useFlashBanner';
 import { InertiaLinkProps } from '@inertiajs/vue3';
 import type { LucideIcon } from 'lucide-vue-next';
 
@@ -23,7 +24,7 @@ export interface SharedTeams {
   canUpdatePassword: boolean;
   canUpdateProfileInformation: boolean;
   hasEmailVerification: boolean;
-  flash: { token?: string; [key: string]: unknown };
+  flash: FlashBanner & { token?: string };
   hasAccountDeletionFeatures: boolean;
   hasApiFeatures: boolean;
   hasTeamFeatures: boolean;

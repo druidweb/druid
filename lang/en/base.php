@@ -165,6 +165,7 @@ return [
     'log_out_confirm' => 'Please enter your password to confirm you would like to log out of your other browser sessions.',
     'this_device' => 'This device',
     'current_session' => 'Your current browser session',
+    'unknown' => 'Unknown',
   ],
 
   /**

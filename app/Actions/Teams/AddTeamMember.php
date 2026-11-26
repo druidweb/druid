@@ -15,6 +15,7 @@ use Closure;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 final class AddTeamMember implements AddsTeamMembers
 {
@@ -26,6 +27,10 @@ final class AddTeamMember implements AddsTeamMembers
     Gate::forUser($user)->authorize('addTeamMember', $team);
 
     $this->validate($team, $email, $role);
+
+    throw_if($role !== null && ! $user->canAssignTeamRole($team, $role), ValidationException::withMessages([
+      'role' => __('You may not assign a role with more permissions than your own.'),
+    ])->errorBag('addTeamMember'));
 
     $newTeamMember = Teams::findUserByEmailOrFail($email);
 

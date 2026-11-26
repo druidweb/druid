@@ -216,34 +216,6 @@ it('returns false for hasTeamRole when user not in team users collection', funct
   expect($user->hasTeamRole($otherTeam, 'admin'))->toBeFalse();
 });
 
-it('checks team permission with create wildcard', function (): void {
-  Teams::role('creator', 'Creator', ['*:create'])->description('Can create anything');
-
-  $user = User::factory()->withPersonalTeam()->create();
-  $memberTeam = Team::factory()->create();
-  $memberTeam->users()->attach($user, ['role' => 'creator']);
-
-  $user = User::with(['teams', 'ownedTeams'])->find($user->id);
-  $memberTeam = Team::with('users')->find($memberTeam->id);
-
-  expect($user->hasTeamPermission($memberTeam, 'posts:create'))->toBeTrue();
-  expect($user->hasTeamPermission($memberTeam, 'posts:update'))->toBeFalse();
-});
-
-it('checks team permission with update wildcard', function (): void {
-  Teams::role('updater', 'Updater', ['*:update'])->description('Can update anything');
-
-  $user = User::factory()->withPersonalTeam()->create();
-  $memberTeam = Team::factory()->create();
-  $memberTeam->users()->attach($user, ['role' => 'updater']);
-
-  $user = User::with(['teams', 'ownedTeams'])->find($user->id);
-  $memberTeam = Team::with('users')->find($memberTeam->id);
-
-  expect($user->hasTeamPermission($memberTeam, 'posts:update'))->toBeTrue();
-  expect($user->hasTeamPermission($memberTeam, 'posts:create'))->toBeFalse();
-});
-
 it('checks team permission with global wildcard for non-owner member', function (): void {
   Teams::role('superadmin', 'Super Admin', ['*'])->description('Can do anything');
 

@@ -142,6 +142,7 @@ const Zorah: ZorahConfig = {
             log_out_confirm: 'Please enter your password to confirm you would like to log out of your other browser sessions.',
             this_device: 'This device',
             current_session: 'Your current browser session',
+            unknown: 'Unknown',
           },
           appearance: { title: 'Appearance settings', description: "Update your account's appearance settings" },
           delete_account: {
@@ -234,7 +235,9 @@ const Zorah: ZorahConfig = {
           alpha_num: 'The :attribute field must only contain letters and numbers.',
           any_of: 'The :attribute field is invalid.',
           array: 'The :attribute field must be an array.',
+          array_keys: 'The :attribute field must only contain the following keys: :values.',
           ascii: 'The :attribute field must only contain single-byte alphanumeric characters and symbols.',
+          base64: 'The :attribute field must be a valid Base64 string.',
           before: 'The :attribute field must be a date before :date.',
           before_or_equal: 'The :attribute field must be a date before or equal to :date.',
           between: {

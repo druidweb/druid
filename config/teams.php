@@ -23,6 +23,9 @@ return [
    * these middleware; however, this default value is usually sufficient.
    */
   'middleware' => ['web'],
+
+  // Set false when the app registers its own team, API token and profile routes.
+  'routes' => (bool) env('TEAMS_ROUTES', true),
   'auth_session' => AuthenticateSession::class,
 
   /**

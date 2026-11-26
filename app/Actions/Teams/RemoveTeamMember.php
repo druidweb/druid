@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Teams;
 
 use App\Contracts\RemovesTeamMembers;
+use App\Events\RemovingTeamMember;
 use App\Events\TeamMemberRemoved;
 use App\Models\Team;
 use App\Models\User;
@@ -23,6 +24,8 @@ final class RemoveTeamMember implements RemovesTeamMembers
 
     $this->ensureUserDoesNotOwnTeam($teamMember, $team);
 
+    event(new RemovingTeamMember($team, $teamMember));
+
     $team->removeUser($teamMember);
 
     event(new TeamMemberRemoved($team, $teamMember));
@@ -33,8 +36,13 @@ final class RemoveTeamMember implements RemovesTeamMembers
    */
   private function authorize(User $user, Team $team, User $teamMember): void
   {
-    throw_if(! Gate::forUser($user)->check('removeTeamMember', $team) &&
-        (string) $user->id !== (string) $teamMember->id, AuthorizationException::class);
+    // Anyone may leave; removing someone else needs the 'delete' permission and must not target a member who outranks the user.
+    $isLeaving = (string) $user->id === (string) $teamMember->id;
+
+    throw_unless(
+      $isLeaving || (Gate::forUser($user)->check('removeTeamMember', $team) && $user->canManageTeamMember($team, $teamMember)),
+      AuthorizationException::class
+    );
   }
 
   /**

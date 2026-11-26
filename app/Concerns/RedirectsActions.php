@@ -15,14 +15,8 @@ trait RedirectsActions
    */
   public function redirectPath(object $action): Response|Redirector|RedirectResponse
   {
-    if (method_exists($action, 'redirectTo')) {
-      $response = $action->redirectTo();
-    } elseif (property_exists($action, 'redirectTo')) {
-      /** @var object{redirectTo: string|null} $action */
-      $response = $action->redirectTo;
-    } else {
-      $response = config('fortify.home');
-    }
+    // An action may choose where to land by defining redirectTo(); otherwise go home.
+    $response = method_exists($action, 'redirectTo') ? $action->redirectTo() : config('fortify.home');
 
     /** @var string|null $redirectPath */
     $redirectPath = $response;

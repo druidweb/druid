@@ -61,7 +61,23 @@ expect()->extend('toBeOne', fn () => $this->toBe(1));
  * project that you don't want to repeat in every file. Here you can also expose helpers as
  * global functions to help you to reduce the number of lines of code in your test files.
  */
-function something(): void
+// JS for a same-origin fetch from a visited page that resolves to the HTTP status. With $bearer it drops the
+// session cookie and authenticates with that API token instead, exercising the token path in a real browser.
+function sameOriginRequest(string $method, string $url, ?array $body = null, ?string $bearer = null): string
 {
-  // ..
+  $bodyJs = $body === null ? 'undefined' : json_encode($body);
+  $bearerJs = json_encode($bearer);
+
+  return <<<JS
+    (function () {
+      const bearer = {$bearerJs};
+      const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+      const headers = { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' };
+      if (bearer) { headers['Authorization'] = 'Bearer ' + bearer; } else if (match) { headers['X-XSRF-TOKEN'] = decodeURIComponent(match[1]); }
+      const options = { method: '{$method}', headers: headers, credentials: bearer ? 'omit' : 'same-origin' };
+      const requestBody = {$bodyJs};
+      if (requestBody !== undefined) { options.body = JSON.stringify(requestBody); }
+      return fetch('{$url}', options).then(function (response) { return response.status; });
+    })()
+  JS;
 }

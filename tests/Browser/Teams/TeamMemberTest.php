@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Events\TeamMemberUpdated;
 use App\Models\Team;
 use App\Models\User;
 use App\Teams\Features;
+use Illuminate\Support\Facades\Event;
 
 // Same-origin request from the authenticated browser session, resolving to the HTTP
 // status. Guarded against redeclaration when the whole Browser suite loads every
@@ -148,7 +150,7 @@ it('lets a member leave the team', function (): void {
   expect($team->fresh()->users()->where('users.id', $member->id)->exists())->toBeFalse();
 });
 
-it('forbids a non-owner member from removing another member via a direct request', function (): void {
+it('forbids an editor (no delete permission) from removing another member via a direct request', function (): void {
   $owner = User::factory()->withPersonalTeam()->create();
   $memberA = User::factory()->withPersonalTeam()->create();
   $memberB = User::factory()->withPersonalTeam()->create();
@@ -160,7 +162,7 @@ it('forbids a non-owner member from removing another member via a direct request
   $team->users()->attach($memberB, ['role' => 'editor']);
   $this->actingAs($memberA);
 
-  // memberA is neither the owner nor memberB, so RemoveTeamMember's authorize guard
+  // memberA is an editor (no 'delete' permission) and not memberB, so RemoveTeamMember's authorize guard
   // rejects the attempt (AuthorizationException -> 403); memberB stays on the team.
   $status = visit('/dashboard')->script(teamApiRequest('DELETE', '/teams/'.$team->id.'/members/'.$memberB->id));
 
@@ -187,7 +189,7 @@ it('prevents the owner from leaving a team they created', function (): void {
   expect((string) $team->fresh()->user_id)->toBe((string) $owner->id);
 });
 
-it('forbids a non-owner member from adding a member via a direct request', function (): void {
+it('rejects an editor adding a member with a role above their own via a direct request', function (): void {
   $owner = User::factory()->withPersonalTeam()->create();
   $member = User::factory()->withPersonalTeam()->create();
   $team = Team::factory()->create([
@@ -202,7 +204,8 @@ it('forbids a non-owner member from adding a member via a direct request', funct
     'role' => 'admin',
   ]));
 
-  expect((int) $status)->toBe(403);
+  // Editors hold the create permission but not admin's delete, so granting admin is a validation error.
+  expect((int) $status)->toBe(422);
   expect($team->fresh()->teamInvitations()->where('email', 'intruder@example.com')->exists())->toBeFalse();
 });
 
@@ -233,7 +236,7 @@ it('directly adds an existing user when team invitations are disabled', function
   expect($team->fresh()->teamInvitations()->where('email', 'existing@example.com')->exists())->toBeFalse();
 });
 
-it('forbids a non-owner member from changing another member role via a direct request', function (): void {
+it('rejects an editor promoting another member above their own role via a direct request', function (): void {
   $owner = User::factory()->withPersonalTeam()->create();
   $memberA = User::factory()->withPersonalTeam()->create();
   $memberB = User::factory()->withPersonalTeam()->create();
@@ -249,7 +252,7 @@ it('forbids a non-owner member from changing another member role via a direct re
     'role' => 'admin',
   ]));
 
-  expect((int) $status)->toBe(403);
+  expect((int) $status)->toBe(422);
   expect($team->fresh()->users()->find($memberB->id)->membership->role)->toBe('editor');
 });
 
@@ -285,4 +288,66 @@ it('clears the current team when removing a member whose current team is this te
   expect($team->fresh()->users()->where('users.id', $member->id)->exists())->toBeFalse();
   // Proves Team::removeUser reset the detached member's current team (lines 156-158).
   expect($member->fresh()->current_team_id)->toBeNull();
+});
+
+it('lets an admin promote an editor from the team page', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $admin = User::factory()->withPersonalTeam()->create(['name' => 'Ada Admin']);
+  $editor = User::factory()->withPersonalTeam()->create(['name' => 'Eddie Editor']);
+  $team = $owner->currentTeam;
+  $team->users()->attach($admin, ['role' => 'admin']);
+  $team->users()->attach($editor, ['role' => 'editor']);
+  $this->actingAs($admin);
+
+  visit('/teams/'.$team->id)
+    ->assertSee('Eddie Editor')
+    ->click('button[data-slot="button"]:has-text("Editor")')
+    ->click('[data-slot="dialog-content"] button:has-text("Administrator")')
+    ->click('[data-slot="dialog-content"] button.bg-primary')
+    // The dialog closes once the update succeeds; wait for that before reading the DB.
+    ->assertMissing('[data-slot="dialog-content"]')
+    ->assertNoJavaScriptErrors();
+
+  expect($team->fresh()->users()->find($editor->id)->membership->role)->toBe('admin');
+});
+
+it('only offers an editor the roles and members they can act on', function (): void {
+  $owner = User::factory()->withPersonalTeam()->create();
+  $editor = User::factory()->withPersonalTeam()->create(['name' => 'Eddie Editor']);
+  $admin = User::factory()->withPersonalTeam()->create(['name' => 'Ada Admin']);
+  $team = $owner->currentTeam;
+  $team->users()->attach($editor, ['role' => 'editor']);
+  $team->users()->attach($admin, ['role' => 'admin']);
+  $this->actingAs($editor);
+
+  $page = visit('/teams/'.$team->id)
+    ->assertSee('Ada Admin')
+    ->assertNoJavaScriptErrors();
+
+  // Editors can add members but only at their own role, so the picker offers Editor and not Administrator.
+  expect((int) $page->script("document.querySelectorAll('button[data-slot=\"button\"]').length"))->toBeGreaterThan(0);
+  expect((string) $page->script("Array.from(document.querySelectorAll('button')).map(b => b.textContent.trim()).filter(t => t.startsWith('Administrator')).length"))->toBe('0');
+  // The admin outranks the editor, so there is no Remove or manage-role button for them: only plain role text.
+  expect((string) $page->script("Array.from(document.querySelectorAll('button')).filter(b => b.textContent.trim() === 'Remove').length"))->toBe('0');
+});
+
+it('saves nothing and announces nothing when the current role is re-selected', function (): void {
+  Event::fake([TeamMemberUpdated::class]);
+
+  $owner = User::factory()->withPersonalTeam()->create();
+  $member = User::factory()->withPersonalTeam()->create(['name' => 'Steady Editor']);
+  $team = $owner->currentTeam;
+  $team->users()->attach($member, ['role' => 'editor']);
+  $this->actingAs($owner);
+
+  visit('/teams/'.$team->id)
+    ->assertSee('Steady Editor')
+    ->click('button[data-slot="button"]:has-text("Editor")')
+    ->click('[data-slot="dialog-content"] button:has-text("Editor")')
+    ->click('[data-slot="dialog-content"] button.bg-primary')
+    ->assertMissing('[data-slot="dialog-content"]')
+    ->assertNoJavaScriptErrors();
+
+  Event::assertNotDispatched(TeamMemberUpdated::class);
+  expect($team->fresh()->users()->find($member->id)->membership->role)->toBe('editor');
 });

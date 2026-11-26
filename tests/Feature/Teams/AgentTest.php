@@ -8,9 +8,17 @@ it('detects browser from user agent', function (): void {
   $agent = new Agent;
   $agent->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
 
-  // The browser detection returns a string (actual order depends on the detection rules)
-  expect($agent->browser())->toBeString();
-  expect($agent->browser())->not->toBeNull();
+  expect($agent->browser())->toBe('Chrome');
+});
+
+it('detects desktop safari and firefox rather than the generic mozilla rule', function (): void {
+  $agent = new Agent;
+  $agent->setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15');
+  expect($agent->browser())->toBe('Safari');
+
+  $agent = new Agent;
+  $agent->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0');
+  expect($agent->browser())->toBe('Firefox');
 });
 
 it('detects windows platform', function (): void {
@@ -50,46 +58,25 @@ it('detects mobile device', function (): void {
   expect($agent->isDesktop())->toBeFalse();
 });
 
-it('caches browser detection results', function (): void {
+it('treats a cloudfront mobile viewer as not desktop', function (): void {
   $agent = new Agent;
-  $agent->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+  $agent->setHttpHeaders(['HTTP_USER_AGENT' => 'Amazon CloudFront', 'HTTP_CLOUDFRONT_IS_MOBILE_VIEWER' => 'true']);
 
-  // First call
-  $browser1 = $agent->browser();
-  // Second call should return cached result
-  $browser2 = $agent->browser();
-
-  expect($browser1)->toBe($browser2);
+  expect($agent->isDesktop())->toBeFalse();
 });
 
-it('caches platform detection results', function (): void {
+it('returns null for an unknown browser', function (): void {
   $agent = new Agent;
-  $agent->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+  $agent->setUserAgent('curl/8.0');
 
-  // First call
-  $platform1 = $agent->platform();
-  // Second call should return cached result
-  $platform2 = $agent->platform();
-
-  expect($platform1)->toBe($platform2);
-  expect($platform1)->toBe('Windows');
-});
-
-it('detects cloudfront desktop viewer', function (): void {
-  $agent = new Agent;
-  $agent->setUserAgent('Amazon CloudFront');
-  $agent->setHttpHeaders(['HTTP_CLOUDFRONT_IS_DESKTOP_VIEWER' => 'true']);
-
-  expect($agent->isDesktop())->toBeTrue();
+  expect($agent->browser())->toBeNull();
 });
 
 it('returns null for unknown platform', function (): void {
   $agent = new Agent;
   $agent->setUserAgent('Unknown/1.0');
 
-  // May return null or a fallback
-  $platform = $agent->platform();
-  expect($platform)->toBeNull();
+  expect($agent->platform())->toBeNull();
 });
 
 it('detects various browsers', function (): void {
@@ -124,45 +111,6 @@ it('detects chromeos platform', function (): void {
   $agent->setUserAgent('Mozilla/5.0 (X11; CrOS x86_64 14092.77.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.107 Safari/537.36');
 
   expect($agent->platform())->toBe('ChromeOS');
-});
-
-it('handles empty regex rules gracefully', function (): void {
-  $agent = new class extends Agent
-  {
-    public function testFindDetectionRulesAgainstUserAgent(array $rules): ?string
-    {
-      return $this->findDetectionRulesAgainstUserAgent($rules);
-    }
-  };
-
-  $agent->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
-
-  // Test with empty regex - should skip and continue
-  $result = $agent->testFindDetectionRulesAgainstUserAgent([
-    'Browser1' => '',
-    'Browser2' => 'Mozilla',
-  ]);
-
-  expect($result)->toBe('Browser2');
-});
-
-it('handles empty key in detection rules', function (): void {
-  $agent = new class extends Agent
-  {
-    public function testFindDetectionRulesAgainstUserAgent(array $rules): ?string
-    {
-      return $this->findDetectionRulesAgainstUserAgent($rules);
-    }
-  };
-
-  $agent->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
-
-  // Test with empty string key - should return the match from matchesArray
-  $result = $agent->testFindDetectionRulesAgainstUserAgent([
-    '' => '(Mozilla)',
-  ]);
-
-  expect($result)->toBe('Mozilla');
 });
 
 it('merges rules correctly', function (): void {

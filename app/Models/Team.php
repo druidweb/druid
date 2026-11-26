@@ -152,7 +152,7 @@ final class Team extends Model
   public function removeUser(mixed $user): void
   {
     /** @var User $user */
-    if ($user->current_team_id === $this->id) {
+    if ($user->isCurrentTeam($this)) {
       $user->forceFill([
         'current_team_id' => null,
       ])->save();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Actions\Fortify\ConfirmPassword;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
@@ -54,6 +55,7 @@ final class FortifyServiceProvider extends ServiceProvider
     Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
     Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
     Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+    Fortify::confirmPasswordsUsing(resolve(ConfirmPassword::class));
   }
 
   /**

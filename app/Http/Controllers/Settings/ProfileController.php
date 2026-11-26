@@ -5,18 +5,17 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Settings;
 
 use App\Contracts\DeletesUsers;
-use App\Http\Requests\Settings\ProfileUpdateRequest;
 use App\Models\User;
 use App\Teams\Teams;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Fortify\Actions\ConfirmPassword;
+use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 final class ProfileController
@@ -35,25 +34,17 @@ final class ProfileController
   /**
    * Update the user's profile information.
    */
-  public function update(ProfileUpdateRequest $request): RedirectResponse
+  // Same action Fortify's PUT /user/profile-information uses, so validation, photo handling and
+  // email re-verification have one source of truth.
+  public function update(Request $request, UpdatesUserProfileInformation $updater): RedirectResponse
   {
     /** @var User $user */
     $user = $request->user();
 
-    $photo = $request->file('photo');
-    if ($photo instanceof UploadedFile) {
-      $user->updateProfilePhoto($photo);
-    }
+    /** @var array<string, mixed> $input */
+    $input = $request->all();
 
-    /** @var array<string, mixed> $safeData */
-    $safeData = $request->safe()->only(['name', 'email']);
-    $user->fill($safeData);
-
-    if ($user->isDirty('email')) {
-      $user->email_verified_at = null;
-    }
-
-    $user->save();
+    $updater->update($user, $input);
 
     return to_route('profile.edit');
   }

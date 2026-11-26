@@ -22,8 +22,11 @@ it('accepts a team invitation from a signed url', function (): void {
   // forces the URL generator origin to its own host, so this signature validates.
   $signedUrl = URL::signedRoute('team-invitations.accept', ['invitation' => $invitation->id]);
 
+  // The accept redirect flashes a banner, which the frontend shows as a success toast.
   visit($signedUrl)
-    ->assertPathIs('/dashboard');
+    ->assertPathIs('/dashboard')
+    ->assertSee('Great! You have accepted the invitation to join the '.$team->name.' team.')
+    ->assertNoJavaScriptErrors();
 
   expect($team->fresh()->hasUser($invited))->toBeTrue();
   expect(TeamInvitation::query()->find($invitation->id))->toBeNull();

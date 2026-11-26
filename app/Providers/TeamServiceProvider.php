@@ -11,6 +11,9 @@ use App\Actions\Teams\DeleteUser;
 use App\Actions\Teams\InviteTeamMember;
 use App\Actions\Teams\RemoveTeamMember;
 use App\Actions\Teams\UpdateTeamName;
+use App\Models\Membership;
+use App\Models\Team;
+use App\Models\TeamInvitation;
 use App\Models\User;
 use App\Teams\Teams;
 use Illuminate\Http\RedirectResponse;
@@ -31,6 +34,16 @@ final class TeamServiceProvider extends ServiceProvider
    */
   public function boot(): void
   {
+    // Explicit so a downstream app swaps a model in one obvious place.
+    Teams::useUserModel(User::class);
+    Teams::useTeamModel(Team::class);
+    Teams::useMembershipModel(Membership::class);
+    Teams::useTeamInvitationModel(TeamInvitation::class);
+
+    if (! config('teams.routes')) {
+      Teams::ignoreRoutes();
+    }
+
     $this->configurePermissions();
 
     Teams::createTeamsUsing(CreateTeam::class);
@@ -41,26 +54,11 @@ final class TeamServiceProvider extends ServiceProvider
     Teams::deleteTeamsUsing(DeleteTeam::class);
     Teams::deleteUsersUsing(DeleteUser::class);
 
-    RedirectResponse::macro('banner', function (string $message): RedirectResponse {
+    // Flashes a banner the frontend shows as a toast (see resources/js/composables/useFlashBanner.ts).
+    RedirectResponse::macro('banner', function (string $message, string $style = 'success'): RedirectResponse {
       /** @var RedirectResponse $this */
       return $this->with('flash', [
-        'bannerStyle' => 'success',
-        'banner' => $message,
-      ]);
-    });
-
-    RedirectResponse::macro('warningBanner', function (string $message): RedirectResponse {
-      /** @var RedirectResponse $this */
-      return $this->with('flash', [
-        'bannerStyle' => 'warning',
-        'banner' => $message,
-      ]);
-    });
-
-    RedirectResponse::macro('dangerBanner', function (string $message): RedirectResponse {
-      /** @var RedirectResponse $this */
-      return $this->with('flash', [
-        'bannerStyle' => 'danger',
+        'bannerStyle' => $style,
         'banner' => $message,
       ]);
     });
@@ -82,6 +80,9 @@ final class TeamServiceProvider extends ServiceProvider
    */
   private function configurePermissions(): void
   {
+    // The full API token vocabulary; each role below grants a subset of it.
+    Teams::permissions(['create', 'read', 'update', 'delete']);
+
     Teams::defaultApiTokenPermissions(['read']);
 
     Teams::role('admin', 'Administrator', [

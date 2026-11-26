@@ -19,30 +19,11 @@ it('adds banner macro to redirect response', function (): void {
   ]);
 });
 
-it('adds warningBanner macro to redirect response', function (): void {
-  $response = redirect('/');
+it('accepts a banner style', function (string $style): void {
+  $result = redirect('/')->banner('Styled message', $style);
 
-  expect(RedirectResponse::hasMacro('warningBanner'))->toBeTrue();
-
-  $result = $response->warningBanner('Warning message');
-
-  expect($result)->toBeInstanceOf(RedirectResponse::class);
   expect($result->getSession()->get('flash'))->toBe([
-    'bannerStyle' => 'warning',
-    'banner' => 'Warning message',
+    'bannerStyle' => $style,
+    'banner' => 'Styled message',
   ]);
-});
-
-it('adds dangerBanner macro to redirect response', function (): void {
-  $response = redirect('/');
-
-  expect(RedirectResponse::hasMacro('dangerBanner'))->toBeTrue();
-
-  $result = $response->dangerBanner('Danger message');
-
-  expect($result)->toBeInstanceOf(RedirectResponse::class);
-  expect($result->getSession()->get('flash'))->toBe([
-    'bannerStyle' => 'danger',
-    'banner' => 'Danger message',
-  ]);
-});
+})->with(['warning', 'danger']);

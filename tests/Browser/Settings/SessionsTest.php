@@ -12,6 +12,7 @@ it('shows the browser sessions page and opens the logout confirmation', function
   visit('/user/other-browser-sessions')
     ->assertSee('Browser Sessions')
     ->assertSee('This device')
+    ->assertSee('Chrome')
     ->assertNoJavaScriptErrors()
     ->click('Log Out Other Browser Sessions')
     ->assertPresent('[data-slot="dialog-content"] input[name="password"]');
@@ -49,4 +50,24 @@ it('rejects logging out other sessions with a wrong password', function (): void
     ->assertSee('password is incorrect');
 
   expect($user->fresh()->password)->toBe($originalHash);
+});
+
+it('describes a phone session with its platform, browser and a phone icon', function (): void {
+  $this->actingAs(User::factory()->withPersonalTeam()->create());
+
+  visit('/user/other-browser-sessions')
+    ->withUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1')
+    ->assertSee('iOS - Safari')
+    ->assertPresent('svg.lucide-smartphone')
+    ->assertMissing('svg.lucide-monitor')
+    ->assertNoJavaScriptErrors();
+});
+
+it('falls back to unknown for an unrecognised client', function (): void {
+  $this->actingAs(User::factory()->withPersonalTeam()->create());
+
+  visit('/user/other-browser-sessions')
+    ->withUserAgent('acme-kiosk/2.1')
+    ->assertSee('Unknown - Unknown')
+    ->assertSee('This device');
 });

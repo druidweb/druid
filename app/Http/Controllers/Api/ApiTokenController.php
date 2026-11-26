@@ -29,6 +29,11 @@ final class ApiTokenController implements HasMiddleware
       static function (Request $request, callable $next): HttpResponse {
         abort_unless(Teams::hasApiFeatures(), HttpResponse::HTTP_FORBIDDEN);
 
+        // Tokens are managed from a browser session only; otherwise a scoped token could widen its own abilities or mint a broader one.
+        /** @var User|null $user */
+        $user = $request->user();
+        abort_if($user?->currentAccessToken() instanceof PersonalAccessToken, HttpResponse::HTTP_FORBIDDEN);
+
         /** @var HttpResponse $response */
         $response = $next($request);
 
@@ -49,6 +54,7 @@ final class ApiTokenController implements HasMiddleware
       'tokens' => $user->tokens->map(fn (mixed $token): array => $token->toArray() + [
         'last_used_ago' => $token->last_used_at?->diffForHumans(),
       ]),
+      'hasPermissions' => Teams::hasPermissions(),
       'availablePermissions' => Teams::$permissions,
       'defaultPermissions' => Teams::$defaultPermissions,
     ]);
