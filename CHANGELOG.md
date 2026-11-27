@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/druidweb/druid/compare/v1.6.0...v1.6.1) (2026-11-27)
+
+
+### Bug Fixes
+
+* deps updates and test fixes ([1a543bb](https://github.com/druidweb/druid/commit/1a543bb4f7eac03844641a3d83122fe8b58474ba))
+
 # [1.6.0](https://github.com/druidweb/druid/compare/v1.5.8...v1.6.0) (2026-11-26)
 
 
