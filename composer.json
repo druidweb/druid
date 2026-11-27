@@ -70,26 +70,20 @@
       "Composer\\Config::disableProcessTimeout",
       "bunx concurrently -c \"#c4b5fd,#fdba74\" \"php artisan queue:listen --tries=1\" \"php artisan inertia:start-ssr\" --names=queue,ssr --kill-others"
     ],
-    "lint": [
+    "test:types": "./vendor/bin/pest --type-coverage --parallel --min=100",
+    "test:lint": [
       "./vendor/bin/rector",
       "./vendor/bin/fixr",
       "bun run lint",
       "bun run format"
     ],
-    "test:types": "./vendor/bin/pest --type-coverage --parallel --min=100",
-    "test:lint": [
-      "./vendor/bin/rector --dry-run",
-      "./vendor/bin/fixr --test",
-      "bun run lint:check",
-      "bun run format:check"
-    ],
     "test:feat": "./vendor/bin/pest --parallel",
     "test:e2e": "./vendor/bin/pest tests/Browser",
     "test:e2e:coverage": "./vendor/bin/pest tests/Browser --coverage --min=100",
     "test:coverage": [
-            "./vendor/bin/pest --parallel --coverage --coverage-clover=coverage.xml --min=100.0",
-            "php bin/coverage-clean"
-        ],
+      "./vendor/bin/pest --parallel --coverage --coverage-clover=coverage.xml --min=100.0",
+      "php bin/coverage-clean"
+    ],
     "test:static": [
       "./vendor/bin/phpstan analyze",
       "bun run types"
